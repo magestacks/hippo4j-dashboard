@@ -1,7 +1,5 @@
 import request from '@/utils/request'
 
-// project
-
 export function list(data) {
   return request({
     url: '/v1/cs/item/query/page',

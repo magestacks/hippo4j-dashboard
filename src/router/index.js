@@ -191,7 +191,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
   {
     path: '/hippo4j/user',
     component: Layout,
@@ -204,6 +203,21 @@ export const asyncRoutes = [
         name: 'User',
         component: () => import('@/views/hippo4j/user/index'),
         meta: { title: '用户管理', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/hippo4j/log',
+    component: Layout,
+    redirect: '/hippo4j/logList',
+    name: 'log',
+    meta: { title: '日志管理', icon: 'work' },
+    children: [
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('@/views/hippo4j/log/index'),
+        meta: { title: '日志管理', icon: 'log' }
       }
     ]
   },
@@ -221,7 +235,7 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter () {
+export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }

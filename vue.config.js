@@ -36,7 +36,7 @@ module.exports = {
     },
     proxy: {
       '/v1/cs': {
-        target: `http://192.168.20.227:${apiPort}/v1/cs`,
+        target: `http://127.0.0.1:${apiPort}/v1/cs`,
         changOrigin: true,
         secure: false,
         pathRewrite: {
