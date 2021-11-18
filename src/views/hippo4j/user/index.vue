@@ -206,7 +206,7 @@
         })
       },
       handleDelete(row) {
-        user.deleteUser(row.id).then(response => {
+        user.deleteUser(row.userName).then(response => {
           this.fetchData()
           this.$notify({
             title: 'Success',

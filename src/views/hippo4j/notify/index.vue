@@ -31,22 +31,19 @@
       <el-table-column label="线程池ID" align="center">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
-      <el-table-column label="核心线程" align="center" width="120">
-        <template slot-scope="scope">{{ scope.row.coreSize }}</template>
+      <el-table-column label="通知方式" align="center" width="200">
+        <template slot-scope="scope">{{ scope.row.platform }} - {{ scope.row.type }}</template>
       </el-table-column>
-      <el-table-column label="最大线程" align="center" width="120">
-        <template slot-scope="scope">{{ scope.row.maxSize }}</template>
+      <el-table-column label="接收者" align="center">
+        <template slot-scope="scope">{{ scope.row.receives | ellipsis}}</template>
       </el-table-column>
-      <el-table-column label="队列类型" align="center">
-        <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
+      <el-table-column label="报警间隔" align="center" width="120">
+        <template slot-scope="scope">{{ scope.row.interval }}</template>
       </el-table-column>
-      <el-table-column label="队列容量" align="center" width="120">
-        <template slot-scope="scope">{{ scope.row.capacity }}</template>
-      </el-table-column>
-      <el-table-column label="是否报警" align="center" width="200">
+      <el-table-column label="是否启用" align="center" width="200">
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.isAlarm" active-color="#00A854" active-text="报警" :active-value="0"
-                     inactive-color="#F04134" inactive-text="忽略" :inactive-value="1" @change="changeSwitch(scope.row)"/>
+          <el-switch v-model="scope.row.enable" active-color="#00A854" active-text="启用" :active-value="0"
+                     inactive-color="#F04134" inactive-text="停用" :inactive-value="1" @change="changeSwitch(scope.row)"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -81,8 +78,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="核心线程" prop="coreSize">
-              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999"/>
+            <el-form-item label="通知平台" prop="platform">
+              <el-select v-model="temp.platform" placeholder="通知平台" style="display:block;">
+                <el-option v-for="item in platformTypes" :key="item.key" :label="item.display_name"
+                           :value="item.key"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -97,8 +97,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="最大线程" prop="maxSize">
-              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999"/>
+            <el-form-item label="通知类型" prop="type">
+              <el-select v-model="temp.type" placeholder="通知类型" style="display:block;">
+                <el-option v-for="item in typeTypes" :key="item.key" :label="item.display_name"
+                           :value="item.key"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -106,13 +109,17 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="线程池ID" prop="tpId">
-              <el-input v-model="temp.tpId" size="medium" placeholder="请输入线程池ID"
-                        :disabled="dialogStatus==='create'?false:true"/>
+              <el-select v-model="temp.tpId" placeholder="线程池ID" style="display:block;" :disabled="dialogStatus==='create'?false:true">
+                <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="KVTime" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="Time / S" :min="20" :max="90"/>
+            <el-form-item label="是否启用" prop="enable">
+              <el-select v-model="temp.enable" placeholder="是否启用" style="display:block;">
+                <el-option v-for="item in enableTypes" :key="item.key" :label="item.display_name"
+                           :value="item.key"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -125,59 +132,26 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="队列类型" prop="queueType">
-              <el-select v-model="temp.queueType" placeholder="队列类型" style="display:block;">
-                <el-option v-for="item in queueTypeOptions" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
-              </el-select>
+            <el-form-item label="Token" prop="secretKey">
+              <el-input v-model="temp.secretKey" size="medium" placeholder="请输入Token"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="1" :max="99999"/>
+            <el-form-item label="报警间隔" prop="interval">
+              <el-input-number v-model="temp.interval" placeholder="报警间隔/Min" :min="1" :max="99999"/>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="拒绝策略" prop="rejectedType">
-              <el-select v-model="temp.rejectedType" style="display:block;" placeholder="拒绝策略">
-                <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
-              </el-select>
+        <el-row :gutter="40">
+          <el-col :span="24">
+            <el-form-item label="接收者" prop="receives">
+              <el-input v-model="temp.receives" :autosize="{ minRows: 4, maxRows: 6}" type="textarea" placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)"
+                        style="width: 83%"/>
             </el-form-item>
           </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="活跃度报警" prop="livenessAlarm">
-              <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="1" :max="99999"/>
-            </el-form-item>
-          </el-col>
-
-
         </el-row>
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="是否报警" prop="isAlarm">
-              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
-                <el-option v-for="item in alarmTypes" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量报警" prop="capacityAlarm">
-              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="20" :max="90"/>
-            </el-form-item>
-          </el-col>
-
-        </el-row>
-
-        <el-row :gutter="20">
-
-        </el-row>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -204,14 +178,15 @@
 <script>
   import * as itemApi from '@/api/hippo4j-item'
   import * as tenantApi from '@/api/hippo4j-tenant'
+  import * as notifyApi from '@/api/hippo4j-notify'
   import * as threadPoolApi from '@/api/hippo4j-threadPool'
   import waves from '@/directive/waves'
   import Pagination from '@/components/Pagination'
 
   export default {
     name: 'JobProject',
-    components: {Pagination},
-    directives: {waves},
+    components: { Pagination },
+    directives: { waves },
     filters: {
       statusFilter(status) {
         const statusMap = {
@@ -220,25 +195,14 @@
           deleted: 'danger'
         }
         return statusMap[status]
-      }
-    },
-    filters: {
-      queueFilter(type) {
-        if ('1' == type) {
-          return 'ArrayBlockingQueue'
-        } else if ('2' == type) {
-          return 'LinkedBlockingQueue'
-        } else if ('3' == type) {
-          return 'LinkedBlockingDeque'
-        } else if ('4' == type) {
-          return 'SynchronousQueue'
-        } else if ('5' == type) {
-          return 'LinkedTransferQueue'
-        } else if ('6' == type) {
-          return 'PriorityBlockingQueue'
-        } else if ('9' == type) {
-          return 'ResizableLinkedBlockingQueue'
+      },
+
+      ellipsis(value) {
+        if (!value) return "";
+        if (value.length > 22) {
+          return value.slice(0, 22) + "...";
         }
+        return value;
       }
     },
     data() {
@@ -256,26 +220,20 @@
         pluginData: [],
         dialogFormVisible: false,
         tenantOptions: [],
-        threadPoolOptions: [],
         itemOptions: [],
-        queueTypeOptions: [
-          {key: 1, display_name: 'ArrayBlockingQueue'},
-          {key: 2, display_name: 'LinkedBlockingQueue'},
-          {key: 3, display_name: 'LinkedBlockingDeque'},
-          {key: 4, display_name: 'SynchronousQueue'},
-          {key: 5, display_name: 'LinkedTransferQueue'},
-          {key: 6, display_name: 'PriorityBlockingQueue'},
-          {key: 9, display_name: 'ResizableLinkedBlockingQueue'}
+        threadPoolOptions: [],
+        platformTypes: [
+          { key: 'DING', display_name: 'DING' },
         ],
-        rejectedOptions: [
-          {key: 1, display_name: 'CallerRunsPolicy'},
-          {key: 2, display_name: 'AbortPolicy'},
-          {key: 3, display_name: 'DiscardPolicy'},
-          {key: 4, display_name: 'DiscardOldestPolicy'}
+
+        typeTypes: [
+          { key: 'CONFIG', display_name: 'CONFIG'},
+          { key: 'ALARM', display_name: 'ALARM'},
         ],
-        alarmTypes: [
-          {key: 0, display_name: '报警'},
-          {key: 1, display_name: '不报警'}
+
+        enableTypes: [
+          { key: 0, display_name: '启用'},
+          { key: 1, display_name: '停用'},
         ],
         dialogStatus: '',
         textMap: {
@@ -283,18 +241,15 @@
           create: 'Create'
         },
         rules: {
-          tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
-          itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
-          tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
-          coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
-          maxSize: [{required: true, message: 'this is required', trigger: 'blur'}],
-          queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
-          capacity: [{required: true, message: 'this is required', trigger: 'blur'}],
-          keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
-          isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-          capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-          livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-          rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
+          tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          receives: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          secretKey: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          platform: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          type: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          enable: [{ required: true, message: 'this is required', trigger: 'blur' }],
+
         },
         temp: {
           id: undefined,
@@ -311,9 +266,9 @@
     methods: {
       fetchData() {
         this.listLoading = true
-        threadPoolApi.list(this.listQuery).then(response => {
-          const {records} = response
-          const {total} = response
+        notifyApi.list(this.listQuery).then(response => {
+          const { records } = response
+          const { total } = response
           this.total = total
           this.list = records
           this.listLoading = false
@@ -321,7 +276,7 @@
       },
       initSelect() {
         tenantApi.list({}).then(response => {
-          const {records} = response
+          const { records } = response
           for (var i = 0; i < records.length; i++) {
             this.tenantOptions.push({
               key: records[i].tenantId,
@@ -331,7 +286,7 @@
         })
 
         itemApi.list({}).then(response => {
-          const {records} = response
+          const { records } = response
           for (var i = 0; i < records.length; i++) {
             this.itemOptions.push({
               key: records[i].itemId,
@@ -369,7 +324,7 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
-            threadPoolApi.created(this.temp).then(() => {
+            notifyApi.created(this.temp).then(() => {
               this.fetchData()
               this.dialogFormVisible = false
               this.$notify({
@@ -394,7 +349,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             const tempData = Object.assign({}, this.temp)
-            threadPoolApi.updated(tempData).then(() => {
+            notifyApi.updated(tempData).then(() => {
               this.fetchData()
               this.dialogFormVisible = false
               this.$notify({
@@ -408,7 +363,7 @@
         })
       },
       handleDelete(row) {
-        threadPoolApi.deleted(row).then(response => {
+        notifyApi.deleted(row).then(response => {
           this.fetchData()
           this.$notify({
             title: 'Success',

@@ -26,7 +26,7 @@ export function createUser(data) {
 
 export function deleteUser(name) {
   return request({
-    url: '/v1/cs/user/remove/' + name,
+    url: '/v1/cs/auth/users/remove/' + name,
     method: 'delete'
   })
 }
