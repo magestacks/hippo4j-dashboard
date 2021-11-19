@@ -289,7 +289,6 @@
           coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
           maxSize: [{required: true, message: 'this is required', trigger: 'blur'}],
           queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
-          capacity: [{required: true, message: 'this is required', trigger: 'blur'}],
           keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
           isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
           capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],

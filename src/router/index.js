@@ -219,6 +219,17 @@ export const asyncRoutes = [
     ]
   },
 
+  {
+    path: 'external-link',
+    component: Layout,
+    children: [
+      {
+        path: 'https://hippox.cn',
+        meta: { title: '官网外链', icon: 'link' }
+      }
+    ]
+  },
+
   toolRouter,
   { path: '*', redirect: '/404', hidden: true }
 ]
