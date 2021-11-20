@@ -68,7 +68,7 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="基本信息"></el-form-item>
+            <el-form-item label="《基本信息》"></el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -119,14 +119,14 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="扩展信息"></el-form-item>
+            <el-form-item label="《扩展信息》"></el-form-item>
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
-              <el-select v-model="temp.queueType" placeholder="队列类型" style="display:block;">
+              <el-select v-model="temp.queueType" placeholder="队列类型" @change="selectQueueType" style="display:block;">
                 <el-option v-for="item in queueTypeOptions" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
@@ -134,7 +134,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="1" :max="99999"/>
+              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="99999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -151,7 +151,7 @@
 
           <el-col :span="12">
             <el-form-item label="活跃度报警" prop="livenessAlarm">
-              <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="1" :max="99999"/>
+              <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="30" :max="90"/>
             </el-form-item>
           </el-col>
 
@@ -169,7 +169,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="容量报警" prop="capacityAlarm">
-              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="20" :max="90"/>
+              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="30" :max="90"/>
             </el-form-item>
           </el-col>
 
@@ -265,7 +265,7 @@
           {key: 4, display_name: 'SynchronousQueue'},
           {key: 5, display_name: 'LinkedTransferQueue'},
           {key: 6, display_name: 'PriorityBlockingQueue'},
-          {key: 9, display_name: 'ResizableLinkedBlockingQueue'}
+          {key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'}
         ],
         rejectedOptions: [
           {key: 1, display_name: 'CallerRunsPolicy'},
@@ -416,6 +416,9 @@
             duration: 2000
           })
         })
+      },
+
+      selectQueueType(value) {
       }
     }
   }

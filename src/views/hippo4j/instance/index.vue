@@ -50,7 +50,7 @@
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleInfo(row)">
-            查看
+            参数
           </el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -86,7 +86,20 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="线程相关">
+            <el-form-item label="内存占比" prop="currentLoad">
+              <el-input v-model="runTimeTemp.memoryProportion" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="剩余内存" prop="currentLoad">
+              <el-input v-model="runTimeTemp.freeMemory" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="《线程相关》">
             </el-form-item>
           </el-col>
         </el-row>
@@ -127,7 +140,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="队列相关">
+            <el-form-item label="《队列相关》">
             </el-form-item>
           </el-col>
         </el-row>
@@ -160,7 +173,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="其它信息">
+            <el-form-item label="《其它信息》">
             </el-form-item>
           </el-col>
         </el-row>
@@ -257,7 +270,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="1" :max="99999"/>
+              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="99999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -274,7 +287,7 @@
 
           <el-col :span="12">
             <el-form-item label="活跃度报警" prop="livenessAlarm">
-              <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="1" :max="99999"/>
+              <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="30" :max="90"/>
             </el-form-item>
           </el-col>
 
@@ -292,7 +305,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="容量报警" prop="capacityAlarm">
-              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="20" :max="90"/>
+              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="30" :max="90"/>
             </el-form-item>
           </el-col>
 
@@ -403,7 +416,7 @@
           { key: 4, display_name: 'SynchronousQueue' },
           { key: 5, display_name: 'LinkedTransferQueue' },
           { key: 6, display_name: 'PriorityBlockingQueue' },
-          { key: 9, display_name: 'ResizableLinkedBlockingQueue' }
+          { key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)' }
         ],
         rejectedOptions: [
           { key: 1, display_name: 'CallerRunsPolicy' },
@@ -415,6 +428,19 @@
           { key: 0, display_name: '报警' },
           { key: 1, display_name: '不报警' }
         ],
+        rules: {
+          tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
+          itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
+          tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
+          coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+          maxSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+          queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
+          keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
+          isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+          capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+          livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+          rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
+        },
         dialogStatus: '',
         textMap: {
           update: 'Edit',
