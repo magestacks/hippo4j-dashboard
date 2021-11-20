@@ -555,16 +555,19 @@
       },
 
       refresh(row) {
+        let httpStr = ''
         const identify = row.identify
         let clientBasePath = row.clientBasePath
-        if (Object.keys(clientBasePath).length == 0) {
-          clientBasePath = ''
+        if (JSON.stringify(clientBasePath)=='{}') {
+          httpStr = 'http://' + identify + clientBasePath + '/run/state/' + row.tpId
+        } else {
+          httpStr = 'http://' + identify + '/run/state/' + row.tpId
         }
 
         axios({
           method: 'get',
           changeOrigin: true,
-          url: 'http://' + identify + clientBasePath + '/run/state/' + row.tpId,
+          url: httpStr,
           headers: { 'Access-Control-Allow-Credentials': true },
           params: {}
         }).then((response) => {
