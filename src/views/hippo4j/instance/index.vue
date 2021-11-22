@@ -63,6 +63,12 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="instanceDialogFormVisible" width="1000px">
       <test v-if="dialogVisible"></test>
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="110px">
+        <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线程池负载高时, 禁止频繁刷新此页面!!!</h3>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label=""> </el-form-item>
+          </el-col>
+        </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="线程池ID" prop="tpId">
@@ -558,7 +564,7 @@
         let httpStr = ''
         const identify = row.identify
         let clientBasePath = row.clientBasePath
-        if (JSON.stringify(clientBasePath)=='{}') {
+        if (clientBasePath != null) {
           httpStr = 'http://' + identify + clientBasePath + '/run/state/' + row.tpId
         } else {
           httpStr = 'http://' + identify + '/run/state/' + row.tpId
