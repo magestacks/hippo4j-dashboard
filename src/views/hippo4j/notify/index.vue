@@ -31,14 +31,17 @@
       <el-table-column label="线程池ID" align="center">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
-      <el-table-column label="通知方式" align="center" width="200">
-        <template slot-scope="scope">{{ scope.row.platform }} - {{ scope.row.type }}</template>
+      <el-table-column label="通知平台" align="center">
+        <template slot-scope="scope">{{ scope.row.platform }}</template>
       </el-table-column>
-      <el-table-column label="接收者" align="center">
-        <template slot-scope="scope">{{ scope.row.receives | ellipsis}}</template>
+      <el-table-column label="通知类型" align="center">
+        <template slot-scope="scope">{{ scope.row.type }}</template>
       </el-table-column>
       <el-table-column label="报警间隔" align="center" width="120">
         <template slot-scope="scope">{{ scope.row.interval }}</template>
+      </el-table-column>
+      <el-table-column label="接收者" align="center" width="200">
+        <template slot-scope="scope">{{ scope.row.receives | ellipsis}}</template>
       </el-table-column>
       <el-table-column label="是否启用" align="center" width="200">
         <template slot-scope="scope">
