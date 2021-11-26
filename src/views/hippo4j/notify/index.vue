@@ -60,8 +60,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
                 @pagination="fetchData"/>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px"
-               :before-close="handleClose">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -109,8 +108,10 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="线程池ID" prop="tpId">
-              <el-select v-model="temp.tpId" placeholder="线程池ID" style="display:block;" :disabled="dialogStatus==='create'?false:true">
-                <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+              <el-select v-model="temp.tpId" placeholder="线程池ID" style="display:block;"
+                         :disabled="dialogStatus==='create'?false:true">
+                <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name"
+                           :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -138,7 +139,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="报警间隔" prop="interval">
-              <el-input-number v-model="temp.interval" placeholder="报警间隔/Min" :min="1" :max="99999"/>
+              <el-input-number v-model="temp.interval" placeholder="报警间隔/Min" :min="0" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -146,7 +147,10 @@
         <el-row :gutter="40">
           <el-col :span="24">
             <el-form-item label="接收者" prop="receives">
-              <el-input v-model="temp.receives" :autosize="{ minRows: 4, maxRows: 6}" type="textarea" placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)"
+              <el-input v-model="temp.receives" :autosize="{ minRows: 6, maxRows: 10}" type="textarea" placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)
+钉钉：填写手机号
+企微：填写user_id会以@的消息发给用户，否则填写姓名，如：龙台
+飞书：填写ou_开头用户唯一标识会以@的消息发给用户，填写手机号则是普通的@"
                         style="width: 83%"/>
             </el-form-item>
           </el-col>
@@ -198,11 +202,11 @@
       },
 
       ellipsis(value) {
-        if (!value) return "";
+        if (!value) return ''
         if (value.length > 22) {
-          return value.slice(0, 22) + "...";
+          return value.slice(0, 22) + '...'
         }
-        return value;
+        return value
       }
     },
     data() {
@@ -224,16 +228,18 @@
         threadPoolOptions: [],
         platformTypes: [
           { key: 'DING', display_name: 'DING' },
+          { key: 'LARK', display_name: 'LARK' },
+          { key: 'WECHAT', display_name: 'WECHAT' },
         ],
 
         typeTypes: [
-          { key: 'CONFIG', display_name: 'CONFIG'},
-          { key: 'ALARM', display_name: 'ALARM'},
+          { key: 'CONFIG', display_name: 'CONFIG' },
+          { key: 'ALARM', display_name: 'ALARM' }
         ],
 
         enableTypes: [
-          { key: 0, display_name: '启用'},
-          { key: 1, display_name: '停用'},
+          { key: 0, display_name: '启用' },
+          { key: 1, display_name: '停用' }
         ],
         dialogStatus: '',
         textMap: {
@@ -248,12 +254,13 @@
           secretKey: [{ required: true, message: 'this is required', trigger: 'blur' }],
           platform: [{ required: true, message: 'this is required', trigger: 'blur' }],
           type: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          enable: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          enable: [{ required: true, message: 'this is required', trigger: 'blur' }]
 
         },
         temp: {
           id: undefined,
-          tenantId: ''
+          tenantId: '',
+          interval: undefined
         },
         visible: true
       }
@@ -339,6 +346,9 @@
       },
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
+        if (this.temp.interval == null) {
+          this.temp.interval = undefined
+        }
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
         this.$nextTick(() => {

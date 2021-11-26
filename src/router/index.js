@@ -180,8 +180,8 @@ export const asyncRoutes = [
         meta: { title: '线程池实例', icon: 'exe-cfg' }
       },
       {
-        path: 'user',
-        name: 'User',
+        path: 'notifyList',
+        name: 'notifyList',
         component: () => import('@/views/hippo4j/notify/index'),
         meta: { title: '报警通知', icon: 'battery-line' }
       }
