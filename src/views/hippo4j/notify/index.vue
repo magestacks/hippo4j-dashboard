@@ -46,7 +46,7 @@
       <el-table-column label="是否启用" align="center" width="200">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.enable" active-color="#00A854" active-text="启用" :active-value="0"
-                     inactive-color="#F04134" inactive-text="停用" :inactive-value="1" @change="changeSwitch(scope.row)"/>
+                     inactive-color="#F04134" inactive-text="停用" :inactive-value="1" @change="changeEnable(scope.row)"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -377,6 +377,17 @@
       },
       handleDelete(row) {
         notifyApi.deleted(row).then(response => {
+          this.fetchData()
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      },
+      changeEnable(row) {
+        notifyApi.enable(row).then(response => {
           this.fetchData()
           this.$notify({
             title: 'Success',

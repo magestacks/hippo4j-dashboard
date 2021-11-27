@@ -29,24 +29,24 @@
       <el-table-column label="最大线程" align="center" width="120">
         <template slot-scope="scope">{{ scope.row.maxSize }}</template>
       </el-table-column>
-      <el-table-column label="队列类型" align="center">
-        <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
-      </el-table-column>
-      <el-table-column label="队列容量" align="center" width="120">
-        <template slot-scope="scope">{{ scope.row.capacity }}</template>
-      </el-table-column>
-      <el-table-column label="拒绝策略" align="center" width="200">
-        <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
-      </el-table-column>
       <el-table-column label="线程存活" align="center" width="120">
         <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
       </el-table-column>
-      <el-table-column label="是否报警" align="center" width="200">
+      <el-table-column label="队列类型" align="center">
+        <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
+      </el-table-column>
+      <el-table-column label="队列容量" align="center" width="160">
+        <template slot-scope="scope">{{ scope.row.capacity }}</template>
+      </el-table-column>
+      <el-table-column label="拒绝策略" align="center" width="280">
+        <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
+      </el-table-column>
+      <!--<el-table-column label="是否报警" align="center" width="200">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.isAlarm" active-color="#00A854" active-text="报警" :active-value="0"
                      inactive-color="#F04134" inactive-text="忽略" :inactive-value="1" @change="changeSwitch(scope.row)"/>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleInfo(row)">
@@ -66,7 +66,7 @@
         <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线程池负载高时, 禁止频繁刷新此页面!!!</h3>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label=""> </el-form-item>
+            <el-form-item label=""></el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -254,11 +254,7 @@
                         :disabled="dialogStatus==='create'?false:true"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="KVTime" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="Time / S" :min="20" :max="90"/>
-            </el-form-item>
-          </el-col>
+
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
@@ -268,7 +264,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
-              <el-select v-model="temp.queueType" placeholder="队列类型" style="display:block;">
+              <el-select v-model="temp.queueType" placeholder="队列类型" @change="selectQueueType" style="display:block;">
                 <el-option v-for="item in queueTypeOptions" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
@@ -276,7 +272,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="99999"/>
+              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="2147483647"
+                               :disabled="temp.queueType===4||temp.queueType===5?true:false"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -292,15 +289,21 @@
           </el-col>
 
           <el-col :span="12">
+            <el-form-item label="KVTime" prop="keepAliveTime">
+              <el-input-number v-model="temp.keepAliveTime" placeholder="Time / S" :min="20" :max="90"/>
+            </el-form-item>
+          </el-col>
+
+          <!--<el-col :span="12">
             <el-form-item label="活跃度报警" prop="livenessAlarm">
               <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="30" :max="90"/>
             </el-form-item>
-          </el-col>
+          </el-col>-->
 
 
         </el-row>
 
-        <el-row :gutter="20">
+        <!--<el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="是否报警" prop="isAlarm">
               <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
@@ -315,7 +318,7 @@
             </el-form-item>
           </el-col>
 
-        </el-row>
+        </el-row>-->
 
         <el-row :gutter="20">
 
@@ -435,17 +438,17 @@
           { key: 1, display_name: '不报警' }
         ],
         rules: {
-          tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
-          itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
-          tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
-          coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
-          maxSize: [{required: true, message: 'this is required', trigger: 'blur'}],
-          queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
-          keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
-          isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-          capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-          livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-          rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
+          tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          maxSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          isAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          capacityAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          livenessAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          rejectedType: [{ required: true, message: 'this is required', trigger: 'blur' }]
         },
         dialogStatus: '',
         textMap: {
@@ -597,6 +600,13 @@
             })
           }
         })
+      },
+      selectQueueType(value) {
+        if (value === 4) {
+          this.temp.capacity = 0
+        } else if (value === 5) {
+          this.temp.capacity = 2147483647
+        }
       }
     }
   }

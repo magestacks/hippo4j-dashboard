@@ -24,15 +24,18 @@
       <el-table-column label="项目名称" align="center">
         <template slot-scope="scope">{{ scope.row.itemName }}</template>
       </el-table-column>
-      <el-table-column label="项目简介" align="center">
+      <!--<el-table-column label="项目简介" align="center">
         <template slot-scope="scope">{{ scope.row.itemDesc | ellipsis }}</template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="OWNER" width="200" align="center">
         <template slot-scope="scope">{{ scope.row.owner }}
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="200" align="center">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
+      </el-table-column>
+      <el-table-column label="修改时间" width="200" align="center">
+        <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">

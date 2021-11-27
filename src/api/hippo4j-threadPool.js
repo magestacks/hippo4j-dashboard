@@ -40,3 +40,10 @@ export function deleted(data) {
   })
 }
 
+export function alarmEnable(data) {
+  return request({
+    url: '/v1/cs/thread/pool/alarm/enable/' + data.id + '/' + data.isAlarm,
+    method: 'post'
+  })
+}
+

@@ -40,3 +40,9 @@ export function deleted(data) {
   })
 }
 
+export function enable(data) {
+  return request({
+    url: '/v1/cs/notify/enable/' + data.id + '/' + data.enable,
+    method: 'post'
+  })
+}
