@@ -100,7 +100,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="通知类型" prop="type">
-              <el-select v-model="temp.type" placeholder="通知类型" style="display:block;">
+              <el-select v-model="temp.type" placeholder="通知类型" @change="selectType" style="display:block;">
                 <el-option v-for="item in typeTypes" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
@@ -142,7 +142,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="报警间隔" prop="interval">
-              <el-input-number v-model="temp.interval" placeholder="报警间隔/Min" :min="0" />
+              <el-input-number v-model="temp.interval"  placeholder="报警间隔/Min" :min="0"
+                               :disabled="temp.type==='CONFIG'?true:false"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -232,7 +233,7 @@
         platformTypes: [
           { key: 'DING', display_name: 'DING' },
           { key: 'LARK', display_name: 'LARK' },
-          { key: 'WECHAT', display_name: 'WECHAT' },
+          { key: 'WECHAT', display_name: 'WECHAT' }
         ],
 
         typeTypes: [
@@ -396,6 +397,12 @@
             duration: 2000
           })
         })
+      },
+
+      selectType(value) {
+        if (value === 'CONFIG') {
+          this.temp.interval = undefined
+        }
       }
     }
   }
