@@ -61,7 +61,7 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
                 @pagination="fetchData"/>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="instanceDialogFormVisible" width="1000px">
-      <test v-if="dialogVisible"></test>
+      <test></test>
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="110px">
         <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线程池负载高时, 禁止频繁刷新此页面!!!</h3>
         <el-row :gutter="20">
@@ -207,8 +207,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px"
-               :before-close="handleClose">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="12">

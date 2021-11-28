@@ -1,13 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.itemId" clearable placeholder="项目ID" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
+      <el-input v-model="listQuery.itemId" clearable placeholder="项目ID" style="width: 200px;" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                 @click="handleCreate">
+                 @click="handleCreate" v-if="this.$cookie.get('userName') == 'admin'">
         添加
       </el-button>
     </div>
@@ -37,7 +36,7 @@
       <el-table-column label="修改时间" width="200" align="center">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width" v-if="this.$cookie.get('userName') == 'admin'">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑

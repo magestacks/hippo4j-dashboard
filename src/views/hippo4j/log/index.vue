@@ -1,12 +1,9 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.category" clearable placeholder="业务类型" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
-      <el-input v-model="listQuery.bizNo" clearable placeholder="业务标识" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
-      <el-input v-model="listQuery.operator" clearable placeholder="操作人" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
+      <el-input v-model="listQuery.category" clearable placeholder="业务类型" style="width: 200px;" class="filter-item"/>
+      <el-input v-model="listQuery.bizNo" clearable placeholder="业务标识" style="width: 200px;" class="filter-item"/>
+      <el-input v-model="listQuery.operator" clearable placeholder="操作人" style="width: 200px;" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索
       </el-button>
@@ -43,7 +40,7 @@
                 @pagination="fetchData"/>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="800px">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px">
+      <el-form ref="dataForm" :model="temp" label-position="left" label-width="100px">
         <el-form-item label="业务类型" prop="category">
           <el-input v-model="temp.category" :disabled="true" placeholder="业务类型" style="width: 40%"/>
         </el-form-item>
