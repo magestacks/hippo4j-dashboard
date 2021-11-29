@@ -71,7 +71,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="线程池ID" prop="tpId">
+            <el-form-item label="线程池ID">
               <el-input v-model="runTimeTemp.tpId" :disabled="true"/>
             </el-form-item>
           </el-col>
@@ -112,7 +112,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="核心线程" prop="coreSize">
+            <el-form-item label="核心线程">
               <el-input v-model="runTimeTemp.coreSize" :disabled="true"/>
             </el-form-item>
           </el-col>
@@ -153,7 +153,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="阻塞队列" prop="queueType">
+            <el-form-item label="阻塞队列">
               <el-input v-model="runTimeTemp.queueType" :disabled="true"/>
             </el-form-item>
           </el-col>
@@ -193,6 +193,14 @@
           <el-col :span="12">
             <el-form-item label="拒绝次数" prop="rejectCount">
               <el-input v-model="runTimeTemp.rejectCount" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="最后更新时间" prop="clientLastRefreshTime">
+              <el-input v-model="runTimeTemp.clientLastRefreshTime" :disabled="true"/>
             </el-form-item>
           </el-col>
         </el-row>
