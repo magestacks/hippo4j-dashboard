@@ -3,7 +3,7 @@
     <el-col :xs="16" :sm="16" :lg="8" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('chartInfo')">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="success" class-name="card-panel-icon" />
+          <svg-icon icon-class="tenant_logo" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -16,7 +16,7 @@
     <el-col :xs="16" :sm="16" :lg="8" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="fail" class-name="card-panel-icon" />
+          <svg-icon icon-class="item_logo" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -29,7 +29,7 @@
     <el-col :xs="16" :sm="16" :lg="8" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="running" class-name="card-panel-icon" />
+          <svg-icon icon-class="threadpool_logo" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -49,11 +49,25 @@ export default {
   components: {
     CountTo
   },
+   props: {
+    countSucTotal: {
+      type: Number,
+      default: 0,
+    },
+    countFailTotal: {
+      type: Number,
+      default: 0,
+    },
+    countRunningTotal: {
+      type: Number,
+      default: 0,
+    },
+  },
   data () {
     return {
-      successCount: parseInt(localStorage.getItem('countSucTotal')),
-      failCount: parseInt(localStorage.getItem('countFailTotal')),
-      runningCount: parseInt(localStorage.getItem('countRunningTotal'))
+      successCount: this.countSucTotal,//parseInt(localStorage.getItem('countSucTotal')),
+      failCount: this.countFailTotal,//parseInt(localStorage.getItem('countFailTotal')),
+      runningCount: this.countRunningTotal//parseInt(localStorage.getItem('countRunningTotal'))
     }
   },
   methods: {

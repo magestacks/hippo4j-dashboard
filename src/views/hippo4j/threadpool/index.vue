@@ -31,25 +31,25 @@
       <el-table-column label="线程池ID" align="center">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
-      <el-table-column label="核心线程" align="center" width="120">
+      <el-table-column label="核心线程" align="center" >
         <template slot-scope="scope">{{ scope.row.coreSize }}</template>
       </el-table-column>
-      <el-table-column label="最大线程" align="center" width="120">
+      <el-table-column label="最大线程" align="center" >
         <template slot-scope="scope">{{ scope.row.maxSize }}</template>
       </el-table-column>
       <el-table-column label="队列类型" align="center">
         <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
       </el-table-column>
-      <el-table-column label="队列容量" align="center" width="120">
+      <el-table-column label="队列容量" align="center" >
         <template slot-scope="scope">{{ scope.row.capacity }}</template>
       </el-table-column>
-      <el-table-column label="是否报警" align="center" width="200">
+      <el-table-column label="是否报警" align="center">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.isAlarm" active-color="#00A854" active-text="报警" :active-value="0"
                      inactive-color="#F04134" inactive-text="忽略" :inactive-value="1" @change="changeAlarm(scope.row)"/>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑

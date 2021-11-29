@@ -1,8 +1,11 @@
 <template>
-  <div class="dashboard-editor-container">
+  <div class="dashboard-editor-container" v-if='show'>
     <!--<github-corner class="github-corner" />-->
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <panel-group @handleSetLineChartData="handleSetLineChartData"
+                  :countSucTotal='countSucTotal'
+                  :countRunningTotal='countRunningTotal'
+                  :countFailTotal='countRunningTotal'/>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
@@ -74,21 +77,30 @@ export default {
   },
   data () {
     return {
-      lineChartData: lineChartData.chartInfo
+      lineChartData: lineChartData.chartInfo,
+      countSucTotal:0,
+      countRunningTotal:0,
+      countFailTotal:0,
+      show:false
     }
   },
-  created () {
+  async created () {
     this.chartInfo()
   },
   methods: {
     handleSetLineChartData (type) {
+      console.log('111',type)
       this.lineChartData = lineChartData[type]
     },
     chartInfo () {
       dashborad.chartInfo().then(response => {
-        localStorage.setItem('countSucTotal', response.tenantCount)
-        localStorage.setItem('countRunningTotal', response.threadPoolCount)
-        localStorage.setItem('countFailTotal', response.itemCount)
+        this.show = true
+        // localStorage.setItem('countSucTotal', response.tenantCount)
+        // localStorage.setItem('countRunningTotal', response.threadPoolCount)
+        // localStorage.setItem('countFailTotal', response.itemCount)
+        this.countSucTotal=response.tenantCount,
+        this.countRunningTotal=response.threadPoolCount,
+        this.countFailTotal=response.itemCount
         // this.lineChartData.successData = content.triggerDayCountSucList
         // this.lineChartData.failData = content.triggerDayCountFailList
         // this.lineChartData.dayList = content.triggerDayList

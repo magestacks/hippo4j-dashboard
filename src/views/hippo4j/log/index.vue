@@ -12,7 +12,7 @@
       <el-table-column align="center" label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index+1 }}</template>
       </el-table-column>
-      <el-table-column label="业务类型" width="200" align="center">
+      <el-table-column label="业务类型" align="center">
         <template slot-scope="scope">{{ scope.row.category }}</template>
       </el-table-column>
       <el-table-column label="业务标识" align="center">
@@ -21,14 +21,14 @@
       <el-table-column label="日志内容" align="center">
         <template slot-scope="scope">{{ scope.row.action | ellipsis }}</template>
       </el-table-column>
-      <el-table-column label="操作人" width="200" align="center">
+      <el-table-column label="操作人" align="center">
         <template slot-scope="scope">{{ scope.row.operator }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="200" align="center">
+      <el-table-column label="创建时间" align="center">
         <template slot-scope="scope">{{ scope.row.createTime }}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             查看
