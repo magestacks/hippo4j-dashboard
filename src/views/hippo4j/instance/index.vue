@@ -20,26 +20,26 @@
         <template slot-scope="scope">{{ scope.$index+1 }}</template>
       </el-table-column>
 
-      <el-table-column label="实例标识" align="center" width="200">
+      <el-table-column label="实例标识" align="center">
         <template slot-scope="scope">{{ scope.row.identify }}</template>
       </el-table-column>
-      <el-table-column label="核心线程" align="center" width="120">
+      <el-table-column label="核心线程" align="center">
         <template slot-scope="scope">{{ scope.row.coreSize }}</template>
       </el-table-column>
-      <el-table-column label="最大线程" align="center" width="120">
+      <el-table-column label="最大线程" align="center">
         <template slot-scope="scope">{{ scope.row.maxSize }}</template>
-      </el-table-column>
-      <el-table-column label="线程存活" align="center" width="120">
-        <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
       </el-table-column>
       <el-table-column label="队列类型" align="center">
         <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
       </el-table-column>
-      <el-table-column label="队列容量" align="center" width="160">
+      <el-table-column label="队列容量" align="center">
         <template slot-scope="scope">{{ scope.row.capacity }}</template>
       </el-table-column>
-      <el-table-column label="拒绝策略" align="center" width="280">
+      <el-table-column label="拒绝策略" align="center">
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
+      </el-table-column>
+      <el-table-column label="线程存活" align="center">
+        <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
       </el-table-column>
       <!--<el-table-column label="是否报警" align="center" width="200">
         <template slot-scope="scope">
@@ -47,7 +47,7 @@
                      inactive-color="#F04134" inactive-text="忽略" :inactive-value="1" @change="changeSwitch(scope.row)"/>
         </template>
       </el-table-column>-->
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleInfo(row)">
             参数
@@ -362,7 +362,6 @@
   import axios from 'axios'
 
   export default {
-    name: 'JobProject',
     components: { Pagination },
     directives: { waves },
     filters: {
@@ -565,19 +564,20 @@
         if (typeof row === 'undefined' || row === null) {
           row = this.tempRow
         } else {
-          this.tempRow = { 'identify': row.identify, 'clientBasePath': row.clientBasePath, 'tpId': row.tpId }
+          this.tempRow = { 'identify': row.identify, 'clientAddress': row.clientAddress, 'clientBasePath': row.clientBasePath, 'tpId': row.tpId }
         }
         this.refresh(row)
       },
 
       refresh(row) {
         let httpStr = ''
-        const identify = row.identify
+        const clientAddress = row.clientAddress
+        alert(clientAddress)
         let clientBasePath = row.clientBasePath
         if (clientBasePath != null) {
-          httpStr = 'http://' + identify + clientBasePath + '/run/state/' + row.tpId
+          httpStr = 'http://' + clientAddress + clientBasePath + '/run/state/' + row.tpId
         } else {
-          httpStr = 'http://' + identify + '/run/state/' + row.tpId
+          httpStr = 'http://' + clientAddress + '/run/state/' + row.tpId
         }
 
         axios({

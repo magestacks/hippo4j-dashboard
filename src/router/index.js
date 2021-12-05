@@ -178,16 +178,24 @@ export const asyncRoutes = [
         name: 'instanceList',
         component: () => import('@/views/hippo4j/instance/index'),
         meta: { title: '线程池实例' }
-      },
+      }
+    ]
+  },
+  {
+    path: '/hippo4j/notify',
+    component: Layout,
+    redirect: '/hippo4j/notifyList',
+    name: 'notify',
+    meta: { title: '报警通知', icon: 'work' },
+    children: [
       {
         path: 'notifyList',
         name: 'notifyList',
         component: () => import('@/views/hippo4j/notify/index'),
-        meta: { title: '报警通知' }
+        meta: { title: '报警通知', icon: 'password' }
       }
     ]
   },
-
   {
     path: '/hippo4j/user',
     component: Layout,
