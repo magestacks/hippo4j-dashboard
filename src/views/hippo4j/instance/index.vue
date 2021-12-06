@@ -572,7 +572,6 @@
       refresh(row) {
         let httpStr = ''
         const clientAddress = row.clientAddress
-        alert(clientAddress)
         let clientBasePath = row.clientBasePath
         if (clientBasePath != null) {
           httpStr = 'http://' + clientAddress + clientBasePath + '/run/state/' + row.tpId

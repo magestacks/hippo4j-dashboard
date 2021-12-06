@@ -103,7 +103,7 @@ export default {
       }
 
       .icon-people {
-        background: #40c9c6;
+        background: #bcc99d;
       }
 
       .icon-message {
@@ -111,11 +111,11 @@ export default {
       }
 
       .icon-money {
-        background: #f4516c;
+        background: #a0a6f4;
       }
 
       .icon-shopping {
-        background: #34bfa3;
+        background: #bcc99d;
       }
     }
 
@@ -128,7 +128,7 @@ export default {
     }
 
     .icon-money {
-      color: #f4516c;
+      color: #a0a6f4;
     }
 
     .icon-shopping {
