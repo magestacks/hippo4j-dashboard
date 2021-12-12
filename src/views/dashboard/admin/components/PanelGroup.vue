@@ -103,7 +103,7 @@ export default {
       }
 
       .icon-people {
-        background: #bcc99d;
+        background: #dae8d6;
       }
 
       .icon-message {
@@ -115,7 +115,7 @@ export default {
       }
 
       .icon-shopping {
-        background: #bcc99d;
+        background: #dae8d6;
       }
     }
 

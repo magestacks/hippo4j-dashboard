@@ -30,7 +30,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login ({ commit }, userInfo) {
+  login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password, rememberMe: 1 }).then(response => {
@@ -43,14 +43,14 @@ const actions = {
         setToken(data)
         resolve()
       }).catch(error => {
-        alert('登陆失败')
+        alert('登录失败')
         reject(error)
       })
     })
   },
 
   // get user info
-  getInfo ({ commit, state }) {
+  getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       const data = {}
       data.roles = JSON.parse(localStorage.getItem('roles'))
@@ -60,7 +60,7 @@ const actions = {
   },
 
   // user logout
-  logout ({ commit, state }) {
+  logout({ commit, state }) {
     // return new Promise((resolve, reject) => {
     //   logout(state.token).then(() => {
     //     commit('SET_TOKEN', '')
@@ -82,7 +82,7 @@ const actions = {
   },
 
   // remove token
-  resetToken ({ commit }) {
+  resetToken({ commit }) {
     return new Promise(resolve => {
       commit('SET_TOKEN', '')
       commit('SET_ROLES', [])
@@ -92,7 +92,7 @@ const actions = {
   },
 
   // dynamically modify permissions
-  changeRoles ({ commit, dispatch }, role) {
+  changeRoles({ commit, dispatch }, role) {
     return new Promise(async resolve => {
       const token = role + '-token'
 

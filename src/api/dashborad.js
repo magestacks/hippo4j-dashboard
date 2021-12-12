@@ -8,3 +8,31 @@ export function chartInfo() {
     method: 'get'
   })
 }
+
+export function lineChart() {
+  return request({
+    url: '/v1/cs/dashboard/line/chart',
+    method: 'get'
+  })
+}
+
+export function pieChart() {
+  return request({
+    url: '/v1/cs/dashboard/pie/chart',
+    method: 'get'
+  })
+}
+
+export function tenantChart() {
+  return request({
+    url: '/v1/cs/dashboard/tenant/chart',
+    method: 'get'
+  })
+}
+
+export function ranking() {
+  return request({
+    url: '/v1/cs/dashboard/ranking',
+    method: 'get'
+  })
+}

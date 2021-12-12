@@ -60,7 +60,7 @@
         this.chart = echarts.init(this.$el, 'macarons')
         this.setOptions(this.chartData)
       },
-      setOptions({failData, successData, dayList} = {}) {
+      setOptions({ failData, successData, dayList } = {}) {
         this.chart.setOption({
           xAxis: {
             data: dayList,
@@ -120,21 +120,24 @@
               animationEasing: 'quadraticOut'
             },
             {
-            name: 'rejectCount', itemStyle: {
-              normal: {
-                color: '#FF005A',
-                lineStyle: {
+              name: 'rejectCount',
+              itemStyle: {
+                normal: {
                   color: '#FF005A',
-                  width: 2
+                  lineStyle: {
+                    color: '#FF005A',
+                    width: 2
+                  }
                 }
-              }
-            },
-            smooth: true,
-            type: 'line',
-            data: failData,
-            animationDuration: 2800,
-            animationEasing: 'cubicInOut'
-          }]
+              },
+              smooth: true,
+              type: 'line',
+              data: failData,
+              animationDuration: 2800,
+              animationEasing: 'cubicInOut'
+            }]
+
+          // stop
         })
       }
     }

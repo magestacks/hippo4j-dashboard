@@ -1,7 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" class="filter-item">
+      <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" class="filter-item"
+                 @change="tenantSelectList()">
+        <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+      </el-select>
+      <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" class="filter-item"
+                 @change="itemSelectList()">
         <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
       <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" class="filter-item">
@@ -12,6 +17,10 @@
                  @click="fetchData">
         搜索
       </el-button>
+      <!--<el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
+                 @click="refreshData">
+        重置
+      </el-button>-->
     </div>
 
 
@@ -55,6 +64,9 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
+          <!--<el-button type="primary" size="mini" @click="hrefMonitor(row)">
+            监控
+          </el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -354,6 +366,7 @@
 </template>
 
 <script>
+  import * as tenantApi from '@/api/hippo4j-tenant'
   import * as itemApi from '@/api/hippo4j-item'
   import * as threadPoolApi from '@/api/hippo4j-threadPool'
   import * as instanceApi from '@/api/hippo4j-instance'
@@ -416,6 +429,7 @@
           itemId: '',
           tpId: ''
         },
+        size: 500,
         pluginTypeOptions: ['reader', 'writer'],
         dialogPluginVisible: false,
         pluginData: [],
@@ -496,25 +510,20 @@
           this.listLoading = false
         })
       },
+      refreshData() {
+        this.listQuery.tenantId = null
+        this.listQuery.itemId = null
+        this.listQuery.tpId = null
+      },
       initSelect() {
-        itemApi.list({}).then(response => {
+        tenantApi.list({ 'size': this.size }).then(response => {
           const { records } = response
           for (var i = 0; i < records.length; i++) {
-            this.itemOptions.push({
-              key: records[i].itemId,
-              display_name: records[i].itemId + ' ' + records[i].itemName
+            this.tenantOptions.push({
+              key: records[i].tenantId,
+              display_name: records[i].tenantId + ' ' + records[i].tenantName
             })
           }
-
-          threadPoolApi.list({}).then(response => {
-            const { records } = response
-            for (var i = 0; i < records.length; i++) {
-              this.threadPoolOptions.push({
-                key: records[i].tpId,
-                display_name: records[i].tpId
-              })
-            }
-          })
         })
 
       },
@@ -613,6 +622,53 @@
         } else if (value === 5) {
           this.temp.capacity = 2147483647
         }
+      },
+
+      tenantSelectList() {
+        this.listQuery.itemId = null
+        this.listQuery.tpId = null
+
+        this.itemOptions = []
+        this.threadPoolOptions = []
+        const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
+        itemApi.list(tenantId).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.itemOptions.push({
+              key: records[i].itemId,
+              display_name: records[i].itemId + ' ' + records[i].itemName
+            })
+          }
+        })
+      },
+
+      itemSelectList() {
+        this.listQuery.tpId = null
+
+        this.threadPoolOptions = []
+        const itemId = { 'itemId': this.listQuery.itemId, 'size': this.size }
+        threadPoolApi.list(itemId).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.threadPoolOptions.push({
+              key: records[i].tpId,
+              display_name: records[i].tpId
+            })
+          }
+        })
+      },
+      hrefMonitor(row) {
+        /*let routeUrl = this.$router.resolve({
+          path: '/hippo4j/monitor',
+          query:{
+            tenantId: row.tenantId,
+            itemId: row.itemId,
+            tpId: row.tpId,
+            identify: row.identify
+          }
+        });
+        window.open(routeUrl.href, '_blank');*/
+        // this.$router.push('/monitorList')
       }
     }
   }

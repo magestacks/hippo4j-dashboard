@@ -83,6 +83,11 @@ export const constantRoutes = [
         meta: { title: '运行报表', icon: 'dashboard', affix: true }
       }
     ]
+  },
+  {
+    path: '/hippo4j/monitor',
+    component: () => import('@/views/hippo4j/monitor/index'),
+    hidden: true
   }
 ]
 
@@ -178,6 +183,12 @@ export const asyncRoutes = [
         name: 'instanceList',
         component: () => import('@/views/hippo4j/instance/index'),
         meta: { title: '线程池实例' }
+      },
+      {
+        path: 'monitorList',
+        name: 'monitorList',
+        component: () => import('@/views/hippo4j/monitor/index'),
+        meta: { title: '线程池监控' }
       }
     ]
   },

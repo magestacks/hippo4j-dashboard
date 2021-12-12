@@ -1,15 +1,18 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" class="filter-item">
+      <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" class="filter-item"
+                 @change="tenantSelectList()">
         <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" class="filter-item">
+      <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" class="filter-item"
+                 @change="itemSelectList()">
         <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
       <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" class="filter-item">
         <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
+
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索
       </el-button>
@@ -249,6 +252,7 @@
         listQuery: {
           current: 1,
           size: 10,
+          tpId: '',
           itemId: ''
         },
         pluginTypeOptions: ['reader', 'writer'],
@@ -277,6 +281,7 @@
           {key: 0, display_name: '报警'},
           {key: 1, display_name: '不报警'}
         ],
+        size: 500,
         dialogStatus: '',
         textMap: {
           update: 'Edit',
@@ -330,8 +335,8 @@
         })
       },
       initSelect() {
-        tenantApi.list({}).then(response => {
-          const {records} = response
+        tenantApi.list({ 'size': this.size }).then(response => {
+          const { records } = response
           for (var i = 0; i < records.length; i++) {
             this.tenantOptions.push({
               key: records[i].tenantId,
@@ -339,27 +344,6 @@
             })
           }
         })
-
-        itemApi.list({}).then(response => {
-          const {records} = response
-          for (var i = 0; i < records.length; i++) {
-            this.itemOptions.push({
-              key: records[i].itemId,
-              display_name: records[i].itemId + ' ' + records[i].itemName
-            })
-          }
-        })
-
-        threadPoolApi.list({}).then(response => {
-          const { records } = response
-          for (var i = 0; i < records.length; i++) {
-            this.threadPoolOptions.push({
-              key: records[i].tpId,
-              display_name: records[i].tpId
-            })
-          }
-        })
-
       },
       resetTemp() {
         this.temp = {
@@ -434,6 +418,39 @@
         } else if (value === 5) {
           this.temp.capacity = 2147483647
         }
+      },
+      tenantSelectList() {
+        this.listQuery.itemId = null
+        this.listQuery.tpId = null
+
+        this.itemOptions = []
+        this.threadPoolOptions = []
+        const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
+        itemApi.list(tenantId).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.itemOptions.push({
+              key: records[i].itemId,
+              display_name: records[i].itemId + ' ' + records[i].itemName
+            })
+          }
+        })
+      },
+
+      itemSelectList() {
+        this.listQuery.tpId = null
+
+        this.threadPoolOptions = []
+        const itemId = { 'itemId': this.listQuery.itemId, 'size': this.size }
+        threadPoolApi.list(itemId).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.threadPoolOptions.push({
+              key: records[i].tpId,
+              display_name: records[i].tpId
+            })
+          }
+        })
       }
     }
   }
