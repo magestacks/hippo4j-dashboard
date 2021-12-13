@@ -60,63 +60,28 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions ({ failData, successData, dayList } = {}) {
+    setOptions ({ oneList, twoList, threeList, fourList } = {}) {
       this.chart.setOption({
         title: {
-          text: 'Stacked Area Chart'
+          text: 'Ranking',
+          subtext: 'Data in the last 10 minutes'
         },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          }
+        legend: {},
+        tooltip: {},
+        dataset: {
+          source: [
+            ['product', 'queueSize', 'rejectCount', 'completedTaskCount'],
+            oneList,
+            twoList,
+            threeList,
+            fourList
+          ]
         },
-        legend: {
-          data: ['Completed Task Count']
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        series: [
-          {
-            name: 'Completed Task Count',
-            type: 'line',
-            stack: 'Total',
-            label: {
-              show: true,
-              position: 'top',
-              color: '#6a7985'
-            },
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
-          }
-        ]
+        xAxis: { type: 'category' },
+        yAxis: {},
+        // Declare several bar series, each will be mapped
+        // to a column of dataset.source by default.
+        series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }]
       })
     }
   }

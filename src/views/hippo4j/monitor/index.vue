@@ -29,37 +29,59 @@
 
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <el-form label-position="left" style="customStyle">
-        <el-form-item label="核心线程" label-width="200px">
-          <span>{{ temp.coreSize }}</span>
-        </el-form-item>
-        <el-form-item label="最大线程" label-width="200px">
-          <span>{{ temp.maxSize }}</span>
-        </el-form-item>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;padding-left:32px">
+      <el-col :span="12">
+        <el-form label-position="left" style="customStyle">
+          <el-form-item label="租户ID" label-width="200px">
+            <span>{{ temp.tenantId }}</span>
+          </el-form-item>
+          <el-form-item label="项目ID" label-width="200px">
+            <span>{{ temp.itemId }}</span>
+          </el-form-item>
 
-        <el-form-item label="队列类型" label-width="200px">
-          <span>{{ temp.queueType | queueFilter }}</span>
-        </el-form-item>
+          <el-form-item label="线程池ID" label-width="200px">
+            <span>{{ temp.tpId }}</span>
+          </el-form-item>
 
-        <el-form-item label="队列容量" label-width="200px">
-          <span>{{ temp.capacity }}</span>
-        </el-form-item>
-        <el-form-item label="拒绝策略" label-width="200px">
-          <span>{{ temp.rejectedType | rejectedFilter}}</span>
-        </el-form-item>
-        <el-form-item label="KVTime" label-width="200px">
-          <span>{{ temp.keepAliveTime }}</span>
-        </el-form-item>
-      </el-form>
+          <el-form-item label="实例ID" label-width="200px">
+            <span>{{ fromIdentify }}</span>
+          </el-form-item>
+          <el-form-item label="是否报警" label-width="200px">
+            <span>{{ temp.isAlarm | alarmFilter}}</span>
+          </el-form-item>
+
+        </el-form>
+      </el-col>
+      <el-col :span="12">
+        <el-form label-position="left" style="customStyle">
+          <el-form-item label="核心线程" label-width="200px">
+            <span>{{ temp.coreSize }}</span>
+          </el-form-item>
+          <el-form-item label="最大线程" label-width="200px">
+            <span>{{ temp.maxSize }}</span>
+          </el-form-item>
+
+          <el-form-item label="队列类型" label-width="200px">
+            <span>{{ temp.queueType | queueFilter }}</span>
+          </el-form-item>
+
+          <el-form-item label="队列容量" label-width="200px">
+            <span>{{ temp.capacity }}</span>
+          </el-form-item>
+          <el-form-item label="拒绝策略" label-width="200px">
+            <span>{{ temp.rejectedType | rejectedFilter}}</span>
+          </el-form-item>
+        </el-form>
+      </el-col>
+
     </el-row>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
+      <line-chart :chart-data="lineChartData.chartInfo" />
     </el-row>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart-two :chart-data="lineChartData" />
+      <line-chart-two :chart-data="lineChartData.chartInfo" />
     </el-row>
 
   </div>
@@ -76,18 +98,18 @@ import * as threadPoolApi from '@/api/hippo4j-threadPool'
 import * as instanceApi from '@/api/hippo4j-instance'
 import * as monitorApi from '@/api/hippo4j-monitor'
 
-const lineChartData = {
-  chartInfo: {
-    poolSizeList: [],
-    activeSizeList: [],
-    queueSizeList: [],
-    completedTaskCountList: [],
-    rejectCountList: [],
-    dayList: [],
-    queueRemainingCapacityList: [],
-    currentLoadList: []
-  }
-}
+// const lineChartData = {
+//   chartInfo: {
+//     poolSizeList: [],
+//     activeSizeList: [],
+//     queueSizeList: [],
+//     completedTaskCountList: [],
+//     rejectCountList: [],
+//     dayList: [],
+//     queueRemainingCapacityList: [],
+//     currentLoadList: []
+//   }
+// }
 
 export default {
   name: 'DashboardAdmin',
@@ -124,11 +146,31 @@ export default {
       } else if ('4' == type) {
         return 'DiscardOldestPolicy'
       }
+    },
+
+    alarmFilter (type) {
+      if ('0' == type) {
+        return '报警'
+      } else if ('1' == type) {
+        return '忽略'
+      }
     }
   },
   data () {
     return {
-      lineChartData: lineChartData.chartInfo,
+      // lineChartData: lineChartData.chartInfo,
+      lineChartData: {
+        chartInfo: {
+          poolSizeList: [],
+          activeSizeList: [],
+          queueSizeList: [],
+          completedTaskCountList: [],
+          rejectCountList: [],
+          dayList: [],
+          queueRemainingCapacityList: [],
+          currentLoadList: []
+        }
+      },
       countSucTotal: 0,
       countRunningTotal: 0,
       countFailTotal: 0,
@@ -149,18 +191,15 @@ export default {
         instanceId: ''
       },
 
-      temp: {}
+      temp: {},
+      fromIdentify: ''
     }
   },
-
-
-
   async created () {
     this.chartInfo()
     this.initSelect()
 
   },
-
   methods: {
     handleSetLineChartData (type) {
       this.lineChartData = lineChartData[type]
@@ -187,6 +226,7 @@ export default {
       threadPoolApi.info(this.listQuery).then(response => {
         console.log(response)
         this.temp = response
+        this.fromIdentify = this.listQuery.identify
       })
 
       this.initChart()
@@ -282,19 +322,24 @@ export default {
         "instanceId": this.listQuery.identify
       }
       monitorApi.active(this.listQuery).then(response => {
-        this.lineChartData.dayList = response.times
-        this.lineChartData.poolSizeList = response.poolSizeList
+        this.lineChartData.chartInfo.dayList = response.times
+        this.lineChartData.chartInfo.poolSizeList = response.poolSizeList
 
-        this.lineChartData.activeSizeList = response.activeSizeList
-        this.lineChartData.queueSizeList = response.queueSizeList
-        this.lineChartData.completedTaskCountList = response.completedTaskCountList
+        this.lineChartData.chartInfo.activeSizeList = response.activeSizeList
+        this.lineChartData.chartInfo.queueSizeList = response.queueSizeList
+        this.lineChartData.chartInfo.completedTaskCountList = response.completedTaskCountList
 
-        this.lineChartData.rejectCountList = response.rejectCountList
-        this.lineChartData.queueRemainingCapacityList = response.queueRemainingCapacityList
-        this.lineChartData.currentLoadList = response.currentLoadList
+        this.lineChartData.chartInfo.rejectCountList = response.rejectCountList
+        this.lineChartData.chartInfo.queueRemainingCapacityList = response.queueRemainingCapacityList
+        this.lineChartData.chartInfo.currentLoadList = response.currentLoadList
       })
 
     }
+  },
+  beforeDestroy () {
+    this.lineChartData = {
+      chartInfo: {}
+    };
   }
 }
 </script>

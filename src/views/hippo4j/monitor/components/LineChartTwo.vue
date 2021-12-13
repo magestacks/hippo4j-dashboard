@@ -107,6 +107,9 @@ export default {
             type: 'line',
             stack: 'Total',
             areaStyle: {},
+            label: {
+              position: 'top'
+            },
             emphasis: {
               focus: 'series'
             },
@@ -128,6 +131,7 @@ export default {
             type: 'line',
             stack: 'Total',
             areaStyle: {},
+
             emphasis: {
               focus: 'series'
             },

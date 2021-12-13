@@ -3,33 +3,32 @@
     <github-corner class="github-corner" />
 
     <panel-group @handleSetLineChartData="handleSetLineChartData" :countSucTotal='countSucTotal'
-      :countRunningTotal='countRunningTotal' :countFailTotal='countFailTotal' />
+      :countRunningTotal='countRunningTotal' :countFailTotal='countFailTotal'
+      :countRunningInstanceTotal='countRunningInstanceTotal' />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData" />
     </el-row>
 
     <el-row :gutter="32">
-
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <el-form label-position="left">
-            <el-form-item label="登陆用户" label-width="200px">
+            <el-form-item label="登陆用户" label-width="120px">
               <span>{{temp.userName}}</span>
             </el-form-item>
-            <el-form-item label="用户角色" label-width="200px">
+            <el-form-item label="用户角色" label-width="120px">
               <span>{{temp.role}}</span>
             </el-form-item>
-            <el-form-item label="所属租户" label-width="200px">
+            <el-form-item label="所属租户" label-width="120px">
               <span></span>
             </el-form-item>
-            <el-form-item label="创建时间" label-width="200px">
+            <el-form-item label="创建时间" label-width="120px">
               <span> {{temp.gmtCreate}}</span>
             </el-form-item>
-            <el-form-item label="修改时间" label-width="200px">
+            <el-form-item label="修改时间" label-width="120px">
               <span>{{temp.gmtModified}}</span>
             </el-form-item>
-
           </el-form>
         </div>
       </el-col>
@@ -80,8 +79,10 @@ import * as user from '@/api/hippo4j-user'
 
 const lineChartData = {
   chartInfo: {
-    failData: [1, 3, 4, 5, 3, 2],
-    successData: [1, 2, 3, 4, 1, 3],
+    oneList: [1, 3, 4, 5, 3, 2],
+    twoList: [1, 2, 3, 4, 1, 3],
+    threeList: [1, 2, 3, 4, 1, 3],
+    fourList: [1, 2, 3, 4, 1, 3],
     dayList: ['ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty']
   }
 }
@@ -105,6 +106,7 @@ export default {
       countSucTotal: 0,
       countRunningTotal: 0,
       countFailTotal: 0,
+      countRunningInstanceTotal: 0,
       show: false,
       temp: {}
     }
@@ -125,14 +127,17 @@ export default {
         this.show = true
         this.countSucTotal = response.tenantCount,
           this.countRunningTotal = response.threadPoolCount,
-          this.countFailTotal = response.itemCount
+          this.countFailTotal = response.itemCount,
+          this.countRunningInstanceTotal = response.threadPoolInstanceCount
       })
     },
 
     lintChart () {
       dashborad.lineChart({}).then(response => {
-        this.lineChartData.successData = response.completedTaskCounts
-        this.lineChartData.failData = response.rejectCounts
+        this.lineChartData.oneList = response.oneList
+        this.lineChartData.twoList = response.twoList
+        this.lineChartData.threeList = response.threeList
+        this.lineChartData.fourList = response.fourList
       })
     },
 
@@ -156,6 +161,9 @@ export default {
     top: 0px;
     border: 0;
     right: 0;
+  }
+  .el-form-item {
+    margin-bottom: 30px !important;
   }
 
   .chart-wrapper {

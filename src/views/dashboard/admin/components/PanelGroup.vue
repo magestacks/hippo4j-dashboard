@@ -1,41 +1,54 @@
 <template>
-  <el-row :gutter="80" class="panel-group">
-    <el-col :xs="16" :sm="16" :lg="8" class="card-panel-col">
+  <el-row :gutter="40" class="panel-group">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('chartInfo')">
-        <div class="card-panel-icon-wrapper icon-people">
+        <div class="card-panel-icon-wrapper ">
           <svg-icon icon-class="tenant_logo" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            租户
+            Tenant
           </div>
           <count-to :start-val="0" :end-val="successCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="16" :sm="16" :lg="8" class="card-panel-col">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-message">
+        <div class="card-panel-icon-wrapper ">
           <svg-icon icon-class="item_logo" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            项目
+            Item
           </div>
           <count-to :start-val="0" :end-val="failCount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="16" :sm="16" :lg="8" class="card-panel-col">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="threadpool_logo" class-name="card-panel-icon" />
+        <div class="card-panel-icon-wrapper ">
+          <svg-icon icon-class="thread_logo" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            线程池
+            Thread Pool
           </div>
           <count-to :start-val="0" :end-val="runningCount" :duration="3200" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel">
+        <div class="card-panel-icon-wrapper ">
+          <svg-icon icon-class="instance_logo" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            Pool Instance
+          </div>
+          <count-to :start-val="0" :end-val="runningCountInstance" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -49,7 +62,7 @@ export default {
   components: {
     CountTo
   },
-   props: {
+  props: {
     countSucTotal: {
       type: Number,
       default: 0,
@@ -62,12 +75,17 @@ export default {
       type: Number,
       default: 0,
     },
+    countRunningInstanceTotal: {
+      type: Number,
+      default: 0,
+    },
   },
   data () {
     return {
       successCount: this.countSucTotal,//parseInt(localStorage.getItem('countSucTotal')),
       failCount: this.countFailTotal,//parseInt(localStorage.getItem('countFailTotal')),
-      runningCount: this.countRunningTotal//parseInt(localStorage.getItem('countRunningTotal'))
+      runningCount: this.countRunningTotal,//parseInt(localStorage.getItem('countRunningTotal'))
+      runningCountInstance: this.countRunningInstanceTotal
     }
   },
   methods: {

@@ -23,39 +23,39 @@
 </template>
 
 <script>
-  import * as dashborad from '@/api/dashborad'
+import * as dashborad from '@/api/dashborad'
 
-  export default {
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          success: 'success',
-          pending: 'danger'
-        }
-        return statusMap[status]
-      },
-      orderNoFilter(str) {
-        return str.substring(0, 30)
+export default {
+  filters: {
+    statusFilter (status) {
+      const statusMap = {
+        success: 'success',
+        pending: 'danger'
       }
+      return statusMap[status]
     },
-    data() {
-      return {
-        list: null
-      }
-    },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      fetchData() {
-        this.list = [{ 'order_no': '123456', 'price': '4454', 'status': '1' }]
+    orderNoFilter (str) {
+      return str.substring(0, 30)
+    }
+  },
+  data () {
+    return {
+      list: null
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData () {
+      this.list = [{ 'order_no': '123456', 'price': '4454', 'status': '1' }]
 
-        dashborad.ranking({}).then(response => {
-          this.list = response.rankingChartInfoList
+      dashborad.ranking({}).then(response => {
+        this.list = response.rankingChartInfoList
 
-          console.log(response.rankingChartInfoList)
-        })
-      }
+        console.log(response.rankingChartInfoList)
+      })
     }
   }
+}
 </script>
