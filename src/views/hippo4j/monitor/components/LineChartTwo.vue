@@ -60,8 +60,7 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    // ,
-    setOptions ({ poolSizeList, activeSizeList, queueSizeList, completedTaskCountList, rejectCountList, dayList, queueRemainingCapacityList, currentLoadList } = {}) {
+    setOptions ({ poolSizeList, activeSizeList, queueSizeList, completedTaskCountList, rejectCountList, dayList, queueRemainingCapacityList } = {}) {
       this.chart.setOption({
         title: {
           text: 'Stacked Area Chart'
@@ -76,7 +75,7 @@ export default {
           }
         },
         legend: {
-          data: ['poolSize', 'activeSize', 'rejectCount', 'currentLoad']
+          data: ['queueSize', 'queueRemainingCapacity', 'completedTaskCount']
         },
         toolbox: {
           feature: {
@@ -102,48 +101,38 @@ export default {
           }
         ],
         series: [
+
           {
-            name: 'poolSize',
+            name: 'queueSize',
             type: 'line',
             stack: 'Total',
             areaStyle: {},
             emphasis: {
               focus: 'series'
             },
-            data: poolSizeList
-          },
-          {
-            name: 'activeSize',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: activeSizeList
-          },
-          {
-            name: 'rejectCount',
-            type: 'line',
-            stack: 'Total',
-            color: '#f47920',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: rejectCountList
-          },
-          {
-            name: 'currentLoad',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: currentLoadList
+            data: queueSizeList
           },
 
+          {
+            name: 'queueRemainingCapacity',
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: queueRemainingCapacityList
+          },
+          {
+            name: 'completedTaskCount',
+            type: 'line',
+            stack: 'Total',
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: completedTaskCountList
+          }
         ]
       })
     }

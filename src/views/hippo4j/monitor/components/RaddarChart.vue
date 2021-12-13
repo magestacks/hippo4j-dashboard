@@ -4,6 +4,10 @@
 
 <script>
 import resize from './mixins/resize'
+import * as dashborad from '@/api/dashborad'
+import * as monitorApi from '@/api/hippo4j-monitor'
+
+const animationDuration = 3000
 
 export default {
   mixins: [resize],
@@ -18,13 +22,9 @@ export default {
     },
     height: {
       type: String,
-      default: '450px'
+      default: '300px'
     },
-    autoResize: {
-      type: Boolean,
-      default: true
-    },
-    chartData: {
+    acticeChartData: {
       type: Object,
       required: true
     }
@@ -35,7 +35,7 @@ export default {
     }
   },
   watch: {
-    chartData: {
+    acticeChartData: {
       deep: true,
       handler (val) {
         this.setOptions(val)
@@ -58,10 +58,30 @@ export default {
     initChart () {
       let echarts = require('echarts')
       this.chart = echarts.init(this.$el, 'macarons')
-      this.setOptions(this.chartData)
+
+      this.chart.setOption({
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+        },
+        title: {
+          left: 'center',
+          text: '活跃线程'
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            type: 'line',
+            smooth: true,
+            areaStyle: {}
+          }
+        ]
+      })
     },
-    // ,
-    setOptions ({ poolSizeList, activeSizeList, queueSizeList, completedTaskCountList, rejectCountList, dayList, queueRemainingCapacityList, currentLoadList } = {}) {
+
+    setOptions ({ contentList, dayList } = {}) {
       this.chart.setOption({
         title: {
           text: 'Stacked Area Chart'
@@ -76,7 +96,7 @@ export default {
           }
         },
         legend: {
-          data: ['poolSize', 'activeSize', 'rejectCount', 'currentLoad']
+          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
         },
         toolbox: {
           feature: {
@@ -93,7 +113,7 @@ export default {
           {
             type: 'category',
             boundaryGap: false,
-            data: dayList
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
           }
         ],
         yAxis: [
@@ -103,50 +123,63 @@ export default {
         ],
         series: [
           {
-            name: 'poolSize',
+            name: 'Email',
             type: 'line',
             stack: 'Total',
             areaStyle: {},
             emphasis: {
               focus: 'series'
             },
-            data: poolSizeList
+            data: [120, 132, 101, 134, 90, 230, 210]
           },
           {
-            name: 'activeSize',
+            name: 'Union Ads',
             type: 'line',
             stack: 'Total',
             areaStyle: {},
             emphasis: {
               focus: 'series'
             },
-            data: activeSizeList
+            data: [220, 182, 191, 234, 290, 330, 310]
           },
           {
-            name: 'rejectCount',
+            name: 'Video Ads',
             type: 'line',
             stack: 'Total',
-            color: '#f47920',
             areaStyle: {},
             emphasis: {
               focus: 'series'
             },
-            data: rejectCountList
+            data: [150, 232, 201, 154, 190, 330, 410]
           },
           {
-            name: 'currentLoad',
+            name: 'Direct',
             type: 'line',
             stack: 'Total',
             areaStyle: {},
             emphasis: {
               focus: 'series'
             },
-            data: currentLoadList
+            data: [320, 332, 301, 334, 390, 330, 320]
           },
-
+          {
+            name: 'Search Engine',
+            type: 'line',
+            stack: 'Total',
+            label: {
+              show: true,
+              position: 'top'
+            },
+            areaStyle: {},
+            emphasis: {
+              focus: 'series'
+            },
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+          }
         ]
       })
     }
   }
 }
 </script>
+

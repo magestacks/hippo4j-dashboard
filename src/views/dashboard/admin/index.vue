@@ -1,38 +1,59 @@
 <template>
   <div class="dashboard-editor-container" v-if='show'>
-    <github-corner class="github-corner"/>
+    <github-corner class="github-corner" />
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData"
-                 :countSucTotal='countSucTotal'
-                 :countRunningTotal='countRunningTotal'
-                 :countFailTotal='countFailTotal'/>
+    <panel-group @handleSetLineChartData="handleSetLineChartData" :countSucTotal='countSucTotal'
+      :countRunningTotal='countRunningTotal' :countFailTotal='countFailTotal' />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData"/>
+      <line-chart :chart-data="lineChartData" />
     </el-row>
 
     <el-row :gutter="32">
+
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
-          <raddar-chart/>
+          <el-form label-position="left">
+            <el-form-item label="登陆用户" label-width="200px">
+              <span>{{temp.userName}}</span>
+            </el-form-item>
+            <el-form-item label="用户角色" label-width="200px">
+              <span>{{temp.role}}</span>
+            </el-form-item>
+            <el-form-item label="所属租户" label-width="200px">
+              <span></span>
+            </el-form-item>
+            <el-form-item label="创建时间" label-width="200px">
+              <span> {{temp.gmtCreate}}</span>
+            </el-form-item>
+            <el-form-item label="修改时间" label-width="200px">
+              <span>{{temp.gmtModified}}</span>
+            </el-form-item>
+
+          </el-form>
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
-          <pie-chart/>
+          <raddar-chart />
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
-          <bar-chart/>
+          <pie-chart />
         </div>
       </el-col>
+      <!-- <el-col :xs="24" :sm="24" :lg="8">
+        <div class="chart-wrapper">
+          <bar-chart />
+        </div>
+      </el-col> -->
     </el-row>
 
     <el-row :gutter="8">
       <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}"
-              style="padding-right:8px;margin-bottom:30px;">
-        <transaction-table/>
+        style="padding-right:8px;margin-bottom:30px;">
+        <transaction-table />
       </el-col>
       <!--<el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
         <todo-list />
@@ -45,97 +66,108 @@
 </template>
 
 <script>
-  import GithubCorner from '@/components/GithubCorner'
-  import PanelGroup from './components/PanelGroup'
-  import LineChart from './components/LineChart'
-  import RaddarChart from './components/RaddarChart'
-  import PieChart from './components/PieChart'
-  import BarChart from './components/BarChart'
-  import TransactionTable from './components/TransactionTable'
-  /*import TodoList from './components/TodoList'
-  import BoxCard from './components/BoxCard'*/
-  import * as dashborad from '@/api/dashborad'
+import GithubCorner from '@/components/GithubCorner'
+import PanelGroup from './components/PanelGroup'
+import LineChart from './components/LineChart'
+import RaddarChart from './components/RaddarChart'
+import PieChart from './components/PieChart'
+import BarChart from './components/BarChart'
+import TransactionTable from './components/TransactionTable'
+/*import TodoList from './components/TodoList'
+import BoxCard from './components/BoxCard'*/
+import * as dashborad from '@/api/dashborad'
+import * as user from '@/api/hippo4j-user'
 
-  const lineChartData = {
-    chartInfo: {
-      failData: [1, 3, 4, 5, 3, 2],
-      successData: [1, 2, 3, 4, 1, 3],
-      dayList: ['ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty']
+const lineChartData = {
+  chartInfo: {
+    failData: [1, 3, 4, 5, 3, 2],
+    successData: [1, 2, 3, 4, 1, 3],
+    dayList: ['ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty']
+  }
+}
+
+export default {
+  name: 'DashboardAdmin',
+  components: {
+    GithubCorner,
+    PanelGroup,
+    LineChart,
+    RaddarChart,
+    PieChart,
+    BarChart,
+    TransactionTable
+    /*TodoList,
+    BoxCard*/
+  },
+  data () {
+    return {
+      lineChartData: lineChartData.chartInfo,
+      countSucTotal: 0,
+      countRunningTotal: 0,
+      countFailTotal: 0,
+      show: false,
+      temp: {}
+    }
+  },
+  async created () {
+    this.chartInfo()
+    this.lintChart()
+    this.userInfo()
+  },
+
+  methods: {
+
+    handleSetLineChartData (type) {
+      this.lineChartData = lineChartData[type]
+    },
+    chartInfo () {
+      dashborad.chartInfo().then(response => {
+        this.show = true
+        this.countSucTotal = response.tenantCount,
+          this.countRunningTotal = response.threadPoolCount,
+          this.countFailTotal = response.itemCount
+      })
+    },
+
+    lintChart () {
+      dashborad.lineChart({}).then(response => {
+        this.lineChartData.successData = response.completedTaskCounts
+        this.lineChartData.failData = response.rejectCounts
+      })
+    },
+
+    userInfo () {
+      user.getCurrentUser().then(response => {
+        this.temp = response
+      })
     }
   }
-
-  export default {
-    name: 'DashboardAdmin',
-    components: {
-      GithubCorner,
-      PanelGroup,
-      LineChart,
-      RaddarChart,
-      PieChart,
-      BarChart,
-      TransactionTable
-      /*TodoList,
-      BoxCard*/
-    },
-    data() {
-      return {
-        lineChartData: lineChartData.chartInfo,
-        countSucTotal: 0,
-        countRunningTotal: 0,
-        countFailTotal: 0,
-        show: false
-      }
-    },
-    async created() {
-      this.chartInfo()
-      this.lintChart()
-    },
-    methods: {
-      handleSetLineChartData(type) {
-        this.lineChartData = lineChartData[type]
-      },
-      chartInfo() {
-        dashborad.chartInfo().then(response => {
-          this.show = true
-          this.countSucTotal = response.tenantCount,
-            this.countRunningTotal = response.threadPoolCount,
-            this.countFailTotal = response.itemCount
-        })
-      },
-
-      lintChart() {
-        dashborad.lineChart({}).then(response => {
-          this.lineChartData.successData = response.completedTaskCounts
-          this.lineChartData.failData = response.rejectCounts
-        })
-      }
-    }
-  }
+}
 </script>
 
 <style lang="scss" scoped>
-  .dashboard-editor-container {
-    padding: 32px;
-    background-color: rgb(240, 242, 245);
-    position: relative;
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
 
-    .github-corner {
-      position: absolute;
-      top: 0px;
-      border: 0;
-      right: 0;
-    }
-
-    .chart-wrapper {
-      background: #fff;
-      padding: 16px 16px 0;
-      margin-bottom: 32px;
-    }
+  .github-corner {
+    position: absolute;
+    top: 0px;
+    border: 0;
+    right: 0;
   }
 
-  @media (max-width: 1024px) {
-    .chart-wrapper {
-      padding: 8px;
-    }
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
   }
+}
+
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    padding: 8px;
+  }
+}
 </style>

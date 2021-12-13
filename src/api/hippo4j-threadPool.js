@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function list(data) {
+export function list (data) {
   return request({
     url: '/v1/cs/thread/pool/query/page',
     method: 'post',
@@ -8,7 +8,14 @@ export function list(data) {
   })
 }
 
-export function tenantList(data) {
+export function info (data) {
+  return request({
+    url: '/v1/cs/configs?tpId=' + data.tpId + '&itemId=' + data.itemId + '&namespace=' + data.tenantId + '&instanceId=' + data.identify,
+    method: 'get',
+  })
+}
+
+export function tenantList (data) {
   return request({
     url: '/v1/cs/item/query/page',
     method: 'post',
@@ -16,7 +23,7 @@ export function tenantList(data) {
   })
 }
 
-export function updated(data) {
+export function updated (data) {
   return request({
     url: '/v1/cs/thread/pool/save_or_update',
     method: 'post',
@@ -24,7 +31,7 @@ export function updated(data) {
   })
 }
 
-export function created(data) {
+export function created (data) {
   return request({
     url: '/v1/cs/thread/pool/save_or_update',
     method: 'post',
@@ -32,7 +39,7 @@ export function created(data) {
   })
 }
 
-export function deleted(data) {
+export function deleted (data) {
   return request({
     url: '/v1/cs/thread/pool/delete',
     method: 'delete',
@@ -40,7 +47,7 @@ export function deleted(data) {
   })
 }
 
-export function alarmEnable(data) {
+export function alarmEnable (data) {
   return request({
     url: '/v1/cs/thread/pool/alarm/enable/' + data.id + '/' + data.isAlarm,
     method: 'post'

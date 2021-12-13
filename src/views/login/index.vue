@@ -137,7 +137,7 @@ export default {
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               //登录成功后将当前登录用户写入cookie
-              this.$cookie.set('userName',this.loginForm.username);
+              this.$cookie.set('userName', this.loginForm.username);
               console.log('success submit.')
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false

@@ -2,19 +2,23 @@
   <div class="dashboard-editor-container" v-if='show'>
     <div class="filter-container">
       <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" class="filter-item"
-                 @change="tenantSelectList()">
-        <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+        @change="tenantSelectList()">
+        <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
       <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" class="filter-item"
-                 @change="itemSelectList()">
-        <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+        @change="itemSelectList()">
+        <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
-      <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" class="filter-item">
-        <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+      <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" class="filter-item"
+        @change="threadPoolSelectList()">
+        <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+      </el-select>
+      <el-select v-model="listQuery.identify" placeholder="IP : Port" style="width:220px" class="filter-item">
+        <el-option v-for="item in identifyOptions" :key="item.key" :label="item.display_name" :value="item.key" />
       </el-select>
 
       <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-search"
-                 @click="fetchData">
+        @click="fetchData">
         搜索
       </el-button>
       <!--<el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
@@ -23,200 +27,301 @@
       </el-button>-->
     </div>
 
+    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item :label="线程池名称" label-width="200px">
-              <span>111111</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
+      <el-form label-position="left" style="customStyle">
+        <el-form-item label="核心线程" label-width="200px">
+          <span>{{ temp.coreSize }}</span>
+        </el-form-item>
+        <el-form-item label="最大线程" label-width="200px">
+          <span>{{ temp.maxSize }}</span>
+        </el-form-item>
+
+        <el-form-item label="队列类型" label-width="200px">
+          <span>{{ temp.queueType | queueFilter }}</span>
+        </el-form-item>
+
+        <el-form-item label="队列容量" label-width="200px">
+          <span>{{ temp.capacity }}</span>
+        </el-form-item>
+        <el-form-item label="拒绝策略" label-width="200px">
+          <span>{{ temp.rejectedType | rejectedFilter}}</span>
+        </el-form-item>
+        <el-form-item label="KVTime" label-width="200px">
+          <span>{{ temp.keepAliveTime }}</span>
+        </el-form-item>
+      </el-form>
     </el-row>
 
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart/>
-        </div>
-      </el-col>
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <line-chart :chart-data="lineChartData" />
     </el-row>
 
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}"
-              style="padding-right:8px;margin-bottom:30px;">
-        <transaction-table/>
-      </el-col>
-
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <line-chart-two :chart-data="lineChartData" />
     </el-row>
+
   </div>
 </template>
 
 <script>
-  import LineChart from './components/LineChart'
-  import RaddarChart from '../../dashboard/admin/components/RaddarChart'
-  import PieChart from '../../dashboard/admin/components/PieChart'
-  import BarChart from '../../dashboard/admin/components/BarChart'
-  import TransactionTable from '../../dashboard/admin/components/TransactionTable'
-  import * as dashborad from '@/api/dashborad'
+import LineChart from './components/LineChart'
+import LineChartTwo from './components/LineChartTwo'
+import * as dashborad from '@/api/dashborad'
 
-  import * as itemApi from '@/api/hippo4j-item'
-  import * as tenantApi from '@/api/hippo4j-tenant'
-  import * as threadPoolApi from '@/api/hippo4j-threadPool'
+import * as itemApi from '@/api/hippo4j-item'
+import * as tenantApi from '@/api/hippo4j-tenant'
+import * as threadPoolApi from '@/api/hippo4j-threadPool'
+import * as instanceApi from '@/api/hippo4j-instance'
+import * as monitorApi from '@/api/hippo4j-monitor'
 
-  const lineChartData = {
-    chartInfo: {
-      failData: [1, 3, 4, 5, 3, 2],
-      successData: [1, 2, 3, 4, 1, 3],
-      dayList: ['ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty']
-    }
+const lineChartData = {
+  chartInfo: {
+    poolSizeList: [],
+    activeSizeList: [],
+    queueSizeList: [],
+    completedTaskCountList: [],
+    rejectCountList: [],
+    dayList: [],
+    queueRemainingCapacityList: [],
+    currentLoadList: []
   }
+}
 
-  export default {
-    name: 'DashboardAdmin',
-    components: {
-      LineChart,
-      RaddarChart,
-      PieChart,
-      BarChart,
-      TransactionTable
+export default {
+  name: 'DashboardAdmin',
+  components: {
+    LineChart,
+    LineChartTwo
+  },
+  filters: {
+    queueFilter (type) {
+      if ('1' == type) {
+        return 'ArrayBlockingQueue'
+      } else if ('2' == type) {
+        return 'LinkedBlockingQueue'
+      } else if ('3' == type) {
+        return 'LinkedBlockingDeque'
+      } else if ('4' == type) {
+        return 'SynchronousQueue'
+      } else if ('5' == type) {
+        return 'LinkedTransferQueue'
+      } else if ('6' == type) {
+        return 'PriorityBlockingQueue'
+      } else if ('9' == type) {
+        return 'ResizableLinkedBlockingQueue'
+      }
     },
-    data() {
-      return {
-        lineChartData: lineChartData.chartInfo,
-        countSucTotal: 0,
-        countRunningTotal: 0,
-        countFailTotal: 0,
-        show: false,
-        size: 500,
 
-        tenantOptions: [],
-        threadPoolOptions: [],
-        itemOptions: [],
-        listQuery: {
-          current: 1,
-          size: 10,
-          itemId: '',
-          tpId: ''
+    rejectedFilter (type) {
+      if ('1' == type) {
+        return 'CallerRunsPolicy'
+      } else if ('2' == type) {
+        return 'AbortPolicy'
+      } else if ('3' == type) {
+        return 'DiscardPolicy'
+      } else if ('4' == type) {
+        return 'DiscardOldestPolicy'
+      }
+    }
+  },
+  data () {
+    return {
+      lineChartData: lineChartData.chartInfo,
+      countSucTotal: 0,
+      countRunningTotal: 0,
+      countFailTotal: 0,
+      show: false,
+      size: 500,
+
+      tenantOptions: [],
+      threadPoolOptions: [],
+      itemOptions: [],
+      identifyOptions: [],
+      listQuery: {
+        current: 1,
+        size: 10,
+        itemId: '',
+        tpId: '',
+        tenantId: '',
+        identify: '',
+        instanceId: ''
+      },
+
+      temp: {}
+    }
+  },
+
+
+
+  async created () {
+    this.chartInfo()
+    this.initSelect()
+
+  },
+
+  methods: {
+    handleSetLineChartData (type) {
+      this.lineChartData = lineChartData[type]
+    },
+    fetchData () {
+      if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
+        alert('租户ID不允许为空')
+        return
+      }
+      if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
+        alert('项目ID不允许为空')
+        return
+      }
+      if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
+        alert('线程池ID不允许为空!')
+        return
+      }
+      if (this.listQuery.identify == null || Object.keys(this.listQuery.identify).length == 0) {
+        alert('IP:PORT不允许为空!')
+        return
+      }
+
+      this.listQuery.instanceId = this.listQuery.identify
+      threadPoolApi.info(this.listQuery).then(response => {
+        console.log(response)
+        this.temp = response
+      })
+
+      this.initChart()
+
+    },
+    refreshData () {
+      this.listQuery.tenantId = null
+      this.listQuery.itemId = null
+      this.listQuery.tpId = null
+    },
+
+    chartInfo () {
+      dashborad.chartInfo().then(response => {
+        this.show = true
+        this.countSucTotal = response.tenantCount,
+          this.countRunningTotal = response.threadPoolCount,
+          this.countFailTotal = response.itemCount
+      })
+    },
+
+
+    initSelect () {
+      tenantApi.list({ 'size': this.size }).then(response => {
+        const { records } = response
+        for (var i = 0; i < records.length; i++) {
+          this.tenantOptions.push({
+            key: records[i].tenantId,
+            display_name: records[i].tenantId + ' ' + records[i].tenantName
+          })
         }
-      }
-    },
-    async created() {
-      this.chartInfo()
-      this.lintChart()
-      this.initSelect()
-
+      })
     },
 
-    methods: {
-      refreshData() {
-        this.listQuery.tenantId = null
-        this.listQuery.itemId = null
-        this.listQuery.tpId = null
-      },
-      handleSetLineChartData(type) {
-        this.lineChartData = lineChartData[type]
-      },
+    tenantSelectList () {
+      this.listQuery.itemId = null
+      this.listQuery.tpId = null
+      this.listQuery.identify = null
 
-      chartInfo() {
-        dashborad.chartInfo().then(response => {
-          this.show = true
-          this.countSucTotal = response.tenantCount,
-            this.countRunningTotal = response.threadPoolCount,
-            this.countFailTotal = response.itemCount
-        })
-      },
+      this.itemOptions = []
+      this.threadPoolOptions = []
+      this.identifyOptions = []
+      const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
+      itemApi.list(tenantId).then(response => {
+        const { records } = response
+        for (var i = 0; i < records.length; i++) {
+          this.itemOptions.push({
+            key: records[i].itemId,
+            display_name: records[i].itemId + ' ' + records[i].itemName
+          })
+        }
+      })
+    },
 
-      lintChart() {
-        dashborad.lineChart({}).then(response => {
-          this.lineChartData.successData = response.completedTaskCounts
-          this.lineChartData.failData = response.rejectCounts
-        })
-      },
+    itemSelectList () {
+      this.listQuery.tpId = null
+      this.listQuery.identify = null
 
-      initSelect() {
-        tenantApi.list({ 'size': this.size }).then(response => {
-          const { records } = response
-          for (var i = 0; i < records.length; i++) {
-            this.tenantOptions.push({
-              key: records[i].tenantId,
-              display_name: records[i].tenantId + ' ' + records[i].tenantName
-            })
-          }
-        })
-      },
+      this.threadPoolOptions = []
+      this.identifyOptions = []
+      const itemId = { 'itemId': this.listQuery.itemId, 'size': this.size }
+      threadPoolApi.list(itemId).then(response => {
+        const { records } = response
+        for (var i = 0; i < records.length; i++) {
+          this.threadPoolOptions.push({
+            key: records[i].tpId,
+            display_name: records[i].tpId
+          })
+        }
+      })
+    },
 
-      tenantSelectList() {
-        this.listQuery.itemId = null
-        this.listQuery.tpId = null
+    threadPoolSelectList () {
+      this.listQuery.identify = null
 
-        this.itemOptions = []
-        this.threadPoolOptions = []
-        const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
-        itemApi.list(tenantId).then(response => {
-          const { records } = response
-          for (var i = 0; i < records.length; i++) {
-            this.itemOptions.push({
-              key: records[i].itemId,
-              display_name: records[i].itemId + ' ' + records[i].itemName
-            })
-          }
-        })
-      },
+      this.identifyOptions = []
+      const listArray = [this.listQuery.itemId, this.listQuery.tpId]
+      instanceApi.list(listArray).then(response => {
+        const { records } = response
+        for (var i = 0; i < response.length; i++) {
+          this.identifyOptions.push({
+            key: response[i].identify,
+            display_name: response[i].clientAddress
+          })
+        }
+      })
+    },
 
-      itemSelectList() {
-        this.listQuery.tpId = null
-
-        this.threadPoolOptions = []
-        const itemId = { 'itemId': this.listQuery.itemId, 'size': this.size }
-        threadPoolApi.list(itemId).then(response => {
-          const { records } = response
-          for (var i = 0; i < records.length; i++) {
-            this.threadPoolOptions.push({
-              key: records[i].tpId,
-              display_name: records[i].tpId
-            })
-          }
-        })
+    initChart () {
+      const params = {
+        "tenantId": this.listQuery.tenantId,
+        "itemId": this.listQuery.itemId,
+        "tpId": this.listQuery.tpId,
+        "instanceId": this.listQuery.identify
       }
+      monitorApi.active(this.listQuery).then(response => {
+        this.lineChartData.dayList = response.times
+        this.lineChartData.poolSizeList = response.poolSizeList
+
+        this.lineChartData.activeSizeList = response.activeSizeList
+        this.lineChartData.queueSizeList = response.queueSizeList
+        this.lineChartData.completedTaskCountList = response.completedTaskCountList
+
+        this.lineChartData.rejectCountList = response.rejectCountList
+        this.lineChartData.queueRemainingCapacityList = response.queueRemainingCapacityList
+        this.lineChartData.currentLoadList = response.currentLoadList
+      })
+
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .dashboard-editor-container {
-    padding: 32px;
-    background-color: rgb(240, 242, 245);
-    position: relative;
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+  position: relative;
 
-    .github-corner {
-      position: absolute;
-      top: 0px;
-      border: 0;
-      right: 0;
-    }
-
-    .chart-wrapper {
-      background: #fff;
-      padding: 16px 16px 0;
-      margin-bottom: 32px;
-    }
+  .github-corner {
+    position: absolute;
+    top: 0px;
+    border: 0;
+    right: 0;
   }
 
-  @media (max-width: 1024px) {
-    .chart-wrapper {
-      padding: 8px;
-    }
+  .chart-wrapper {
+    background: #fff;
+    padding: 16px 16px 0;
+    margin-bottom: 32px;
   }
+}
+
+@media (max-width: 1024px) {
+  .chart-wrapper {
+    padding: 8px;
+  }
+}
 </style>
