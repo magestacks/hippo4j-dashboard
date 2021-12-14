@@ -77,7 +77,7 @@
           <el-col :span="12">
             <el-form-item label="租户ID" prop="tenantId">
               <el-select v-model="temp.tenantId" placeholder="请选择租户" style="display:block;"
-                :disabled="dialogStatus==='create'?false:true" @change="tenantSelectList()">
+                :disabled="dialogStatus==='create'?false:true" @change="tenantTempSelectList()">
                 <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key" />
               </el-select>
             </el-form-item>
@@ -94,7 +94,8 @@
             <el-form-item label="项目ID" prop="itemId">
               <el-select v-model="temp.itemId" placeholder="请选择项目" style="display:block;"
                 :disabled="dialogStatus==='create'?false:true">
-                <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+                <el-option v-for="item in itemTempOptions" :key="item.key" :label="item.display_name"
+                  :value="item.key" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -260,6 +261,7 @@ export default {
       tenantOptions: [],
       threadPoolOptions: [],
       itemOptions: [],
+      itemTempOptions: [],
       queueTypeOptions: [
         { key: 1, display_name: 'ArrayBlockingQueue' },
         { key: 2, display_name: 'LinkedBlockingQueue' },
@@ -300,7 +302,8 @@ export default {
       },
       temp: {
         id: undefined,
-        tenantId: ''
+        tenantId: '',
+        itemId: ''
       },
       visible: true
     }
@@ -417,11 +420,15 @@ export default {
         this.temp.capacity = 2147483647
       }
     },
+
     tenantSelectList () {
       this.listQuery.itemId = null
       this.listQuery.tpId = null
 
+      this.temp.itemId = null
+
       this.itemOptions = []
+      this.itemTempOptions = []
       this.threadPoolOptions = []
       const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
       itemApi.list(tenantId).then(response => {
@@ -432,6 +439,25 @@ export default {
             display_name: records[i].itemId + ' ' + records[i].itemName
           })
         }
+      })
+    },
+
+    tenantTempSelectList () {
+      this.itemTempOptions = []
+      if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
+        this.temp.itemId = null
+      }
+      const tenantId = { 'tenantId': this.temp.tenantId, 'size': this.size }
+      itemApi.list(tenantId).then(response => {
+        const { records } = response
+        for (var i = 0; i < records.length; i++) {
+          this.itemTempOptions.push({
+            key: records[i].itemId,
+            display_name: records[i].itemId + ' ' + records[i].itemName
+          })
+        }
+
+
       })
     },
 
