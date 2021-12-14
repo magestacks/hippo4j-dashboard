@@ -84,7 +84,7 @@ export default {
     setOptions ({ contentList, dayList } = {}) {
       this.chart.setOption({
         title: {
-          text: 'Stacked Area Chart'
+          text: 'Historical Data Chart'
         },
         tooltip: {
           trigger: 'axis',

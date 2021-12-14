@@ -64,7 +64,7 @@ export default {
     setOptions ({ poolSizeList, activeSizeList, queueSizeList, completedTaskCountList, rejectCountList, dayList, queueRemainingCapacityList, currentLoadList } = {}) {
       this.chart.setOption({
         title: {
-          text: 'Stacked Area Chart'
+          text: 'Historical Data Chart'
         },
         tooltip: {
           trigger: 'axis',
@@ -80,7 +80,6 @@ export default {
         },
         toolbox: {
           feature: {
-            saveAsImage: {}
           }
         },
         grid: {
