@@ -163,7 +163,8 @@ export default {
     right: 0;
   }
   .el-form-item {
-    margin-bottom: 30px !important;
+    margin-bottom: 5px !important;
+    padding-bottom: 20px;
   }
 
   .chart-wrapper {

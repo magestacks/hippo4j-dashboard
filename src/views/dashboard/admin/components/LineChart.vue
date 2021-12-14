@@ -62,10 +62,10 @@ export default {
     },
     setOptions ({ oneList, twoList, threeList, fourList } = {}) {
       this.chart.setOption({
-        title: {
-          text: 'Ranking',
-          subtext: 'Data in the last 10 minutes'
-        },
+        // title: {
+        //   text: 'Ranking',
+        //   subtext: 'Data in the last 10 minutes'
+        // },
         legend: {},
         tooltip: {},
         dataset: {
