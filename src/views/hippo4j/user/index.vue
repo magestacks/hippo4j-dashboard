@@ -91,8 +91,8 @@
 
 <script>
   import * as user from '@/api/hippo4j-user'
-  import waves from '@/directive/waves' // waves directive
-  import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+  import waves from '@/directive/waves'
+  import Pagination from '@/components/Pagination'
 
   export default {
     name: 'User',
@@ -205,14 +205,23 @@
           }
         })
       },
+      openDelConfirm(name) {
+        return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      },
       handleDelete(row) {
-        user.deleteUser(row.userName).then(response => {
-          this.fetchData()
-          this.$notify({
-            title: 'Success',
-            message: 'Delete Successfully',
-            type: 'success',
-            duration: 2000
+        this.openDelConfirm(row.userName).then(() => {
+          user.deleteUser(row.userName).then(response => {
+            this.fetchData()
+            this.$notify({
+              title: 'Success',
+              message: 'Delete Successfully',
+              type: 'success',
+              duration: 2000
+            })
           })
         })
       }

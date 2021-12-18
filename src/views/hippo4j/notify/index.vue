@@ -376,16 +376,27 @@
           }
         })
       },
+      openDelConfirm(name) {
+        return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+      },
       handleDelete(row) {
-        notifyApi.deleted(row).then(response => {
-          this.fetchData()
-          this.$notify({
-            title: 'Success',
-            message: 'Delete Successfully',
-            type: 'success',
-            duration: 2000
+        const name = '[' + row.tpId + ']-[' + row.platform + ']-[' + row.type + ']'
+        this.openDelConfirm(name).then(() => {
+          notifyApi.deleted(row).then(response => {
+            this.fetchData()
+            this.$notify({
+              title: 'Success',
+              message: 'Delete Successfully',
+              type: 'success',
+              duration: 2000
+            })
           })
         })
+
       },
       changeEnable(row) {
         notifyApi.enable(row).then(response => {

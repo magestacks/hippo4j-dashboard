@@ -3,7 +3,7 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('chartInfo')">
         <div class="card-panel-icon-wrapper ">
-          <svg-icon icon-class="tenant_logo" class-name="card-panel-icon" />
+          <svg-icon icon-class="tenant_logo2" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -16,7 +16,7 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper ">
-          <svg-icon icon-class="item_logo" class-name="card-panel-icon" />
+          <svg-icon icon-class="item_logo4" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -29,7 +29,7 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper ">
-          <svg-icon icon-class="thread_logo" class-name="card-panel-icon" />
+          <svg-icon icon-class="threadPool_logo1" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
@@ -42,7 +42,7 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper ">
-          <svg-icon icon-class="instance_logo" class-name="card-panel-icon" />
+          <svg-icon icon-class="threadPool_logo2" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">

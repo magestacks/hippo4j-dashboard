@@ -35,12 +35,12 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/v1/cs': {
-        target: `http://127.0.0.1:${apiPort}/v1/cs`,
+      '/hippo4j/v1/cs': {
+        target: `http://127.0.0.1:${apiPort}/hippo4j/v1/cs`,
         changOrigin: true,
         secure: false,
         pathRewrite: {
-          '^/v1/cs': ''
+          '^/hippo4j/v1/cs': ''
         }
       }
     },

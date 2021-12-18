@@ -218,17 +218,26 @@ export default {
         }
       })
     },
+    openDelConfirm(name) {
+      return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+    },
     handleDelete (row) {
-      console.log('删除')
-      jobProjectApi.deleted(row.tenantId).then(response => {
-        this.fetchData()
-        this.$notify({
-          title: 'Success',
-          message: 'Delete Successfully',
-          type: 'success',
-          duration: 2000
+      this.openDelConfirm(row.tenantId).then(() => {
+        jobProjectApi.deleted(row.tenantId).then(response => {
+          this.fetchData()
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
         })
       })
+
     }
   }
 }
