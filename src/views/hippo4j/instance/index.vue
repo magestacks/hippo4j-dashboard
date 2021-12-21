@@ -452,8 +452,8 @@ export default {
         { key: 4, display_name: 'DiscardOldestPolicy' }
       ],
       alarmTypes: [
-        { key: 0, display_name: '报警' },
-        { key: 1, display_name: '不报警' }
+        { key: 1, display_name: '报警' },
+        { key: 0, display_name: '不报警' }
       ],
       rules: {
         tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
