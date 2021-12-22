@@ -21,10 +21,10 @@
                  @click="fetchData">
         搜索
       </el-button>
-      <!--<el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
+      <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
                  @click="refreshData">
         重置
-      </el-button>-->
+      </el-button>
     </div>
 
     <panel-group @handleSetLineChartData="handleSetLineChartData"/>
@@ -49,6 +49,9 @@
           <el-form-item label="是否报警" label-width="200px">
             <span>{{ temp.isAlarm | alarmFilter}}</span>
           </el-form-item>
+          <el-form-item label="核心线程超时" label-width="200px">
+            <span>{{ temp.allowCoreThreadTimeOut | allowCoreThreadTimeOutFilter}}</span>
+          </el-form-item>
 
         </el-form>
       </el-col>
@@ -71,6 +74,9 @@
           <el-form-item label="拒绝策略" label-width="200px">
             <span>{{ temp.rejectedType | rejectedFilter}}</span>
           </el-form-item>
+          <el-form-item label="已完成任务数" label-width="200px">
+            <span>{{ lastTaskCount }}</span>
+          </el-form-item>
         </el-form>
       </el-col>
 
@@ -92,31 +98,23 @@
   import LineChartTwo from './components/LineChartTwo'
   import * as dashborad from '@/api/dashborad'
 
+  import waves from '@/directive/waves'
+  import Pagination from '@/components/Pagination'
+
   import * as itemApi from '@/api/hippo4j-item'
   import * as tenantApi from '@/api/hippo4j-tenant'
   import * as threadPoolApi from '@/api/hippo4j-threadPool'
   import * as instanceApi from '@/api/hippo4j-instance'
   import * as monitorApi from '@/api/hippo4j-monitor'
 
-  // const lineChartData = {
-  //   chartInfo: {
-  //     poolSizeList: [],
-  //     activeSizeList: [],
-  //     queueSizeList: [],
-  //     completedTaskCountList: [],
-  //     rejectCountList: [],
-  //     dayList: [],
-  //     queueRemainingCapacityList: [],
-  //     currentLoadList: []
-  //   }
-  // }
-
   export default {
     name: 'DashboardAdmin',
     components: {
+      Pagination,
       LineChart,
       LineChartTwo
     },
+    directives: { waves },
     filters: {
       queueFilter(type) {
         if ('1' == type) {
@@ -154,11 +152,17 @@
         } else if ('0' == type) {
           return '忽略'
         }
+      },
+      allowCoreThreadTimeOutFilter(type) {
+        if ('1' == type) {
+          return '超时'
+        } else if ('0' == type) {
+          return '不超时'
+        }
       }
     },
     data() {
       return {
-        // lineChartData: lineChartData.chartInfo,
         lineChartData: {
           chartInfo: {
             poolSizeList: [],
@@ -168,7 +172,8 @@
             rejectCountList: [],
             dayList: [],
             queueRemainingCapacityList: [],
-            currentLoadList: []
+            currentLoadList: [],
+            queueCapacityList: []
           }
         },
         countSucTotal: 0,
@@ -192,7 +197,8 @@
         },
 
         temp: {},
-        fromIdentify: ''
+        fromIdentify: '',
+        lastTaskCount: null
       }
     },
     async created() {
@@ -206,27 +212,30 @@
       },
       fetchData() {
         if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
-          alert('租户ID不允许为空')
+          alert('租户 ID 不允许为空')
           return
         }
         if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
-          alert('项目ID不允许为空')
+          alert('项目 ID 不允许为空')
           return
         }
         if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
-          alert('线程池ID不允许为空!')
+          alert('线程池 ID 不允许为空!')
           return
         }
         if (this.listQuery.identify == null || Object.keys(this.listQuery.identify).length == 0) {
-          alert('IP:PORT不允许为空!')
+          alert('IP : PORT 不允许为空!')
           return
         }
 
         this.listQuery.instanceId = this.listQuery.identify
         threadPoolApi.info(this.listQuery).then(response => {
-          console.log(response)
           this.temp = response
           this.fromIdentify = this.listQuery.identify
+        })
+
+        monitorApi.lastTaskCountFun(this.listQuery).then(response => {
+          this.lastTaskCount = response.completedTaskCount
         })
 
         this.initChart()
@@ -236,6 +245,11 @@
         this.listQuery.tenantId = null
         this.listQuery.itemId = null
         this.listQuery.tpId = null
+        this.listQuery.identify = null
+
+        this.itemOptions = []
+        this.threadPoolOptions = []
+        this.identifyOptions = []
       },
 
       chartInfo() {
@@ -331,6 +345,7 @@
           this.lineChartData.chartInfo.rejectCountList = response.rejectCountList
           this.lineChartData.chartInfo.queueRemainingCapacityList = response.queueRemainingCapacityList
           this.lineChartData.chartInfo.currentLoadList = response.currentLoadList
+          this.lineChartData.chartInfo.queueCapacityList = response.queueCapacityList
         })
 
       }

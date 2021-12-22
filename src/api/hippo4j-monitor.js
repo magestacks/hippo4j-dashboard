@@ -15,3 +15,11 @@ export function active(data) {
     data
   })
 }
+
+export function lastTaskCountFun(data) {
+  return request({
+    url: '/hippo4j/v1/cs/monitor/last/task/count',
+    method: 'post',
+    data
+  })
+}
