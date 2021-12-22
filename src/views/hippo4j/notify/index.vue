@@ -242,8 +242,8 @@
         ],
 
         enableTypes: [
-          { key: 0, display_name: '启用' },
-          { key: 1, display_name: '停用' }
+          { key: 1, display_name: '启用' },
+          { key: 0, display_name: '停用' }
         ],
         dialogStatus: '',
         textMap: {
