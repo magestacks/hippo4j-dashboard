@@ -320,26 +320,17 @@
 
         </el-row>
 
-        <!--<el-row :gutter="20">
+        <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="是否报警" prop="isAlarm">
-              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
-                <el-option v-for="item in alarmTypes" :key="item.key" :label="item.display_name"
+            <el-form-item label="核心线程超时" prop="isAlarm">
+              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
+                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量报警" prop="capacityAlarm">
-              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="30" :max="90"/>
-            </el-form-item>
-          </el-col>
-
-        </el-row>-->
-
-        <el-row :gutter="20">
-
         </el-row>
+
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -454,6 +445,10 @@
         alarmTypes: [
           { key: 1, display_name: '报警' },
           { key: 0, display_name: '不报警' }
+        ],
+        allowCoreThreadTimeOutTypes: [
+          { key: 1, display_name: '超时' },
+          { key: 0, display_name: '不超时' }
         ],
         rules: {
           tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
