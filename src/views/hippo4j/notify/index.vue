@@ -37,13 +37,13 @@
       <el-table-column label="通知类型" align="center">
         <template slot-scope="scope">{{ scope.row.type }}</template>
       </el-table-column>
-      <el-table-column label="报警间隔" align="center" >
-        <template slot-scope="scope">{{ scope.row.interval }}</template>
+      <el-table-column label="报警间隔" align="center">
+        <template slot-scope="scope">{{ scope.row.interval | intervals }}</template>
       </el-table-column>
-      <el-table-column label="接收者" align="center" >
+      <el-table-column label="接收者" align="center">
         <template slot-scope="scope">{{ scope.row.receives | ellipsis}}</template>
       </el-table-column>
-      <el-table-column label="是否启用" align="center" >
+      <el-table-column label="是否启用" align="center">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.enable" active-color="#00A854" active-text="启用" :active-value="1"
                      inactive-color="#F04134" inactive-text="停用" :inactive-value="0" @change="changeEnable(scope.row)"/>
@@ -142,7 +142,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="报警间隔" prop="interval">
-              <el-input-number v-model="temp.interval"  placeholder="报警间隔/Min" :min="0"
+              <el-input-number v-model="temp.interval" placeholder="报警间隔/Min" :min="0"
                                :disabled="temp.type==='CONFIG'?true:false"/>
             </el-form-item>
           </el-col>
@@ -210,6 +210,14 @@
         if (value.length > 22) {
           return value.slice(0, 22) + '...'
         }
+        return value
+      },
+
+      intervals(value) {
+        if (value == null || value == '') {
+          return '-'
+        }
+
         return value
       }
     },
