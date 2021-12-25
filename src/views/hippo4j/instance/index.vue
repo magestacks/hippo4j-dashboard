@@ -282,7 +282,8 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
-              <el-select v-model="temp.queueType" placeholder="队列类型" @change="selectQueueType" style="display:block;">
+              <el-select v-model="temp.queueType" placeholder="队列类型" :disabled="true" @change="selectQueueType"
+                         style="display:block;">
                 <el-option v-for="item in queueTypeOptions" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
@@ -291,7 +292,7 @@
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
               <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="2147483647"
-                               :disabled="temp.queueType===4||temp.queueType===5?true:false"/>
+                               :disabled="temp.queueType!=9?true:false"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -311,13 +312,6 @@
               <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="20" :max="99999"/>
             </el-form-item>
           </el-col>
-
-          <!--<el-col :span="12">
-            <el-form-item label="活跃度报警" prop="livenessAlarm">
-              <el-input-number v-model="temp.livenessAlarm" placeholder="活跃度报警" :min="30" :max="90"/>
-            </el-form-item>
-          </el-col>-->
-
         </el-row>
 
         <el-row :gutter="20">
