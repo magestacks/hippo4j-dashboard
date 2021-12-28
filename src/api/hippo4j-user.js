@@ -31,9 +31,9 @@ export function deleteUser(name) {
   })
 }
 
-export function getCurrentUser() {
+export function getCurrentUser(name) {
   return request({
-    url: '/hippo4j/v1/cs/auth/users/info',
+    url: '/hippo4j/v1/cs/auth/users/info/' + name,
     method: 'get'
 
   })
