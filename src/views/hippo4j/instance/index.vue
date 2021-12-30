@@ -309,7 +309,7 @@
 
           <el-col :span="12">
             <el-form-item label="KATime/S" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="20" :max="99999"/>
+              <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="1" :max="99999"/>
             </el-form-item>
           </el-col>
         </el-row>
