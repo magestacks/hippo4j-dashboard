@@ -143,6 +143,10 @@
           return 'DiscardPolicy'
         } else if ('4' == type) {
           return 'DiscardOldestPolicy'
+        } else if ('5' == type) {
+          return 'RunsOldestTaskPolicy'
+        } else if ('6' == type) {
+          return 'SyncPutQueuePolicy'
         }
       },
 

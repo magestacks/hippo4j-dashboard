@@ -282,7 +282,9 @@
           { key: 1, display_name: 'CallerRunsPolicy' },
           { key: 2, display_name: 'AbortPolicy' },
           { key: 3, display_name: 'DiscardPolicy' },
-          { key: 4, display_name: 'DiscardOldestPolicy' }
+          { key: 4, display_name: 'DiscardOldestPolicy' },
+          { key: 5, display_name: 'RunsOldestTaskPolicy' },
+          { key: 6, display_name: 'SyncPutQueuePolicy' }
         ],
         alarmTypes: [
           { key: 1, display_name: '报警' },

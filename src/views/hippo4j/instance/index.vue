@@ -214,6 +214,11 @@
               <el-input v-model="runTimeTemp.clientLastRefreshTime" :disabled="true"/>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="拒绝策略" prop="RejectedExecutionHandler">
+              <el-input v-model="runTimeTemp.rejectedName" :disabled="true"/>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -398,6 +403,10 @@
           return 'DiscardPolicy'
         } else if ('4' == type) {
           return 'DiscardOldestPolicy'
+        } else if ('5' == type) {
+          return 'RunsOldestTaskPolicy'
+        } else if ('6' == type) {
+          return 'SyncPutQueuePolicy'
         }
       }
     },
@@ -434,7 +443,9 @@
           { key: 1, display_name: 'CallerRunsPolicy' },
           { key: 2, display_name: 'AbortPolicy' },
           { key: 3, display_name: 'DiscardPolicy' },
-          { key: 4, display_name: 'DiscardOldestPolicy' }
+          { key: 4, display_name: 'DiscardOldestPolicy' },
+          { key: 5, display_name: 'RunsOldestTaskPolicy' },
+          { key: 6, display_name: 'SyncPutQueuePolicy' }
         ],
         alarmTypes: [
           { key: 1, display_name: '报警' },
