@@ -141,9 +141,9 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="拒绝策略" prop="rejectedType">
-              <el-select v-model="temp.rejectedType" style="display:block;" placeholder="拒绝策略">
-                <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
+            <el-form-item label="核心线程超时" prop="isAlarm">
+              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
+                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
             </el-form-item>
@@ -174,9 +174,11 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="核心线程超时" prop="isAlarm">
-              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
-                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name" :value="item.key"/>
+            <el-form-item label="拒绝策略" prop="rejectedType">
+              <el-select v-model="temp.rejectedType" style="display:block;" @change="selectRejectedType"
+                         placeholder="拒绝策略">
+                <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
+                           :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -185,9 +187,15 @@
               <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" :min="30" :max="90"/>
             </el-form-item>
           </el-col>
-
         </el-row>
 
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="SPI 拒绝策略" prop="customRejected">
+              <el-input v-model="temp.customRejectedType" size="medium" placeholder="请输入自定义 SPI 拒绝策略标识"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -284,15 +292,16 @@
           { key: 3, display_name: 'DiscardPolicy' },
           { key: 4, display_name: 'DiscardOldestPolicy' },
           { key: 5, display_name: 'RunsOldestTaskPolicy' },
-          { key: 6, display_name: 'SyncPutQueuePolicy' }
+          { key: 6, display_name: 'SyncPutQueuePolicy' },
+          { key: 7, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
         ],
         alarmTypes: [
           { key: 1, display_name: '报警' },
-          { key: 0, display_name: '不报警' },
+          { key: 0, display_name: '不报警' }
         ],
         allowCoreThreadTimeOutTypes: [
           { key: 1, display_name: '超时' },
-          { key: 0, display_name: '不超时' },
+          { key: 0, display_name: '不超时' }
         ],
         size: 500,
         dialogStatus: '',
@@ -497,6 +506,12 @@
             })
           }
         })
+      },
+
+      selectRejectedType(value) {
+        if (value == 7) {
+          alert(value)
+        }
       }
     }
   }
