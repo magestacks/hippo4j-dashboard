@@ -304,14 +304,13 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="拒绝策略" prop="rejectedType">
-              <el-select v-model="temp.rejectedType" style="display:block;" placeholder="拒绝策略">
-                <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
+            <el-form-item label="核心线程超时" prop="isAlarm">
+              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
+                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
-
           <el-col :span="12">
             <el-form-item label="KATime/S" prop="keepAliveTime">
               <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="1" :max="99999"/>
@@ -321,15 +320,22 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="核心线程超时" prop="isAlarm">
-              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
-                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
+            <el-form-item label="拒绝策略" prop="rejectedType">
+              <el-select v-model="temp.rejectedType" style="display:block;" placeholder="拒绝策略"
+                         @change="selectRejectedType">
+                <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
                            :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-
+        <el-row :gutter="20" v-if="isRejectShow">
+          <el-col :span="12">
+            <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
+              <el-input v-model="temp.customRejectedType" @input="onInput()" placeholder="请输入自定义 SPI 拒绝策略标识"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -407,6 +413,8 @@
           return 'RunsOldestTaskPolicy'
         } else if ('6' == type) {
           return 'SyncPutQueuePolicy'
+        } else {
+          return 'CustomRejectedPolicy' + ' - ' + type
         }
       }
     },
@@ -426,6 +434,7 @@
         dialogPluginVisible: false,
         pluginData: [],
         dialogFormVisible: false,
+        isRejectShow: false, // 是否显示spi拒绝策略
         instanceDialogFormVisible: false,
         tenantOptions: [],
         threadPoolOptions: [],
@@ -445,7 +454,8 @@
           { key: 3, display_name: 'DiscardPolicy' },
           { key: 4, display_name: 'DiscardOldestPolicy' },
           { key: 5, display_name: 'RunsOldestTaskPolicy' },
-          { key: 6, display_name: 'SyncPutQueuePolicy' }
+          { key: 6, display_name: 'SyncPutQueuePolicy' },
+          { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
         ],
         alarmTypes: [
           { key: 1, display_name: '报警' },
@@ -476,7 +486,10 @@
         },
         temp: {
           id: undefined,
-          tenantId: ''
+          tenantId: '',
+          itemId: '',
+          rejectedType: null,
+          customRejectedType: null
         },
         runTimeTemp: {},
         tempRow: {},
@@ -489,6 +502,9 @@
       this.initSelect()
     },
     methods: {
+      onInput() {
+        this.$forceUpdate()
+      },
       fetchData() {
         if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
           alert('租户 ID 不允许为空')
@@ -522,7 +538,7 @@
       initSelect() {
         tenantApi.list({ 'size': this.size }).then(response => {
           const { records } = response
-          for (var i = 0; i < records.length; i++) {
+          for (let i = 0; i < records.length; i++) {
             this.tenantOptions.push({
               key: records[i].tenantId,
               display_name: records[i].tenantId + ' ' + records[i].tenantName
@@ -532,16 +548,20 @@
 
       },
       resetTemp() {
+        this.isRejectShow = false
         this.temp = {
           id: undefined,
-          tenantName: '',
-          tenantDesc: ''
+          tenantId: '',
+          itemId: '',
+          rejectedType: null,
+          customRejectedType: null
         }
       },
       handleCreate() {
         this.resetTemp()
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
+        this.isRejectShow = false
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -562,9 +582,18 @@
           }
         })
       },
+      // 打开弹框
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
         this.dialogStatus = 'update'
+        let rejectedType = this.temp.rejectedType
+        if (rejectedType != 1 && rejectedType != 2 && rejectedType != 3 && rejectedType != 4 && rejectedType != 5 && rejectedType != 6) {
+          this.isRejectShow = true
+          this.temp.customRejectedType = this.temp.rejectedType
+          this.temp.rejectedType = 99
+        } else {
+          this.isRejectShow = false
+        }
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
@@ -585,6 +614,14 @@
           }
         }
         this.refresh(row)
+      },
+
+      selectRejectedType(value) {
+        if (value == 99) {
+          this.isRejectShow = true
+        } else {
+          this.isRejectShow = false
+        }
       },
 
       refresh(row) {
@@ -608,9 +645,16 @@
           console.log(this.runTimeTemp)
         })
       },
+      // 修改操作
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            let rejectedType = this.temp.rejectedType
+            if (rejectedType != 1 && rejectedType != 2 && rejectedType != 3 && rejectedType != 4 && rejectedType != 5 && rejectedType != 6) {
+              if (this.temp.customRejectedType != null) {
+                this.temp.rejectedType = this.temp.customRejectedType
+              }
+            }
             const tempData = Object.assign({}, this.temp)
             instanceApi.updated(tempData).then(() => {
               this.fetchData()

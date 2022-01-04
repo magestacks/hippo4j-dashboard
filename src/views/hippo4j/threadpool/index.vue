@@ -189,10 +189,10 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-if="isRejectShow">
           <el-col :span="12">
-            <el-form-item label="SPI 拒绝策略" prop="customRejected">
-              <el-input v-model="temp.customRejectedType" size="medium" placeholder="请输入自定义 SPI 拒绝策略标识"/>
+            <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
+              <el-input v-model="temp.customRejectedType" @input="onInput()" placeholder="请输入自定义 SPI 拒绝策略标识"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -217,6 +217,7 @@
     </el-dialog>
   </div>
 </template>
+
 
 <script>
   import * as itemApi from '@/api/hippo4j-item'
@@ -260,6 +261,7 @@
     },
     data() {
       return {
+        isRejectShow: false, // 是否显示spi拒绝策略
         list: null,
         listLoading: true,
         total: 0,
@@ -293,7 +295,7 @@
           { key: 4, display_name: 'DiscardOldestPolicy' },
           { key: 5, display_name: 'RunsOldestTaskPolicy' },
           { key: 6, display_name: 'SyncPutQueuePolicy' },
-          { key: 7, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
+          { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
         ],
         alarmTypes: [
           { key: 1, display_name: '报警' },
@@ -326,7 +328,9 @@
         temp: {
           id: undefined,
           tenantId: '',
-          itemId: ''
+          itemId: '',
+          rejectedType: null,
+          customRejectedType: null
         },
         visible: true
       }
@@ -337,6 +341,9 @@
       this.initSelect()
     },
     methods: {
+      onInput() {
+        this.$forceUpdate()
+      },
       fetchData() {
         this.listLoading = true
         threadPoolApi.list(this.listQuery).then(response => {
@@ -361,7 +368,7 @@
       initSelect() {
         tenantApi.list({ 'size': this.size }).then(response => {
           const { records } = response
-          for (var i = 0; i < records.length; i++) {
+          for (let i = 0; i < records.length; i++) {
             this.tenantOptions.push({
               key: records[i].tenantId,
               display_name: records[i].tenantId + ' ' + records[i].tenantName
@@ -370,16 +377,20 @@
         })
       },
       resetTemp() {
+        this.isRejectShow = false
         this.temp = {
           id: undefined,
-          tenantName: '',
-          tenantDesc: ''
+          tenantId: '',
+          itemId: '',
+          rejectedType: null,
+          customRejectedType: null
         }
       },
       handleCreate() {
         this.resetTemp()
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
+        this.isRejectShow = false
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -387,6 +398,13 @@
       createData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            if (this.isRejectShow) {
+              if (this.temp.customRejectedType == null) {
+                this.temp.rejectedType = 2
+              } else {
+                this.temp.rejectedType = this.temp.customRejectedType
+              }
+            }
             threadPoolApi.created(this.temp).then(() => {
               this.fetchData()
               this.dialogFormVisible = false
@@ -402,8 +420,17 @@
       },
       handleUpdate(row) {
         this.temp = Object.assign({}, row) // copy obj
+        let rejectedType = this.temp.rejectedType
+        if (rejectedType != 1 && rejectedType != 2 && rejectedType != 3 && rejectedType != 4 && rejectedType != 5 && rejectedType != 6) {
+          this.isRejectShow = true
+          this.temp.customRejectedType = this.temp.rejectedType
+          this.temp.rejectedType = 99
+        } else {
+          this.isRejectShow = false
+        }
         this.dialogStatus = 'update'
         this.dialogFormVisible = true
+
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
         })
@@ -411,6 +438,12 @@
       updateData() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
+            let rejectedType = this.temp.rejectedType
+            if (rejectedType != 1 && rejectedType != 2 && rejectedType != 3 && rejectedType != 4 && rejectedType != 5 && rejectedType != 6) {
+              if (this.temp.customRejectedType != null) {
+                this.temp.rejectedType = this.temp.customRejectedType
+              }
+            }
             const tempData = Object.assign({}, this.temp)
             threadPoolApi.updated(tempData).then(() => {
               this.fetchData()
@@ -465,7 +498,7 @@
         const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
         itemApi.list(tenantId).then(response => {
           const { records } = response
-          for (var i = 0; i < records.length; i++) {
+          for (let i = 0; i < records.length; i++) {
             this.itemOptions.push({
               key: records[i].itemId,
               display_name: records[i].itemId + ' ' + records[i].itemName
@@ -482,7 +515,7 @@
         const tenantId = { 'tenantId': this.temp.tenantId, 'size': this.size }
         itemApi.list(tenantId).then(response => {
           const { records } = response
-          for (var i = 0; i < records.length; i++) {
+          for (let i = 0; i < records.length; i++) {
             this.itemTempOptions.push({
               key: records[i].itemId,
               display_name: records[i].itemId + ' ' + records[i].itemName
@@ -499,7 +532,7 @@
         const itemId = { 'itemId': this.listQuery.itemId, 'size': this.size }
         threadPoolApi.list(itemId).then(response => {
           const { records } = response
-          for (var i = 0; i < records.length; i++) {
+          for (let i = 0; i < records.length; i++) {
             this.threadPoolOptions.push({
               key: records[i].tpId,
               display_name: records[i].tpId
@@ -509,8 +542,10 @@
       },
 
       selectRejectedType(value) {
-        if (value == 7) {
-          alert(value)
+        if (value == 99) {
+          this.isRejectShow = true
+        } else {
+          this.isRejectShow = false
         }
       }
     }

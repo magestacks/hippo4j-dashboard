@@ -147,6 +147,8 @@
           return 'RunsOldestTaskPolicy'
         } else if ('6' == type) {
           return 'SyncPutQueuePolicy'
+        } else if (null != type && '' != type) {
+          return 'CustomRejectedPolicy' + ' - ' + type
         }
       },
 
