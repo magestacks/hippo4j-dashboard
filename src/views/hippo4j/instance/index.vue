@@ -31,6 +31,9 @@
       <el-table-column label="实例标识" align="center">
         <template slot-scope="scope">{{ scope.row.identify }}</template>
       </el-table-column>
+      <el-table-column label="Active" align="center">
+        <template slot-scope="scope">{{ scope.row.active }}</template>
+      </el-table-column>
       <el-table-column label="核心线程" align="center">
         <template slot-scope="scope">{{ scope.row.coreSize }}</template>
       </el-table-column>
@@ -84,6 +87,31 @@
           <el-col :span="12">
             <el-form-item label="线程池ID">
               <el-input v-model="runTimeTemp.tpId" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="环境标识">
+              <el-input v-model="runTimeTemp.active" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="实例Host">
+              <el-input v-model="runTimeTemp.host" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="实例标识">
+              <el-input v-model="runTimeTemp.identify" :disabled="true"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="《负载相关》">
             </el-form-item>
           </el-col>
         </el-row>
@@ -522,8 +550,6 @@
         const listArray = [this.listQuery.itemId, this.listQuery.tpId]
         instanceApi.list(listArray).then(response => {
           const { records } = response
-          // const { total } = response
-          // this.total = total
           this.list = response
           this.listLoading = false
         })
@@ -642,7 +668,6 @@
           params: {}
         }).then((response) => {
           this.runTimeTemp = response.data.data
-          console.log(this.runTimeTemp)
         })
       },
       // 修改操作
