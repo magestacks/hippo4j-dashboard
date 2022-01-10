@@ -32,7 +32,11 @@
         <template slot-scope="scope">{{ scope.row.identify }}</template>
       </el-table-column>
       <el-table-column label="Active" align="center">
-        <template slot-scope="scope">{{ scope.row.active }}</template>
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.active | statusFilter">
+            {{ scope.row.active }}
+          </el-tag>
+        </template>
       </el-table-column>
       <el-table-column label="核心线程" align="center">
         <template slot-scope="scope">{{ scope.row.coreSize }}</template>
@@ -399,17 +403,17 @@
   export default {
     components: { Pagination },
     directives: { waves },
+
     filters: {
       statusFilter(status) {
         const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
+          DEV: 'info',
+          TEST: 'success',
+          UAT: 'warning',
+          PROD: 'danger'
         }
         return statusMap[status]
-      }
-    },
-    filters: {
+      },
       queueFilter(type) {
         if ('1' == type) {
           return 'ArrayBlockingQueue'
