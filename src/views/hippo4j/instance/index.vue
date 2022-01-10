@@ -175,13 +175,13 @@
           </el-col>
         </el-row>
 
-        <!--<el-row :gutter="20">
+        <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="共存最大线程" prop="completedTaskCount">
-              <el-input v-model="runTimeTemp.completedTaskCount" :disabled="true"/>
+            <el-form-item label="LargestSize" prop="largestPoolSize">
+              <el-input v-model="runTimeTemp.largestPoolSize" :disabled="true"/>
             </el-form-item>
           </el-col>
-        </el-row>-->
+        </el-row>
 
         <el-row :gutter="20">
           <el-col :span="12">
