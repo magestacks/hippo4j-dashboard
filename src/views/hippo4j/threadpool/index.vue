@@ -221,8 +221,8 @@
               <el-select
                 v-model="temp.queueType"
                 placeholder="队列类型"
-                @change="selectQueueType"
                 style="display:block;"
+                @change="selectQueueType"
               >
                 <el-option
                   v-for="item in queueTypeOptions"
@@ -306,8 +306,8 @@
               <el-select
                 v-model="temp.rejectedType"
                 style="display:block;"
-                @change="selectRejectedType"
                 placeholder="拒绝策略"
+                @change="selectRejectedType"
               >
                 <el-option
                   v-for="item in rejectedOptions"
@@ -330,13 +330,13 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20" v-if="isRejectShow">
+        <el-row v-if="isRejectShow" :gutter="20">
           <el-col :span="12">
             <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
               <el-input
                 v-model="temp.customRejectedType"
-                @input="onInput()"
                 placeholder="请输入自定义 SPI 拒绝策略标识"
+                @input="onInput()"
               />
             </el-form-item>
           </el-col>

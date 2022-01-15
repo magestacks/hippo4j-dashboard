@@ -121,7 +121,7 @@
           <el-button type="primary" size="mini" @click="handleInfo(row)">
             查看
           </el-button>
-          <el-button type="primary" size="mini" @click="handleStackInfo(row)">
+          <el-button type="primary" size="mini" @click="handleShowStack(row)">
             堆栈
           </el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -618,6 +618,7 @@ export default {
       },
       isStackShow: false, // 堆栈信息是否显示
       stackInfo: [], // 堆栈信息
+      rowInfo: {}, // 行信息
       size: 500,
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
@@ -837,25 +838,29 @@ export default {
         this.runTimeTemp = response.data.data;
       });
     },
-    handleStackInfo(row) {
-      const { clientAddress, tpId } = row;
-      const clientBasePath = row.clientBasePath || '';
+    handleShowStack(row) {
+      this.rowInfo = row;
+      this.handleStackInfo();
+    },
+    handleStackInfo() {
+      const { clientAddress, tpId } = this.rowInfo;
+      const clientBasePath = this.rowInfo.clientBasePath || '';
       const url = `http://${clientAddress}${clientBasePath}/run/thread/state/${tpId}`;
-      try {
-        axios.get(url).then(res => {
+      axios
+        .get(url)
+        .then(res => {
           const { data } = res.data;
-          console.log(data);
-          if (data) {
+          if (data && data.length !== 0) {
             this.stackInfo = data;
             this.isStackShow = true;
           } else {
             this.$message.warning('当前线程池暂无堆栈信息');
           }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$message.error('查询失败，请尝试刷新页面');
         });
-      } catch (error) {
-        console.log(error);
-        this.$message.error('查询失败，请尝试刷新页面');
-      }
     },
     // 修改操作
     updateData() {
