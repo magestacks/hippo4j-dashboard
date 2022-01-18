@@ -1,31 +1,80 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" class="filter-item"
-                 @change="tenantSelectList()">
-        <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+      <el-select
+        v-model="listQuery.tenantId"
+        placeholder="租户ID"
+        style="width:220px"
+        class="filter-item"
+        @change="tenantSelectList()"
+      >
+        <el-option
+          v-for="item in tenantOptions"
+          :key="item.key"
+          :label="item.display_name"
+          :value="item.key"
+        />
       </el-select>
-      <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" class="filter-item"
-                 @change="itemSelectList()">
-        <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+      <el-select
+        v-model="listQuery.itemId"
+        placeholder="项目ID"
+        style="width:220px"
+        class="filter-item"
+        @change="itemSelectList()"
+      >
+        <el-option
+          v-for="item in itemOptions"
+          :key="item.key"
+          :label="item.display_name"
+          :value="item.key"
+        />
       </el-select>
-      <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" class="filter-item">
-        <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+      <el-select
+        v-model="listQuery.tpId"
+        placeholder="线程池ID"
+        style="width:220px"
+        class="filter-item"
+      >
+        <el-option
+          v-for="item in threadPoolOptions"
+          :key="item.key"
+          :label="item.display_name"
+          :value="item.key"
+        />
       </el-select>
 
-      <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-search"
-                 @click="fetchData">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        style="margin-left: 10px;"
+        icon="el-icon-search"
+        @click="fetchData"
+      >
         搜索
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
-                 @click="refreshData">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        style="margin-left: 10px;"
+        icon="el-icon-refresh"
+        @click="refreshData"
+      >
         重置
       </el-button>
     </div>
 
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      element-loading-text="Loading"
+      border
+      fit
+      highlight-current-row
+    >
       <el-table-column align="center" label="序号" width="95">
-        <template slot-scope="scope">{{ scope.$index+1 }}</template>
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
 
       <el-table-column label="实例标识" align="center">
@@ -62,26 +111,49 @@
                      inactive-color="#F04134" inactive-text="忽略" :inactive-value="1" @change="changeSwitch(scope.row)"/>
         </template>
       </el-table-column>-->
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleInfo(row)">
-            参数
-          </el-button>
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <!--<el-button type="primary" size="mini" @click="hrefMonitor(row)">
-            监控
-          </el-button>-->
+      <el-table-column
+        label="操作"
+        align="center"
+        width="180"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="{ row }">
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              操作<i class="el-icon-arrow-down el-icon--right"/>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item @click.native="handleInfo(row)">查看</el-dropdown-item>
+              <el-dropdown-item @click.native="handleShowStack(row)">堆栈</el-dropdown-item>
+              <el-dropdown-item divided @click.native="handleUpdate(row)">编辑</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
-                @pagination="fetchData"/>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="instanceDialogFormVisible" width="1000px">
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="listQuery.current"
+      :limit.sync="listQuery.size"
+      @pagination="fetchData"
+    />
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      :visible.sync="instanceDialogFormVisible"
+      width="1000px"
+    >
       <test></test>
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="110px">
-        <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线程池负载高时, 禁止频繁刷新此页面!!!</h3>
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="right"
+        label-width="110px"
+      >
+        <h3>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线程池负载高时, 禁止频繁刷新此页面!!!
+        </h3>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label=""></el-form-item>
@@ -115,8 +187,15 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="《负载相关》">
+            <el-form-item label="运行状态">
+              <el-input v-model="runTimeTemp.state" :disabled="true"/>
             </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="《负载相关》"></el-form-item>
           </el-col>
         </el-row>
 
@@ -148,8 +227,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="《线程相关》">
-            </el-form-item>
+            <el-form-item label="《线程相关》"></el-form-item>
           </el-col>
         </el-row>
 
@@ -189,8 +267,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="《队列相关》">
-            </el-form-item>
+            <el-form-item label="《队列相关》"></el-form-item>
           </el-col>
         </el-row>
 
@@ -222,8 +299,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="《其它信息》">
-            </el-form-item>
+            <el-form-item label="《其它信息》"></el-form-item>
           </el-col>
         </el-row>
 
@@ -255,7 +331,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="instanceDialogFormVisible = false">
-          取消
+          关闭
         </el-button>
         <el-button type="primary" @click="handleInfo()">
           刷新
@@ -264,7 +340,13 @@
     </el-dialog>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px">
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="110px"
+      >
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="基本信息"></el-form-item>
@@ -273,9 +355,18 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="租户ID" prop="tenantId">
-              <el-select v-model="temp.tenantId" placeholder="请选择租户" style="display:block;"
-                         :disabled="dialogStatus==='create'?false:true">
-                <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+              <el-select
+                v-model="temp.tenantId"
+                placeholder="请选择租户"
+                style="display:block;"
+                :disabled="dialogStatus === 'create' ? false : true"
+              >
+                <el-option
+                  v-for="item in tenantOptions"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -289,9 +380,18 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="项目ID" prop="itemId">
-              <el-select v-model="temp.itemId" placeholder="请选择项目" style="display:block;"
-                         :disabled="dialogStatus==='create'?false:true">
-                <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
+              <el-select
+                v-model="temp.itemId"
+                placeholder="请选择项目"
+                style="display:block;"
+                :disabled="dialogStatus === 'create' ? false : true"
+              >
+                <el-option
+                  v-for="item in itemOptions"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -305,11 +405,14 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="线程池ID" prop="tpId">
-              <el-input v-model="temp.tpId" size="medium" placeholder="请输入线程池ID"
-                        :disabled="dialogStatus==='create'?false:true"/>
+              <el-input
+                v-model="temp.tpId"
+                size="medium"
+                placeholder="请输入线程池ID"
+                :disabled="dialogStatus === 'create' ? false : true"
+              />
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
@@ -319,17 +422,31 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
-              <el-select v-model="temp.queueType" placeholder="队列类型" :disabled="true" @change="selectQueueType"
-                         style="display:block;">
-                <el-option v-for="item in queueTypeOptions" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
+              <el-select
+                v-model="temp.queueType"
+                placeholder="队列类型"
+                :disabled="true"
+                style="display:block;"
+                @change="selectQueueType"
+              >
+                <el-option
+                  v-for="item in queueTypeOptions"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="2147483647"
-                               :disabled="temp.queueType!=9?true:false"/>
+              <el-input-number
+                v-model="temp.capacity"
+                placeholder="队列容量"
+                :min="0"
+                :max="2147483647"
+                :disabled="temp.queueType != 9 ? true : false"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -337,15 +454,28 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="核心线程超时" prop="isAlarm">
-              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
-                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
+              <el-select
+                v-model="temp.allowCoreThreadTimeOut"
+                placeholder="核心线程超时"
+                style="display:block;"
+              >
+                <el-option
+                  v-for="item in allowCoreThreadTimeOutTypes"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="KATime/S" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="1" :max="99999"/>
+              <el-input-number
+                v-model="temp.keepAliveTime"
+                placeholder="Time/S"
+                :min="1"
+                :max="99999"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -353,28 +483,39 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="拒绝策略" prop="rejectedType">
-              <el-select v-model="temp.rejectedType" style="display:block;" placeholder="拒绝策略"
-                         @change="selectRejectedType">
-                <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
+              <el-select
+                v-model="temp.rejectedType"
+                style="display:block;"
+                placeholder="拒绝策略"
+                @change="selectRejectedType"
+              >
+                <el-option
+                  v-for="item in rejectedOptions"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="20" v-if="isRejectShow">
+        <el-row v-if="isRejectShow" :gutter="20">
           <el-col :span="12">
             <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
-              <el-input v-model="temp.customRejectedType" @input="onInput()" placeholder="请输入自定义 SPI 拒绝策略标识"/>
+              <el-input
+                v-model="temp.customRejectedType"
+                placeholder="请输入自定义 SPI 拒绝策略标识"
+                @input="onInput()"
+              />
             </el-form-item>
           </el-col>
         </el-row>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           确认
         </el-button>
       </div>
@@ -385,7 +526,28 @@
         <el-table-column prop="pv" label="Pv"/>
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">
+          Confirm
+        </el-button>
+      </span>
+    </el-dialog>
+    <el-dialog title="Stack Info" :visible.sync="isStackShow" width="60%">
+      <ul class="stack-info">
+        <li v-for="item in stackInfo" :key="item.threadId">
+          <p>
+            "{{ item.threadName }}" #{{ item.threadId }} java.lang.Thread.State:
+            {{ item.threadStatus }}
+          </p>
+          <ul>
+            <li v-for="(tip, index) in item.threadStack" :key="index">at {{ tip }}</li>
+          </ul>
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isStackShow = false">关 闭</el-button>
+        <el-button type="primary" @click="handleStackInfo">
+          刷 新
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -403,7 +565,6 @@
   export default {
     components: { Pagination },
     directives: { waves },
-
     filters: {
       statusFilter(status) {
         const statusMap = {
@@ -461,6 +622,9 @@
           itemId: '',
           tpId: ''
         },
+        isStackShow: false, // 堆栈信息是否显示
+        stackInfo: [], // 堆栈信息
+        rowInfo: {}, // 行信息
         size: 500,
         pluginTypeOptions: ['reader', 'writer'],
         dialogPluginVisible: false,
@@ -478,7 +642,10 @@
           { key: 4, display_name: 'SynchronousQueue' },
           { key: 5, display_name: 'LinkedTransferQueue' },
           { key: 6, display_name: 'PriorityBlockingQueue' },
-          { key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)' }
+          {
+            key: 9,
+            display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'
+          }
         ],
         rejectedOptions: [
           { key: 1, display_name: 'CallerRunsPolicy' },
@@ -489,10 +656,7 @@
           { key: 6, display_name: 'SyncPutQueuePolicy' },
           { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
         ],
-        alarmTypes: [
-          { key: 1, display_name: '报警' },
-          { key: 0, display_name: '不报警' }
-        ],
+        alarmTypes: [{ key: 1, display_name: '报警' }, { key: 0, display_name: '不报警' }],
         allowCoreThreadTimeOutTypes: [
           { key: 1, display_name: '超时' },
           { key: 0, display_name: '不超时' }
@@ -566,7 +730,7 @@
         this.threadPoolOptions = []
       },
       initSelect() {
-        tenantApi.list({ 'size': this.size }).then(response => {
+        tenantApi.list({ size: this.size }).then(response => {
           const { records } = response
           for (let i = 0; i < records.length; i++) {
             this.tenantOptions.push({
@@ -575,7 +739,6 @@
             })
           }
         })
-
       },
       resetTemp() {
         this.isRejectShow = false
@@ -597,7 +760,7 @@
         })
       },
       createData() {
-        this.$refs['dataForm'].validate((valid) => {
+        this.$refs['dataForm'].validate(valid => {
           if (valid) {
             threadPoolApi.created(this.temp).then(() => {
               this.fetchData()
@@ -617,7 +780,14 @@
         this.temp = Object.assign({}, row) // copy obj
         this.dialogStatus = 'update'
         let rejectedType = this.temp.rejectedType
-        if (rejectedType != 1 && rejectedType != 2 && rejectedType != 3 && rejectedType != 4 && rejectedType != 5 && rejectedType != 6) {
+        if (
+          rejectedType != 1 &&
+          rejectedType != 2 &&
+          rejectedType != 3 &&
+          rejectedType != 4 &&
+          rejectedType != 5 &&
+          rejectedType != 6
+        ) {
           this.isRejectShow = true
           this.temp.customRejectedType = this.temp.rejectedType
           this.temp.rejectedType = 99
@@ -633,14 +803,14 @@
         this.instanceDialogFormVisible = true
         this.dialogStatus = 'info'
 
-        if (typeof row === 'undefined' || row === null) {
+        if (typeof row == 'undefined' || row == null) {
           row = this.tempRow
         } else {
           this.tempRow = {
-            'identify': row.identify,
-            'clientAddress': row.clientAddress,
-            'clientBasePath': row.clientBasePath,
-            'tpId': row.tpId
+            identify: row.identify,
+            clientAddress: row.clientAddress,
+            clientBasePath: row.clientBasePath,
+            tpId: row.tpId
           }
         }
         this.refresh(row)
@@ -670,16 +840,47 @@
           url: httpStr,
           headers: { 'Access-Control-Allow-Credentials': true },
           params: {}
-        }).then((response) => {
+        }).then(response => {
           this.runTimeTemp = response.data.data
         })
       },
+      handleShowStack(row) {
+        this.rowInfo = row
+        this.handleStackInfo()
+      },
+      handleStackInfo() {
+        const { clientAddress, tpId } = this.rowInfo
+        const clientBasePath = this.rowInfo.clientBasePath || ''
+        const url = `http://${clientAddress}${clientBasePath}/run/thread/state/${tpId}`
+        axios
+          .get(url)
+          .then(res => {
+            const { data } = res.data
+            if (data && data.length != 0) {
+              this.stackInfo = data
+              this.isStackShow = true
+            } else {
+              this.$message.warning('当前线程池暂无堆栈信息')
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            this.$message.error('查询失败，请尝试刷新页面')
+          })
+      },
       // 修改操作
       updateData() {
-        this.$refs['dataForm'].validate((valid) => {
+        this.$refs['dataForm'].validate(valid => {
           if (valid) {
             let rejectedType = this.temp.rejectedType
-            if (rejectedType != 1 && rejectedType != 2 && rejectedType != 3 && rejectedType != 4 && rejectedType != 5 && rejectedType != 6) {
+            if (
+              rejectedType != 1 &&
+              rejectedType != 2 &&
+              rejectedType != 3 &&
+              rejectedType != 4 &&
+              rejectedType != 5 &&
+              rejectedType != 6
+            ) {
               if (this.temp.customRejectedType != null) {
                 this.temp.rejectedType = this.temp.customRejectedType
               }
@@ -712,7 +913,7 @@
 
         this.itemOptions = []
         this.threadPoolOptions = []
-        const tenantId = { 'tenantId': this.listQuery.tenantId, 'size': this.size }
+        const tenantId = { tenantId: this.listQuery.tenantId, size: this.size }
         itemApi.list(tenantId).then(response => {
           const { records } = response
           for (var i = 0; i < records.length; i++) {
@@ -728,7 +929,7 @@
         this.listQuery.tpId = null
 
         this.threadPoolOptions = []
-        const itemId = { 'itemId': this.listQuery.itemId, 'size': this.size }
+        const itemId = { itemId: this.listQuery.itemId, size: this.size }
         threadPoolApi.list(itemId).then(response => {
           const { records } = response
           for (var i = 0; i < records.length; i++) {
@@ -742,3 +943,27 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .stack-info {
+    & > li {
+      margin-bottom: 24px;
+
+      p:first-child {
+        color: #0066ff;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+
+      ul {
+        margin-left: 30px;
+
+        li {
+          color: #fc5531;
+          text-align: justify;
+          margin: 10px auto;
+        }
+      }
+    }
+  }
+</style>
