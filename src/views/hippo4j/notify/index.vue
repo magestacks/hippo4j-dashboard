@@ -498,6 +498,7 @@
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
+          this.selectType(this.temp.type);
         })
       },
       updateData() {
@@ -553,6 +554,9 @@
       selectType(value) {
         if (value === 'CONFIG') {
           this.temp.interval = undefined
+          this.rules['interval'] = []
+        }else {
+          this.rules['interval'] = [{required: true, message: 'this is required', trigger: 'blur' }]
         }
       },
 
