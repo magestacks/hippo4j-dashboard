@@ -455,7 +455,15 @@
           itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
           tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
           coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          maxSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
+          maxSize: [
+            { required: true, message: 'this is required', trigger: 'blur' },
+            {validator: (rule, value, callback) => {
+                if (parseInt(value) < parseInt(this.temp.coreSize) ) {
+                  callback('最大线程必须大于等于核心线程');
+                }
+                callback();
+              }}
+          ],
           queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
           allowCoreThreadTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
           keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
