@@ -8,6 +8,14 @@ export function list(data) {
   })
 }
 
+export function listClient(data) {
+  return request({
+    url: '/hippo4j/v1/cs/thread/pool/list/client/instance/' + data.itemId,
+    method: 'get',
+    data
+  })
+}
+
 export function info(data) {
   return request({
     url: '/hippo4j/v1/cs/configs?tpId=' + data.tpId + '&itemId=' + data.itemId + '&namespace=' + data.tenantId + '&instanceId=' + data.identify,
