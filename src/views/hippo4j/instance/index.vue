@@ -800,7 +800,6 @@
         })
       },
       handleInfo(row) {
-        this.instanceDialogFormVisible = true
         this.dialogStatus = 'info'
 
         if (typeof row == 'undefined' || row == null) {
@@ -841,7 +840,12 @@
           headers: { 'Access-Control-Allow-Credentials': true },
           params: {}
         }).then(response => {
+          this.instanceDialogFormVisible = true
+
           this.runTimeTemp = response.data.data
+        }).catch(error => {
+          console.log(error)
+          this.$message.error('查询失败，请尝试刷新页面')
         })
       },
       handleShowStack(row) {
