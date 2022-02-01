@@ -281,6 +281,14 @@
               />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="全部修改" prop="allUpdate">
+              <el-radio-group v-model="temp.allUpdate">
+                <el-radio label="1" border>Yes</el-radio>
+                <el-radio label="0" border>No</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
         </el-row>
 
       </el-form>
@@ -385,6 +393,7 @@
           tenantId: '',
           itemId: '',
           rejectedType: null,
+          allUpdate: '1',
           customRejectedType: null
         },
         visible: true
@@ -540,28 +549,40 @@
               'maxSize': this.temp.maximumSize,
               'keepAliveTime': this.temp.keepAliveTime
             }
-            const url = `http://${this.temp.clientAddress}/web/update/pool`
-            axios
-              .post(url, tempData)
-              .then(res => {
-                this.dialogFormVisible = false
-                this.$notify({
-                  title: 'Success',
-                  message: 'Update Successfully',
-                  type: 'success',
-                  duration: 2000
-                })
-              })
-
-              .catch(error => {
-                console.log(error)
-                this.$message.error('查询失败，请尝试刷新页面')
-              })
+            if (this.temp.allUpdate === '0' || this.temp.allUpdate == undefined || this.temp.allUpdate == null) {
+              this.updateExecute(this.temp.clientAddress, tempData)
+            } else {
+              for (let i = 0; i < this.list.length; i++) {
+                if (this.list[i] != null) {
+                  this.updateExecute(this.list[i].clientAddress, tempData)
+                }
+              }
+            }
 
             this.fetchData()
           }
         })
       },
+
+      updateExecute(clientAddress, updateData) {
+        const url = `http://${clientAddress}/web/update/pool`
+        axios
+          .post(url, updateData)
+          .then(res => {
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+          .catch(error => {
+            console.log(error)
+            this.$message.error('查询失败，请尝试刷新页面')
+          })
+      },
+
       openDelConfirm(name) {
         return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
           confirmButtonText: '确定',
