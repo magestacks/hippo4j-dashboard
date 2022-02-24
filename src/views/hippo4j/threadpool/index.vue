@@ -118,7 +118,9 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(row)">
+          <el-button size="mini" type="danger"
+                     @click="handleDelete(row)"
+          >
             删除
           </el-button>
         </template>
@@ -457,12 +459,14 @@
           coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
           maxSize: [
             { required: true, message: 'this is required', trigger: 'blur' },
-            {validator: (rule, value, callback) => {
-                if (parseInt(value) < parseInt(this.temp.coreSize) ) {
-                  callback('最大线程必须大于等于核心线程');
+            {
+              validator: (rule, value, callback) => {
+                if (parseInt(value) < parseInt(this.temp.coreSize)) {
+                  callback('最大线程必须大于等于核心线程')
                 }
-                callback();
-              }}
+                callback()
+              }
+            }
           ],
           queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
           allowCoreThreadTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
@@ -627,6 +631,12 @@
         })
       },
       handleDelete(row) {
+        const role = this.$cookie.get('userName') === 'admin' ? true : false
+        if (!role) {
+          this.$message.error('请联系管理员删除')
+          return
+        }
+
         this.openDelConfirm(row.tpId).then(() => {
           threadPoolApi.deleted(row).then(response => {
             this.fetchData()
