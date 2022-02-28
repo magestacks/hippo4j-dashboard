@@ -118,7 +118,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" type="danger"
+          <el-button size="mini" :disabled="isEditDisabled" type="danger"
                      @click="handleDelete(row)"
           >
             删除
@@ -418,6 +418,7 @@
         pluginTypeOptions: ['reader', 'writer'],
         dialogPluginVisible: false,
         pluginData: [],
+        isEditDisabled: false,
         dialogFormVisible: false,
         tenantOptions: [],
         threadPoolOptions: [],
@@ -490,6 +491,9 @@
       this.fetchData()
       // 初始化租户、项目
       this.initSelect()
+    },
+    mounted() {
+      this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
     },
     methods: {
       onInput() {
