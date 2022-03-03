@@ -14,7 +14,7 @@
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <el-form label-position="left">
-            <el-form-item label="登陆用户" label-width="120px">
+            <el-form-item label="登录用户" label-width="120px">
               <span>{{temp.userName}}</span>
             </el-form-item>
             <el-form-item label="用户角色" label-width="120px">

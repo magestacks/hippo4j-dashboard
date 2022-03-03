@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import router, { resetRouter } from '@/router'
 
 // create an axios instance
 const service = axios.create({
@@ -35,7 +36,7 @@ service.interceptors.response.use(
   /**
    * If you want to get http information such as headers or status
    * Please return  response => response
-  */
+   */
 
   /**
    * Determine the request status by custom code
@@ -45,7 +46,12 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== '20000' && res.code !== '0' && res.code !== '200') {
+    if (res.code === 'A000004') {
+      removeToken()
+      resetRouter()
+      alert(res.message)
+      document.location.href = 'index'
+    } else if (res.code !== '20000' && res.code !== '0' && res.code !== '200') {
       Message({
         message: res.message || 'Error',
         type: 'error',
