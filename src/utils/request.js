@@ -50,7 +50,7 @@ service.interceptors.response.use(
       removeToken()
       resetRouter()
       alert(res.message)
-      document.location.href = 'index'
+      document.location.href = 'index.html'
     } else if (res.code !== '20000' && res.code !== '0' && res.code !== '200') {
       Message({
         message: res.message || 'Error',
