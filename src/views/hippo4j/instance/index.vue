@@ -703,15 +703,15 @@
       },
       fetchData() {
         if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
-          alert('租户 ID 不允许为空')
+          this.$message.warning('租户 ID 不允许为空')
           return
         }
         if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
-          alert('项目 ID 不允许为空')
+          this.$message.warning('项目 ID 不允许为空')
           return
         }
         if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
-          alert('线程池 ID 不允许为空!')
+          this.$message.warning('线程池 ID 不允许为空')
           return
         }
         this.listLoading = true

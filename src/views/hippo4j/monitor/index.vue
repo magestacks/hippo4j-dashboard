@@ -79,7 +79,7 @@
       </el-button>
     </div>
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+    <panel-group @handleSetLineChartData="handleSetLineChartData"/>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;padding-left:32px">
       <el-col :span="12">
@@ -133,304 +133,305 @@
     </el-row>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData.chartInfo" />
+      <line-chart :chart-data="lineChartData.chartInfo"/>
     </el-row>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart-two :chart-data="lineChartData.chartInfo" />
+      <line-chart-two :chart-data="lineChartData.chartInfo"/>
     </el-row>
   </div>
 </template>
 
 <script>
-import LineChart from './components/LineChart';
-import LineChartTwo from './components/LineChartTwo';
-import * as dashborad from '@/api/dashborad';
-import waves from '@/directive/waves';
-import Pagination from '@/components/Pagination';
-import * as itemApi from '@/api/hippo4j-item';
-import * as tenantApi from '@/api/hippo4j-tenant';
-import * as threadPoolApi from '@/api/hippo4j-threadPool';
-import * as instanceApi from '@/api/hippo4j-instance';
-import * as monitorApi from '@/api/hippo4j-monitor';
-export default {
-  name: 'DashboardAdmin',
-  components: {
-    Pagination,
-    LineChart,
-    LineChartTwo,
-  },
-  directives: { waves },
-  filters: {
-    queueFilter(type) {
-      if ('1' == type) {
-        return 'ArrayBlockingQueue';
-      } else if ('2' == type) {
-        return 'LinkedBlockingQueue';
-      } else if ('3' == type) {
-        return 'LinkedBlockingDeque';
-      } else if ('4' == type) {
-        return 'SynchronousQueue';
-      } else if ('5' == type) {
-        return 'LinkedTransferQueue';
-      } else if ('6' == type) {
-        return 'PriorityBlockingQueue';
-      } else if ('9' == type) {
-        return 'ResizableLinkedBlockingQueue';
-      }
-    },
+  import LineChart from './components/LineChart'
+  import LineChartTwo from './components/LineChartTwo'
+  import * as dashborad from '@/api/dashborad'
+  import waves from '@/directive/waves'
+  import Pagination from '@/components/Pagination'
+  import * as itemApi from '@/api/hippo4j-item'
+  import * as tenantApi from '@/api/hippo4j-tenant'
+  import * as threadPoolApi from '@/api/hippo4j-threadPool'
+  import * as instanceApi from '@/api/hippo4j-instance'
+  import * as monitorApi from '@/api/hippo4j-monitor'
 
-    rejectedFilter(type) {
-      if ('1' == type) {
-        return 'CallerRunsPolicy';
-      } else if ('2' == type) {
-        return 'AbortPolicy';
-      } else if ('3' == type) {
-        return 'DiscardPolicy';
-      } else if ('4' == type) {
-        return 'DiscardOldestPolicy';
-      } else if ('5' == type) {
-        return 'RunsOldestTaskPolicy';
-      } else if ('6' == type) {
-        return 'SyncPutQueuePolicy';
-      } else if (null != type && '' != type) {
-        return 'CustomRejectedPolicy' + ' - ' + type;
-      }
+  export default {
+    name: 'DashboardAdmin',
+    components: {
+      Pagination,
+      LineChart,
+      LineChartTwo
     },
+    directives: { waves },
+    filters: {
+      queueFilter(type) {
+        if ('1' == type) {
+          return 'ArrayBlockingQueue'
+        } else if ('2' == type) {
+          return 'LinkedBlockingQueue'
+        } else if ('3' == type) {
+          return 'LinkedBlockingDeque'
+        } else if ('4' == type) {
+          return 'SynchronousQueue'
+        } else if ('5' == type) {
+          return 'LinkedTransferQueue'
+        } else if ('6' == type) {
+          return 'PriorityBlockingQueue'
+        } else if ('9' == type) {
+          return 'ResizableLinkedBlockingQueue'
+        }
+      },
 
-    alarmFilter(type) {
-      if ('1' == type) {
-        return '报警';
-      } else if ('0' == type) {
-        return '忽略';
+      rejectedFilter(type) {
+        if ('1' == type) {
+          return 'CallerRunsPolicy'
+        } else if ('2' == type) {
+          return 'AbortPolicy'
+        } else if ('3' == type) {
+          return 'DiscardPolicy'
+        } else if ('4' == type) {
+          return 'DiscardOldestPolicy'
+        } else if ('5' == type) {
+          return 'RunsOldestTaskPolicy'
+        } else if ('6' == type) {
+          return 'SyncPutQueuePolicy'
+        } else if (null != type && '' != type) {
+          return 'CustomRejectedPolicy' + ' - ' + type
+        }
+      },
+
+      alarmFilter(type) {
+        if ('1' == type) {
+          return '报警'
+        } else if ('0' == type) {
+          return '忽略'
+        }
+      },
+      allowCoreThreadTimeOutFilter(type) {
+        if ('1' == type) {
+          return '超时'
+        } else if ('0' == type) {
+          return '不超时'
+        }
       }
     },
-    allowCoreThreadTimeOutFilter(type) {
-      if ('1' == type) {
-        return '超时';
-      } else if ('0' == type) {
-        return '不超时';
-      }
-    },
-  },
-  data() {
-    return {
-      lineChartData: {
-        chartInfo: {
-          poolSizeList: [],
-          activeSizeList: [],
-          queueSizeList: [],
-          completedTaskCountList: [],
-          rejectCountList: [],
-          dayList: [],
-          queueRemainingCapacityList: [],
-          currentLoadList: [],
-          queueCapacityList: [],
+    data() {
+      return {
+        lineChartData: {
+          chartInfo: {
+            poolSizeList: [],
+            activeSizeList: [],
+            queueSizeList: [],
+            completedTaskCountList: [],
+            rejectCountList: [],
+            dayList: [],
+            queueRemainingCapacityList: [],
+            currentLoadList: [],
+            queueCapacityList: []
+          }
         },
+        countSucTotal: 0,
+        countRunningTotal: 0,
+        countFailTotal: 0,
+        show: false,
+        size: 500,
+
+        tenantOptions: [],
+        threadPoolOptions: [],
+        itemOptions: [],
+        identifyOptions: [],
+        listQuery: {
+          current: 1,
+          size: 10,
+          itemId: '',
+          tpId: '',
+          tenantId: '',
+          identify: '',
+          instanceId: ''
+        },
+
+        temp: {},
+        fromIdentify: '',
+        lastTaskCount: null
+      }
+    },
+    async created() {
+      this.chartInfo()
+      this.initSelect()
+    },
+    methods: {
+      handleSetLineChartData(type) {
+        this.lineChartData = lineChartData[type]
       },
-      countSucTotal: 0,
-      countRunningTotal: 0,
-      countFailTotal: 0,
-      show: false,
-      size: 500,
+      fetchData() {
+        if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
+          this.$message.warning('租户 ID 不允许为空')
+          return
+        }
+        if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
+          this.$message.warning('项目 ID 不允许为空')
+          return
+        }
+        if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
+          this.$message.warning('线程池 ID 不允许为空')
+          return
+        }
+        if (this.listQuery.identify == null || Object.keys(this.listQuery.identify).length == 0) {
+          this.$message.warning('IP : PORT 不允许为空')
+          return
+        }
 
-      tenantOptions: [],
-      threadPoolOptions: [],
-      itemOptions: [],
-      identifyOptions: [],
-      listQuery: {
-        current: 1,
-        size: 10,
-        itemId: '',
-        tpId: '',
-        tenantId: '',
-        identify: '',
-        instanceId: '',
+        this.listQuery.instanceId = this.listQuery.identify
+        threadPoolApi.info(this.listQuery).then(response => {
+          this.temp = response
+          this.fromIdentify = this.listQuery.identify
+        })
+
+        monitorApi.lastTaskCountFun(this.listQuery).then(response => {
+          this.lastTaskCount = response.completedTaskCount
+        })
+
+        this.initChart()
+      },
+      refreshData() {
+        this.listQuery.tenantId = null
+        this.listQuery.itemId = null
+        this.listQuery.tpId = null
+        this.listQuery.identify = null
+
+        this.itemOptions = []
+        this.threadPoolOptions = []
+        this.identifyOptions = []
       },
 
-      temp: {},
-      fromIdentify: '',
-      lastTaskCount: null,
-    };
-  },
-  async created() {
-    this.chartInfo();
-    this.initSelect();
-  },
-  methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type];
-    },
-    fetchData() {
-      if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
-        alert('租户 ID 不允许为空');
-        return;
-      }
-      if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
-        alert('项目 ID 不允许为空');
-        return;
-      }
-      if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
-        alert('线程池 ID 不允许为空!');
-        return;
-      }
-      if (this.listQuery.identify == null || Object.keys(this.listQuery.identify).length == 0) {
-        alert('IP : PORT 不允许为空!');
-        return;
-      }
+      chartInfo() {
+        dashborad.chartInfo().then(response => {
+          this.show = true;
+          (this.countSucTotal = response.tenantCount),
+            (this.countRunningTotal = response.threadPoolCount),
+            (this.countFailTotal = response.itemCount)
+        })
+      },
 
-      this.listQuery.instanceId = this.listQuery.identify;
-      threadPoolApi.info(this.listQuery).then(response => {
-        this.temp = response;
-        this.fromIdentify = this.listQuery.identify;
-      });
+      initSelect() {
+        tenantApi.list({ size: this.size }).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.tenantOptions.push({
+              key: records[i].tenantId,
+              display_name: records[i].tenantId + ' ' + records[i].tenantName
+            })
+          }
+        })
+      },
 
-      monitorApi.lastTaskCountFun(this.listQuery).then(response => {
-        this.lastTaskCount = response.completedTaskCount;
-      });
+      tenantSelectList() {
+        this.listQuery.itemId = null
+        this.listQuery.tpId = null
+        this.listQuery.identify = null
 
-      this.initChart();
-    },
-    refreshData() {
-      this.listQuery.tenantId = null;
-      this.listQuery.itemId = null;
-      this.listQuery.tpId = null;
-      this.listQuery.identify = null;
+        this.itemOptions = []
+        this.threadPoolOptions = []
+        this.identifyOptions = []
+        const tenantId = { tenantId: this.listQuery.tenantId, size: this.size }
+        itemApi.list(tenantId).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.itemOptions.push({
+              key: records[i].itemId,
+              display_name: records[i].itemId + ' ' + records[i].itemName
+            })
+          }
+        })
+      },
 
-      this.itemOptions = [];
-      this.threadPoolOptions = [];
-      this.identifyOptions = [];
-    },
+      itemSelectList() {
+        this.listQuery.tpId = null
+        this.listQuery.identify = null
 
-    chartInfo() {
-      dashborad.chartInfo().then(response => {
-        this.show = true;
-        (this.countSucTotal = response.tenantCount),
-          (this.countRunningTotal = response.threadPoolCount),
-          (this.countFailTotal = response.itemCount);
-      });
-    },
+        this.threadPoolOptions = []
+        this.identifyOptions = []
+        const itemId = { itemId: this.listQuery.itemId, size: this.size }
+        threadPoolApi.list(itemId).then(response => {
+          const { records } = response
+          for (var i = 0; i < records.length; i++) {
+            this.threadPoolOptions.push({
+              key: records[i].tpId,
+              display_name: records[i].tpId
+            })
+          }
+        })
+      },
 
-    initSelect() {
-      tenantApi.list({ size: this.size }).then(response => {
-        const { records } = response;
-        for (var i = 0; i < records.length; i++) {
-          this.tenantOptions.push({
-            key: records[i].tenantId,
-            display_name: records[i].tenantId + ' ' + records[i].tenantName,
-          });
+      threadPoolSelectList() {
+        this.listQuery.identify = null
+
+        this.identifyOptions = []
+        const listArray = [this.listQuery.itemId, this.listQuery.tpId]
+        instanceApi.list(listArray).then(response => {
+          const { records } = response
+          for (var i = 0; i < response.length; i++) {
+            this.identifyOptions.push({
+              key: response[i].identify,
+              display_name: response[i].clientAddress
+            })
+          }
+        })
+      },
+
+      initChart() {
+        const params = {
+          tenantId: this.listQuery.tenantId,
+          itemId: this.listQuery.itemId,
+          tpId: this.listQuery.tpId,
+          instanceId: this.listQuery.identify
         }
-      });
+        monitorApi.active(this.listQuery).then(response => {
+          this.lineChartData.chartInfo.dayList = response.times
+          this.lineChartData.chartInfo.poolSizeList = response.poolSizeList
+
+          this.lineChartData.chartInfo.activeSizeList = response.activeSizeList
+          this.lineChartData.chartInfo.queueSizeList = response.queueSizeList
+          this.lineChartData.chartInfo.completedTaskCountList = response.completedTaskCountList
+
+          this.lineChartData.chartInfo.rejectCountList = response.rejectCountList
+          this.lineChartData.chartInfo.queueRemainingCapacityList =
+            response.queueRemainingCapacityList
+          this.lineChartData.chartInfo.currentLoadList = response.currentLoadList
+          this.lineChartData.chartInfo.queueCapacityList = response.queueCapacityList
+        })
+      }
     },
-
-    tenantSelectList() {
-      this.listQuery.itemId = null;
-      this.listQuery.tpId = null;
-      this.listQuery.identify = null;
-
-      this.itemOptions = [];
-      this.threadPoolOptions = [];
-      this.identifyOptions = [];
-      const tenantId = { tenantId: this.listQuery.tenantId, size: this.size };
-      itemApi.list(tenantId).then(response => {
-        const { records } = response;
-        for (var i = 0; i < records.length; i++) {
-          this.itemOptions.push({
-            key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName,
-          });
-        }
-      });
-    },
-
-    itemSelectList() {
-      this.listQuery.tpId = null;
-      this.listQuery.identify = null;
-
-      this.threadPoolOptions = [];
-      this.identifyOptions = [];
-      const itemId = { itemId: this.listQuery.itemId, size: this.size };
-      threadPoolApi.list(itemId).then(response => {
-        const { records } = response;
-        for (var i = 0; i < records.length; i++) {
-          this.threadPoolOptions.push({
-            key: records[i].tpId,
-            display_name: records[i].tpId,
-          });
-        }
-      });
-    },
-
-    threadPoolSelectList() {
-      this.listQuery.identify = null;
-
-      this.identifyOptions = [];
-      const listArray = [this.listQuery.itemId, this.listQuery.tpId];
-      instanceApi.list(listArray).then(response => {
-        const { records } = response;
-        for (var i = 0; i < response.length; i++) {
-          this.identifyOptions.push({
-            key: response[i].identify,
-            display_name: response[i].clientAddress,
-          });
-        }
-      });
-    },
-
-    initChart() {
-      const params = {
-        tenantId: this.listQuery.tenantId,
-        itemId: this.listQuery.itemId,
-        tpId: this.listQuery.tpId,
-        instanceId: this.listQuery.identify,
-      };
-      monitorApi.active(this.listQuery).then(response => {
-        this.lineChartData.chartInfo.dayList = response.times;
-        this.lineChartData.chartInfo.poolSizeList = response.poolSizeList;
-
-        this.lineChartData.chartInfo.activeSizeList = response.activeSizeList;
-        this.lineChartData.chartInfo.queueSizeList = response.queueSizeList;
-        this.lineChartData.chartInfo.completedTaskCountList = response.completedTaskCountList;
-
-        this.lineChartData.chartInfo.rejectCountList = response.rejectCountList;
-        this.lineChartData.chartInfo.queueRemainingCapacityList =
-          response.queueRemainingCapacityList;
-        this.lineChartData.chartInfo.currentLoadList = response.currentLoadList;
-        this.lineChartData.chartInfo.queueCapacityList = response.queueCapacityList;
-      });
-    },
-  },
-  beforeDestroy() {
-    this.lineChartData = {
-      chartInfo: {},
-    };
-  },
-};
+    beforeDestroy() {
+      this.lineChartData = {
+        chartInfo: {}
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
-.dashboard-editor-container {
-  padding: 32px;
-  background-color: rgb(240, 242, 245);
-  position: relative;
+  .dashboard-editor-container {
+    padding: 32px;
+    background-color: rgb(240, 242, 245);
+    position: relative;
 
-  .github-corner {
-    position: absolute;
-    top: 0px;
-    border: 0;
-    right: 0;
+    .github-corner {
+      position: absolute;
+      top: 0px;
+      border: 0;
+      right: 0;
+    }
+
+    .chart-wrapper {
+      background: #fff;
+      padding: 16px 16px 0;
+      margin-bottom: 32px;
+    }
   }
 
-  .chart-wrapper {
-    background: #fff;
-    padding: 16px 16px 0;
-    margin-bottom: 32px;
+  @media (max-width: 1024px) {
+    .chart-wrapper {
+      padding: 8px;
+    }
   }
-}
-
-@media (max-width: 1024px) {
-  .chart-wrapper {
-    padding: 8px;
-  }
-}
 </style>
