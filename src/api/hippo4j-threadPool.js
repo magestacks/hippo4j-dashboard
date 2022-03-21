@@ -23,6 +23,44 @@ export function info(data) {
   })
 }
 
+export function runState(data) {
+  return request({
+    url: '/hippo4j/v1/cs/thread/pool/run/state/' + data.tpId + '?clientAddress=' + data.clientAddress,
+    method: 'get'
+  })
+}
+
+export function runThreadState(data) {
+  return request({
+    url: '/hippo4j/v1/cs/thread/pool/run/thread/state/' + data.tpId + '?clientAddress=' + data.clientAddress,
+    method: 'get'
+  })
+}
+
+export function webBaseInfo(data) {
+  return request({
+    // async: false,
+    url: '/hippo4j/v1/cs/thread/pool/web/base/info' + '?clientAddress=' + data.clientAddress,
+    method: 'get'
+  })
+}
+
+export function webBaseState(data) {
+  return request({
+    // async: false,
+    url: '/hippo4j/v1/cs/thread/pool/web/run/state' + '?clientAddress=' + data.clientAddress,
+    method: 'get'
+  })
+}
+
+export function webUpdatePool(clientAddress, data) {
+  return request({
+    url: '/hippo4j/v1/cs/thread/pool/web/update/pool?clientAddress=' + clientAddress,
+    method: 'post',
+    data
+  })
+}
+
 export function tenantList(data) {
   return request({
     url: '/hippo4j/v1/cs/item/query/page',
