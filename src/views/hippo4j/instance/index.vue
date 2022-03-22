@@ -850,7 +850,7 @@
 
         let clientAddressStr = clientAddress + clientBasePath
         threadPoolApi.runThreadState({'clientAddress':clientAddressStr,'tpId':tpId}).then(response => {
-              const { data } = response
+            const data = response
             if (data && data.length != 0) {
               this.stackInfo = data
               this.isStackShow = true
