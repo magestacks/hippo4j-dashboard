@@ -421,19 +421,23 @@
           if (response == null) {
             this.listLoading = false
           }
+
+          debugger
           const tempResp = response
           const tempList = new Array(response.length)
           for (let i = 0; i < tempResp.length; i++) {
             const tempData = {}
-            const url = `http://${response[i].clientAddress}/web/base/info`
-            axios
-              .get(url)
-              .then(res => {
-                const { data } = res.data
+            const tempResp0 = response[i];
+
+              debugger
+              const clientAddress = tempResp0.clientAddress
+              threadPoolApi.webBaseInfo({'clientAddress':clientAddress}).then(res => {
+                const data = res
+                debugger
                 if (data != null) {
-                  tempData.identify = tempResp[i].identify
-                  tempData.active = tempResp[i].active
-                  tempData.clientAddress = tempResp[i].clientAddress
+                  tempData.identify = tempResp0.identify
+                  tempData.active = tempResp0.active
+                  tempData.clientAddress = tempResp0.clientAddress
                   tempData.coreSize = data.coreSize
                   tempData.maximumSize = data.maximumSize
                   tempData.queueType = data.queueType
@@ -442,13 +446,13 @@
                   tempData.keepAliveTime = data.keepAliveTime
                   tempList.push(tempData)
                 }
-              })
-              .catch(error => {
+              }).catch(error => {
                 console.log(error)
                 this.$message.error('查询失败，请尝试刷新页面')
               })
           }
 
+          debugger
           this.list = tempList
           this.listLoading = false
         })
@@ -565,19 +569,16 @@
       },
 
       updateExecute(clientAddress, updateData) {
-        const url = `http://${clientAddress}/web/update/pool`
-        axios
-          .post(url, updateData)
-          .then(res => {
-            this.dialogFormVisible = false
+        // webUpdatePool
+        threadPoolApi.webUpdatePool(clientAddress, updateData).then(response => {
+          this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
               type: 'success',
               duration: 2000
             })
-          })
-          .catch(error => {
+        }).catch(error => {
             console.log(error)
             this.$message.error('查询失败，请尝试刷新页面')
           })
@@ -676,18 +677,19 @@
       },
 
       refresh(row) {
-
+        let clientAddressStr = ''
         const clientAddress = row.clientAddress
-        let httpStr = 'http://' + clientAddress + '/web/run/state'
-
-        axios({
-          method: 'get',
-          changeOrigin: true,
-          url: httpStr,
-          headers: { 'Access-Control-Allow-Credentials': true },
-          params: {}
-        }).then(response => {
-          this.runTimeTemp = response.data.data
+        let clientBasePath = row.clientBasePath
+        if (clientBasePath != null) {
+          clientAddressStr = clientAddress + clientBasePath
+        } else {
+          clientAddressStr = clientAddress 
+        }
+        threadPoolApi.webBaseState({'clientAddress':clientAddressStr}).then(response => {
+              this.runTimeTemp = response
+        }).catch(error => {
+          console.log(error)
+          this.$message.error('查询失败，请尝试刷新页面')
         })
       }
     }

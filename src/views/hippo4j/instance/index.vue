@@ -824,25 +824,17 @@
       },
 
       refresh(row) {
-        let httpStr = ''
+        let clientAddressStr = ''
         const clientAddress = row.clientAddress
         let clientBasePath = row.clientBasePath
         if (clientBasePath != null) {
-          httpStr = 'http://' + clientAddress + clientBasePath + '/run/state/' + row.tpId
+          clientAddressStr = clientAddress + clientBasePath
         } else {
-          httpStr = 'http://' + clientAddress + '/run/state/' + row.tpId
+          clientAddressStr = clientAddress 
         }
-
-        axios({
-          method: 'get',
-          changeOrigin: true,
-          url: httpStr,
-          headers: { 'Access-Control-Allow-Credentials': true },
-          params: {}
-        }).then(response => {
-          this.instanceDialogFormVisible = true
-
-          this.runTimeTemp = response.data.data
+        threadPoolApi.runState({'clientAddress':clientAddressStr,'tpId':row.tpId}).then(response => {
+              this.instanceDialogFormVisible = true
+              this.runTimeTemp = response
         }).catch(error => {
           console.log(error)
           this.$message.error('查询失败，请尝试刷新页面')
@@ -855,22 +847,20 @@
       handleStackInfo() {
         const { clientAddress, tpId } = this.rowInfo
         const clientBasePath = this.rowInfo.clientBasePath || ''
-        const url = `http://${clientAddress}${clientBasePath}/run/thread/state/${tpId}`
-        axios
-          .get(url)
-          .then(res => {
-            const { data } = res.data
+
+        let clientAddressStr = clientAddress + clientBasePath
+        threadPoolApi.runThreadState({'clientAddress':clientAddressStr,'tpId':tpId}).then(response => {
+              const { data } = response
             if (data && data.length != 0) {
               this.stackInfo = data
               this.isStackShow = true
             } else {
               this.$message.warning('当前线程池暂无堆栈信息')
             }
-          })
-          .catch(error => {
-            console.log(error)
-            this.$message.error('查询失败，请尝试刷新页面')
-          })
+        }).catch(error => {
+          console.log(error)
+          this.$message.error('查询失败，请尝试刷新页面')
+        })
       },
       // 修改操作
       updateData() {
