@@ -422,18 +422,15 @@
             this.listLoading = false
           }
 
-          debugger
           const tempResp = response
           const tempList = new Array(response.length)
           for (let i = 0; i < tempResp.length; i++) {
             const tempData = {}
             const tempResp0 = response[i];
 
-              debugger
               const clientAddress = tempResp0.clientAddress
               threadPoolApi.webBaseInfo({'clientAddress':clientAddress}).then(res => {
                 const data = res
-                debugger
                 if (data != null) {
                   tempData.identify = tempResp0.identify
                   tempData.active = tempResp0.active
@@ -452,7 +449,6 @@
               })
           }
 
-          debugger
           this.list = tempList
           this.listLoading = false
         })
@@ -683,7 +679,7 @@
         if (clientBasePath != null) {
           clientAddressStr = clientAddress + clientBasePath
         } else {
-          clientAddressStr = clientAddress 
+          clientAddressStr = clientAddress
         }
         threadPoolApi.webBaseState({'clientAddress':clientAddressStr}).then(response => {
               this.runTimeTemp = response

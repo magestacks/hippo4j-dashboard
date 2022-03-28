@@ -24,7 +24,7 @@
     },
     data() {
       return {
-        title: 'Hippo4J 1.1.0',
+        title: 'Hippo4J 1.2.0',
         logo: 'https://images-machen.oss-cn-beijing.aliyuncs.com/20211127_hippo4j_logo.png'
       }
     }
