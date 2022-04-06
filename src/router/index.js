@@ -249,7 +249,7 @@ export const asyncRoutes = [
     component: Layout,
     children: [
       {
-        path: 'https://hippox.cn',
+        path: 'https://hippo4j.cn',
         meta: { title: '官网外链', icon: 'link' }
       }
     ]
