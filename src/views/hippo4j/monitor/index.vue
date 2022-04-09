@@ -251,7 +251,8 @@
 
         temp: {},
         fromIdentify: '',
-        lastTaskCount: null
+        lastTaskCount: null,
+        timer: null
       }
     },
     async created() {
@@ -263,6 +264,7 @@
         this.lineChartData = lineChartData[type]
       },
       fetchData() {
+        clearTimeout(this.timer)
         if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
           this.$message.warning('租户 ID 不允许为空')
           return
@@ -291,6 +293,9 @@
         })
 
         this.initChart()
+        this.timer = setTimeout(() => {
+          this.fetchData()
+        }, 5000)
       },
       refreshData() {
         this.listQuery.tenantId = null
