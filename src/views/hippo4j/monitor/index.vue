@@ -251,7 +251,8 @@
 
         temp: {},
         fromIdentify: '',
-        lastTaskCount: null
+        lastTaskCount: null,
+        timer: null
       }
     },
     async created() {
@@ -263,6 +264,7 @@
         this.lineChartData = lineChartData[type]
       },
       fetchData() {
+        clearTimeout(this.timer)
         if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
           this.$message.warning('租户 ID 不允许为空')
           return
@@ -291,6 +293,9 @@
         })
 
         this.initChart()
+        this.timer = setTimeout(() => {
+          this.fetchData()
+        }, 5000)
       },
       refreshData() {
         this.listQuery.tenantId = null
@@ -301,6 +306,7 @@
         this.itemOptions = []
         this.threadPoolOptions = []
         this.identifyOptions = []
+        clearTimeout(this.timer)
       },
 
       chartInfo() {
@@ -325,6 +331,7 @@
       },
 
       tenantSelectList() {
+        clearTimeout(this.timer)
         this.listQuery.itemId = null
         this.listQuery.tpId = null
         this.listQuery.identify = null
@@ -345,6 +352,7 @@
       },
 
       itemSelectList() {
+        clearTimeout(this.timer)
         this.listQuery.tpId = null
         this.listQuery.identify = null
 
@@ -363,6 +371,7 @@
       },
 
       threadPoolSelectList() {
+        clearTimeout(this.timer)
         this.listQuery.identify = null
 
         this.identifyOptions = []
