@@ -95,7 +95,12 @@ export default {
     }
   },
   created () {
-    // window.addEventListener('storage', this.afterQRScan)
+    const hostname = window.location.hostname
+    if (hostname === 'console.hippo4j.cn') {
+      this.loginForm.username = 'hippo4j'
+      this.loginForm.password = 'hippo4j'
+    }
+    console.log(hostname)
   },
   mounted () {
     if (this.loginForm.username === '') {
