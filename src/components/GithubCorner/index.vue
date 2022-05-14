@@ -1,5 +1,5 @@
 <template>
-  <a href="https://github.com/acmenlt/dynamic-threadpool" target="_blank" class="github-corner" aria-label="View source on Github">
+  <a href="https://github.com/longtai-cn/hippo4j" target="_blank" class="github-corner" aria-label="View source on Github">
     <svg
       width="80"
       height="80"
