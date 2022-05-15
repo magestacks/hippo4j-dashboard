@@ -166,11 +166,11 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/hippo4j/threadPool',
+    path: '/hippo4j/jdk/threadPool',
     component: Layout,
-    redirect: '/hippo4j/threadPoolList',
+    redirect: '/hippo4j/jdk/threadPoolList',
     name: 'threadPool',
-    meta: { title: '线程池管理', icon: 'tree' },
+    meta: { title: 'JDK 线程池', icon: 'tree' },
     children: [
       {
         path: 'threadPoolList',
@@ -191,25 +191,40 @@ export const asyncRoutes = [
         meta: { title: '线程池监控' }
       },
       {
-        path: 'serverPoolList',
-        name: 'serverPoolList',
+        path: 'notifyList',
+        name: 'notifyList',
+        component: () => import('@/views/hippo4j/notify/index'),
+        meta: { title: '线程池报警' }
+      }
+    ]
+  },
+  {
+    path: '/hippo4j/container/threadPool',
+    component: Layout,
+    redirect: '/hippo4j/container/threadPoolList',
+    name: 'threadPool',
+    meta: { title: '容器线程池', icon: 'example' },
+    children: [
+      {
+        path: 'serverThreadPoolList',
+        name: 'serverThreadPoolList',
         component: () => import('@/views/hippo4j/server/index'),
         meta: { title: '容器线程池' }
       }
     ]
   },
   {
-    path: '/hippo4j/notify',
+    path: '/hippo4j/other/threadPool',
     component: Layout,
-    redirect: '/hippo4j/notifyList',
-    name: 'notify',
-    meta: { title: '报警通知', icon: 'work' },
+    redirect: '/hippo4j/other/threadPoolList',
+    name: 'threadPool',
+    meta: { title: '其它线程池', icon: 'chart' },
     children: [
       {
-        path: 'notifyList',
-        name: 'notifyList',
-        component: () => import('@/views/hippo4j/notify/index'),
-        meta: { title: '报警通知', icon: 'password' }
+        path: 'otherThreadPoolList',
+        name: 'otherThreadPoolList',
+        component: () => import('@/views/hippo4j/other/index'),
+        meta: { title: '其它线程池' }
       }
     ]
   },
