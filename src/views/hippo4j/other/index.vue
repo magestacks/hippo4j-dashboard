@@ -103,15 +103,18 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-dropdown trigger="click">
+          <!--<el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon--right"/>
+              操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"/>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <!--<el-dropdown-item @click.native="handleInfo(row)">查看</el-dropdown-item>-->
+              &lt;!&ndash;<el-dropdown-item @click.native="handleInfo(row)">查看</el-dropdown-item>&ndash;&gt;
               <el-dropdown-item @click.native="handleUpdate(row)">编辑</el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown>-->
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+            编辑
+          </el-button>
         </template>
       </el-table-column>
     </el-table>

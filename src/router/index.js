@@ -203,7 +203,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/container/threadPoolList',
     name: 'threadPool',
-    meta: { title: '容器线程池', icon: 'example' },
+    meta: { title: '容器线程池', icon: 'form' },
     children: [
       {
         path: 'serverThreadPoolList',
@@ -218,7 +218,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/other/threadPoolList',
     name: 'threadPool',
-    meta: { title: '其它线程池', icon: 'chart' },
+    meta: { title: '其它线程池', icon: 'zip' },
     children: [
       {
         path: 'otherThreadPoolList',

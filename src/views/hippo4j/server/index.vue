@@ -85,15 +85,21 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-dropdown trigger="click">
+          <!--<el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon--right"/>
+              操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"/>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="handleInfo(row)">查看</el-dropdown-item>
               <el-dropdown-item @click.native="handleUpdate(row)">编辑</el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown>-->
+          <el-button type="primary" size="mini" @click="handleInfo(row)">
+            查看
+          </el-button>
+          <el-button type="primary" :disabled="isEditDisabled" size="mini" @click="handleUpdate(row)">
+            编辑
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -352,6 +358,7 @@
         dialogPluginVisible: false,
         pluginData: [],
         dialogFormVisible: false,
+        isEditDisabled: false,
         runTimeTemp: {},
         tenantOptions: [],
         instanceDialogFormVisible: false,
@@ -403,6 +410,9 @@
       // 初始化租户、项目
       this.initSelect()
     },
+    mounted() {
+      this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
+    },
     methods: {
       onInput() {
         this.$forceUpdate()
@@ -426,27 +436,27 @@
           const tempList = new Array(response.length)
           for (let i = 0; i < tempResp.length; i++) {
             const tempData = {}
-            const tempResp0 = response[i];
+            const tempResp0 = response[i]
 
-              const clientAddress = tempResp0.clientAddress
-              threadPoolApi.webBaseInfo({'clientAddress':clientAddress}).then(res => {
-                const data = res
-                if (data != null) {
-                  tempData.identify = tempResp0.identify
-                  tempData.active = tempResp0.active
-                  tempData.clientAddress = tempResp0.clientAddress
-                  tempData.coreSize = data.coreSize
-                  tempData.maximumSize = data.maximumSize
-                  tempData.queueType = data.queueType
-                  tempData.queueCapacity = data.queueCapacity
-                  tempData.rejectedName = data.rejectedName
-                  tempData.keepAliveTime = data.keepAliveTime
-                  tempList.push(tempData)
-                }
-              }).catch(error => {
-                console.log(error)
-                this.$message.error('查询失败，请尝试刷新页面')
-              })
+            const clientAddress = tempResp0.clientAddress
+            threadPoolApi.webBaseInfo({ 'clientAddress': clientAddress }).then(res => {
+              const data = res
+              if (data != null) {
+                tempData.identify = tempResp0.identify
+                tempData.active = tempResp0.active
+                tempData.clientAddress = tempResp0.clientAddress
+                tempData.coreSize = data.coreSize
+                tempData.maximumSize = data.maximumSize
+                tempData.queueType = data.queueType
+                tempData.queueCapacity = data.queueCapacity
+                tempData.rejectedName = data.rejectedName
+                tempData.keepAliveTime = data.keepAliveTime
+                tempList.push(tempData)
+              }
+            }).catch(error => {
+              console.log(error)
+              this.$message.error('查询失败，请尝试刷新页面')
+            })
           }
 
           this.list = tempList
@@ -568,16 +578,16 @@
         // webUpdatePool
         threadPoolApi.webUpdatePool(clientAddress, updateData).then(response => {
           this.dialogFormVisible = false
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000
-            })
-        }).catch(error => {
-            console.log(error)
-            this.$message.error('查询失败，请尝试刷新页面')
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000
           })
+        }).catch(error => {
+          console.log(error)
+          this.$message.error('查询失败，请尝试刷新页面')
+        })
       },
 
       openDelConfirm(name) {
@@ -681,8 +691,8 @@
         } else {
           clientAddressStr = clientAddress
         }
-        threadPoolApi.webBaseState({'clientAddress':clientAddressStr}).then(response => {
-              this.runTimeTemp = response
+        threadPoolApi.webBaseState({ 'clientAddress': clientAddressStr }).then(response => {
+          this.runTimeTemp = response
         }).catch(error => {
           console.log(error)
           this.$message.error('查询失败，请尝试刷新页面')
