@@ -6,7 +6,6 @@
         placeholder="线程池类型"
         style="width:260px"
         class="filter-item"
-        @change="tenantSelectList()"
       >
         <el-option
           v-for="item in typeOptions"
@@ -361,7 +360,13 @@
         dialogFormVisible: false,
         runTimeTemp: {},
         typeOptions: [
-          { key: 'RocketMQSpringCloudStream', display_name: 'RocketMQSpringCloudStream' }
+          { key: 'Dubbo', display_name: 'Dubbo' },
+          { key: 'Kafka', display_name: 'Kafka' },
+          { key: 'KafkaSpringCloudStream', display_name: 'KafkaSpringCloudStream' },
+          { key: 'RocketMQ', display_name: 'RocketMQ' },
+          { key: 'RocketMQSpringCloudStream', display_name: 'RocketMQSpringCloudStream' },
+          { key: 'RabbitMQ', display_name: 'RabbitMQ' },
+          { key: 'RabbitMQSpringCloudStream', display_name: 'RabbitMQSpringCloudStream' },
         ],
         tenantOptions: [],
         instanceDialogFormVisible: false,
