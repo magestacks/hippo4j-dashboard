@@ -53,9 +53,9 @@ export function webBaseState(data) {
   })
 }
 
-export function webUpdatePool(clientAddress, data) {
+export function webUpdatePool(data) {
   return request({
-    url: '/hippo4j/v1/cs/thread/pool/web/update/pool?clientAddress=' + clientAddress,
+    url: '/hippo4j/v1/cs/thread/pool/web/update/pool',
     method: 'post',
     data
   })

@@ -431,34 +431,22 @@
           if (response == null) {
             this.listLoading = false
           }
-
           const tempResp = response
-          const tempList = new Array(response.length)
+          const tempList = []
           for (let i = 0; i < tempResp.length; i++) {
             const tempData = {}
             const tempResp0 = response[i]
-
-            const clientAddress = tempResp0.clientAddress
-            threadPoolApi.webBaseInfo({ 'clientAddress': clientAddress }).then(res => {
-              const data = res
-              if (data != null) {
-                tempData.identify = tempResp0.identify
-                tempData.active = tempResp0.active
-                tempData.clientAddress = tempResp0.clientAddress
-                tempData.coreSize = data.coreSize
-                tempData.maximumSize = data.maximumSize
-                tempData.queueType = data.queueType
-                tempData.queueCapacity = data.queueCapacity
-                tempData.rejectedName = data.rejectedName
-                tempData.keepAliveTime = data.keepAliveTime
-                tempList.push(tempData)
-              }
-            }).catch(error => {
-              console.log(error)
-              this.$message.error('查询失败，请尝试刷新页面')
-            })
+            tempData.identify = tempResp0.identify
+            tempData.active = tempResp0.active
+            tempData.clientAddress = tempResp0.clientAddress
+            tempData.coreSize = tempResp0.coreSize
+            tempData.maximumSize = tempResp0.maximumSize
+            tempData.queueType = tempResp0.queueType
+            tempData.queueCapacity = tempResp0.queueCapacity
+            tempData.rejectedName = tempResp0.rejectedName
+            tempData.keepAliveTime = tempResp0.keepAliveTime
+            tempList.push(tempData)
           }
-
           this.list = tempList
           this.listLoading = false
         })
@@ -554,29 +542,29 @@
       updateData() {
         this.$refs['dataForm'].validate(valid => {
           if (valid) {
+            const clientAddressList = []
             const tempData = {
-              'coreSize': this.temp.coreSize,
-              'maxSize': this.temp.maximumSize,
-              'keepAliveTime': this.temp.keepAliveTime
+              'corePoolSize': this.temp.coreSize,
+              'maximumPoolSize': this.temp.maximumSize,
+              'keepAliveTime': this.temp.keepAliveTime,
+              'clientAddressList': clientAddressList
             }
             if (this.temp.allUpdate === '0' || this.temp.allUpdate == undefined || this.temp.allUpdate == null) {
-              this.updateExecute(this.temp.clientAddress, tempData)
+              clientAddressList[0] = this.temp.clientAddress
             } else {
               for (let i = 0; i < this.list.length; i++) {
                 if (this.list[i] != null) {
-                  this.updateExecute(this.list[i].clientAddress, tempData)
+                  clientAddressList[i] = this.list[i].clientAddress
                 }
               }
             }
-
-            this.fetchData()
+            this.updateExecute(tempData)
           }
         })
       },
 
-      updateExecute(clientAddress, updateData) {
-        // webUpdatePool
-        threadPoolApi.webUpdatePool(clientAddress, updateData).then(response => {
+      updateExecute(updateData) {
+        threadPoolApi.webUpdatePool(updateData).then(response => {
           this.dialogFormVisible = false
           this.$notify({
             title: 'Success',
@@ -584,6 +572,7 @@
             type: 'success',
             duration: 2000
           })
+          this.fetchData()
         }).catch(error => {
           console.log(error)
           this.$message.error('查询失败，请尝试刷新页面')
