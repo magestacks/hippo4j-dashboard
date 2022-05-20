@@ -830,7 +830,7 @@
         if (clientBasePath != null) {
           clientAddressStr = clientAddress + clientBasePath
         } else {
-          clientAddressStr = clientAddress 
+          clientAddressStr = clientAddress
         }
         threadPoolApi.runState({'clientAddress':clientAddressStr,'tpId':row.tpId}).then(response => {
               this.instanceDialogFormVisible = true
@@ -881,7 +881,6 @@
             }
             const tempData = Object.assign({}, this.temp)
             instanceApi.updated(tempData).then(() => {
-              this.fetchData()
               this.dialogFormVisible = false
               this.$notify({
                 title: 'Success',
@@ -889,6 +888,7 @@
                 type: 'success',
                 duration: 2000
               })
+              this.fetchData()
             })
           }
         })

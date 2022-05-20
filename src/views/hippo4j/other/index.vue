@@ -480,8 +480,8 @@
               'threadPoolKey': this.temp.threadPoolKey,
               'identify': this.temp.identify,
               'clientAddressList': clientAddressList,
-              'coreSize': this.temp.coreSize,
-              'maximumSize': this.temp.maximumSize
+              'corePoolSize': this.temp.coreSize,
+              'maximumPoolSize': this.temp.maximumSize
             }
             if (this.temp.allUpdate === '0' || this.temp.allUpdate == undefined || this.temp.allUpdate == null) {
               clientAddressList[0] = this.temp.clientAddress
