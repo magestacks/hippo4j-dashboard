@@ -291,14 +291,14 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="全部修改" prop="allUpdate">
-              <el-radio-group v-model="temp.allUpdate">
+              <!--<el-radio-group v-model="temp.allUpdate">
                 <el-radio label="1" border>Yes</el-radio>
                 <el-radio label="0" border>No</el-radio>
-              </el-radio-group>
+              </el-radio-group>-->
+              <el-switch v-model="temp.allUpdate"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
