@@ -54,7 +54,9 @@
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="实例标识" width="260">
-        <template slot-scope="scope">{{ scope.row.identify }}</template>
+        <template slot-scope="scope">
+          <el-link type="primary" :underline="false">{{ scope.row.identify }}</el-link>
+        </template>
       </el-table-column>
       <el-table-column label="Active" width="120">
         <template slot-scope="scope">
@@ -64,10 +66,14 @@
         </template>
       </el-table-column>
       <el-table-column label="核心线程" width="120">
-        <template slot-scope="scope">{{ scope.row.coreSize }}</template>
+        <template slot-scope="scope">
+          <el-link type="success" :underline="false">{{ scope.row.coreSize }}</el-link>
+        </template>
       </el-table-column>
       <el-table-column label="最大线程" width="120">
-        <template slot-scope="scope">{{ scope.row.maximumSize }}</template>
+        <template slot-scope="scope">
+          <el-link type="danger" :underline="false">{{ scope.row.maximumSize }}</el-link>
+        </template>
       </el-table-column>
       <el-table-column label="队列类型" width="160">
         <template slot-scope="scope">{{ scope.row.queueType }}</template>
