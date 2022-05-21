@@ -19,30 +19,33 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
+      stripe
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index+1 }}</template>
       </el-table-column>
-      <el-table-column label="用户名" align="center">
+      <el-table-column label="用户名">
         <template slot-scope="scope">{{ scope.row.userName }}</template>
       </el-table-column>
-      <el-table-column label="角色" align="center">
+      <el-table-column label="角色">
         <template slot-scope="scope">
           <span>{{ scope.row.role }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="创建时间">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="修改时间">
+        <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
+      </el-table-column>
+      <el-table-column label="操作" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.status!=='deleted'" size="mini" type="danger" @click="handleDelete(row)">
+          <el-button v-if="row.status!=='deleted'" size="small" type="text" @click="handleDelete(row)">
             删除
           </el-button>
         </template>
@@ -130,7 +133,7 @@
         rules: {
           role: [{ required: true, message: 'role is required', trigger: 'change' }],
           userName: [{ required: true, message: 'userName is required', trigger: 'blur' }],
-          password: [{ required: false, message: 'password is required', trigger: 'blur'}]
+          password: [{ required: false, message: 'password is required', trigger: 'blur' }]
         },
         temp: {
           id: undefined,

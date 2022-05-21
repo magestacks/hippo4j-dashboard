@@ -5,6 +5,7 @@
         v-model="listQuery.tenantId"
         placeholder="租户ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="tenantSelectList()"
       >
@@ -19,6 +20,7 @@
         v-model="listQuery.itemId"
         placeholder="项目ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="itemSelectList()"
       >
@@ -33,6 +35,7 @@
         v-model="listQuery.tpId"
         placeholder="线程池ID"
         style="width:220px"
+        filterable
         class="filter-item"
       >
         <el-option
@@ -69,43 +72,44 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
       fit
+      max-height="714"
+      stripe
       highlight-current-row
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
 
-      <el-table-column label="实例标识" align="center">
+      <el-table-column label="实例标识" width="260">
         <template slot-scope="scope">{{ scope.row.identify }}</template>
       </el-table-column>
-      <el-table-column label="Active" align="center">
+      <el-table-column label="Active" width="120">
         <template slot-scope="scope">
           <el-tag :type="scope.row.active | statusFilter">
             {{ scope.row.active }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="核心线程" align="center">
+      <el-table-column label="核心线程" width="100">
         <template slot-scope="scope">{{ scope.row.coreSize }}</template>
       </el-table-column>
-      <el-table-column label="最大线程" align="center">
+      <el-table-column label="最大线程" width="100">
         <template slot-scope="scope">{{ scope.row.maxSize }}</template>
       </el-table-column>
-      <el-table-column label="队列类型" align="center">
+      <el-table-column label="队列类型" width="260">
         <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
       </el-table-column>
-      <el-table-column label="队列容量" align="center">
+      <el-table-column label="队列容量" width="100">
         <template slot-scope="scope">{{ scope.row.capacity }}</template>
       </el-table-column>
-      <el-table-column label="拒绝策略" align="center">
+      <el-table-column label="拒绝策略" width="260">
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
       </el-table-column>
-      <el-table-column label="线程存活" align="center">
+      <el-table-column label="线程存活" width="100">
         <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
       </el-table-column>
-      <!--<el-table-column label="是否报警" align="center" width="200">
+      <!--<el-table-column label="是否报警" width="200">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.isAlarm" active-color="#00A854" active-text="报警" :active-value="0"
                      inactive-color="#F04134" inactive-text="忽略" :inactive-value="1" @change="changeSwitch(scope.row)"/>
@@ -114,13 +118,14 @@
       <el-table-column
         label="操作"
         align="center"
-        width="180"
+        fixed="right"
+        width="120"
         class-name="small-padding fixed-width"
       >
-        <template slot-scope="{ row }">
+        <!--<template slot-scope="{ row }">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon--right"/>
+              操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"/>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="handleInfo(row)">查看</el-dropdown-item>
@@ -128,6 +133,17 @@
               <el-dropdown-item divided @click.native="handleUpdate(row)">编辑</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+        </template>-->
+        <template slot-scope="{ row }">
+          <el-button type="text" size="small" @click="handleInfo(row)">
+            查看
+          </el-button>
+          <el-button type="text" size="small" @click="handleShowStack(row)">
+            堆栈
+          </el-button>
+          <el-button type="text" size="small" @click="handleUpdate(row)">
+            编辑
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -832,9 +848,9 @@
         } else {
           clientAddressStr = clientAddress
         }
-        threadPoolApi.runState({'clientAddress':clientAddressStr,'tpId':row.tpId}).then(response => {
-              this.instanceDialogFormVisible = true
-              this.runTimeTemp = response
+        threadPoolApi.runState({ 'clientAddress': clientAddressStr, 'tpId': row.tpId }).then(response => {
+          this.instanceDialogFormVisible = true
+          this.runTimeTemp = response
         }).catch(error => {
           console.log(error)
           this.$message.error('查询失败，请尝试刷新页面')
@@ -849,14 +865,14 @@
         const clientBasePath = this.rowInfo.clientBasePath || ''
 
         let clientAddressStr = clientAddress + clientBasePath
-        threadPoolApi.runThreadState({'clientAddress':clientAddressStr,'tpId':tpId}).then(response => {
-            const data = response
-            if (data && data.length != 0) {
-              this.stackInfo = data
-              this.isStackShow = true
-            } else {
-              this.$message.warning('当前线程池暂无堆栈信息')
-            }
+        threadPoolApi.runThreadState({ 'clientAddress': clientAddressStr, 'tpId': tpId }).then(response => {
+          const data = response
+          if (data && data.length != 0) {
+            this.stackInfo = data
+            this.isStackShow = true
+          } else {
+            this.$message.warning('当前线程池暂无堆栈信息')
+          }
         }).catch(error => {
           console.log(error)
           this.$message.error('查询失败，请尝试刷新页面')

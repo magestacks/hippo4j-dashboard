@@ -5,6 +5,7 @@
         v-model="listQuery.tenantId"
         placeholder="租户ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="tenantSelectList()"
       >
@@ -19,6 +20,7 @@
         v-model="listQuery.itemId"
         placeholder="项目ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="itemSelectList()"
       >
@@ -33,6 +35,7 @@
         v-model="listQuery.tpId"
         placeholder="线程池ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="threadPoolSelectList()"
       >
@@ -47,6 +50,7 @@
         v-model="listQuery.identify"
         placeholder="IP : Port"
         style="width:220px"
+        filterable
         class="filter-item"
       >
         <el-option

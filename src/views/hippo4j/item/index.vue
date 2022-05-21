@@ -10,40 +10,44 @@
         添加
       </el-button>
     </div>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label="序号" width="95">
+    <el-table v-loading="listLoading"
+              stripe
+              :data="list"
+              style="width: 100%"
+              highlight-current-row
+              element-loading-text="Loading">
+      <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index+1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" align="center">
+      <el-table-column label="租户ID" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" align="center">
+      <el-table-column label="项目ID" width="300">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="项目名称" align="center">
+      <el-table-column label="项目名称" width="300">
         <template slot-scope="scope">{{ scope.row.itemName }}</template>
       </el-table-column>
-      <el-table-column label="项目简介" align="center">
-        <!-- <template slot-scope="scope">{{ scope.row.itemDesc | ellipsis }}</template> -->
+      <el-table-column label="项目简介" width="400">
         <template slot-scope="scope">{{ scope.row.itemDesc }}</template>
       </el-table-column>
-      <el-table-column label="OWNER" align="center">
+      <el-table-column label="OWNER" width="150">
         <template slot-scope="scope">{{ scope.row.owner }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="创建时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
-      <el-table-column label="修改时间" align="center">
+      <el-table-column label="修改时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+      <el-table-column label="操作" fixed="right" width="120" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" :disabled="isEditDisabled" size="mini"
+          <el-button type="text" :disabled="isEditDisabled" size="small"
                      @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.status!=='deleted'" :disabled="isEditDisabled" size="mini" type="danger"
+          <el-button v-if="row.status!=='deleted'" :disabled="isEditDisabled" size="small" type="text"
                      @click="handleDelete(row)">
             删除
           </el-button>

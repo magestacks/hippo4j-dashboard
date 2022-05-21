@@ -5,6 +5,7 @@
         v-model="listQuery.tenantId"
         placeholder="租户ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="tenantSelectList()"
       >
@@ -19,6 +20,7 @@
         v-model="listQuery.itemId"
         placeholder="项目ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="itemSelectList()"
       >
@@ -33,6 +35,7 @@
         v-model="listQuery.tpId"
         placeholder="线程池ID"
         style="width:220px"
+        filterable
         class="filter-item"
       >
         <el-option
@@ -65,35 +68,35 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
       fit
+      stripe
       highlight-current-row
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column  label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" align="center">
+      <el-table-column label="租户ID"  width="150">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" align="center">
+      <el-table-column label="项目ID"  width="260">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="线程池ID" align="center">
+      <el-table-column label="线程池ID"  width="260">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
-      <el-table-column label="通知平台" align="center">
+      <el-table-column label="通知平台"  width="150">
         <template slot-scope="scope">{{ scope.row.platform }}</template>
       </el-table-column>
-      <el-table-column label="通知类型" align="center">
+      <el-table-column label="通知类型"  width="150">
         <template slot-scope="scope">{{ scope.row.type }}</template>
       </el-table-column>
-      <el-table-column label="报警间隔" align="center">
+      <el-table-column label="报警间隔"  width="150">
         <template slot-scope="scope">{{ scope.row.interval | intervals }}</template>
       </el-table-column>
-      <el-table-column label="接收者" align="center">
+      <el-table-column label="接收者"  width="200">
         <template slot-scope="scope">{{ scope.row.receives | ellipsis }}</template>
       </el-table-column>
-      <el-table-column label="是否启用" align="center">
+      <el-table-column label="是否启用"  width="160">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.enable"
@@ -109,18 +112,19 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        align="center"
+
+        fixed="right"
         width="180"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
           <el-button
             v-if="row.status !== 'deleted'"
-            size="mini"
-            type="danger"
+            size="small"
+            type="text"
             @click="handleDelete(row)"
           >
             删除
@@ -498,7 +502,7 @@
         this.dialogFormVisible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].clearValidate()
-          this.selectType(this.temp.type);
+          this.selectType(this.temp.type)
         })
       },
       updateData() {
@@ -555,8 +559,8 @@
         if (value === 'CONFIG') {
           this.temp.interval = undefined
           this.rules['interval'] = []
-        }else {
-          this.rules['interval'] = [{required: true, message: 'this is required', trigger: 'blur' }]
+        } else {
+          this.rules['interval'] = [{ required: true, message: 'this is required', trigger: 'blur' }]
         }
       },
 

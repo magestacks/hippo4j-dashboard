@@ -8,29 +8,29 @@
         搜索
       </el-button>
     </div>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label="序号" width="95">
+    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" stripe fit highlight-current-row>
+      <el-table-column label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index+1 }}</template>
       </el-table-column>
-      <el-table-column label="业务类型" align="center">
+      <el-table-column label="业务类型" width="200">
         <template slot-scope="scope">{{ scope.row.category }}</template>
       </el-table-column>
-      <el-table-column label="业务标识" align="center">
+      <el-table-column label="业务标识" width="340">
         <template slot-scope="scope">{{ scope.row.bizNo }}</template>
       </el-table-column>
-      <el-table-column label="日志内容" align="center">
+      <el-table-column label="日志内容" width="500">
         <template slot-scope="scope">{{ scope.row.action | ellipsis }}</template>
       </el-table-column>
-      <el-table-column label="操作人" align="center">
+      <el-table-column label="操作人" width="140">
         <template slot-scope="scope">{{ scope.row.operator }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="创建时间" width="160">
         <template slot-scope="scope">{{ scope.row.createTime }}</template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+      <el-table-column label="操作" fixed="right" width="120" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" size="small" @click="handleUpdate(row)">
             查看
           </el-button>
         </template>
@@ -54,7 +54,8 @@
           <el-input v-model="temp.createTime" :disabled="true" placeholder="创建时间" style="width: 40%"/>
         </el-form-item>
         <el-form-item label="日志内容" prop="action">
-          <el-input v-model="temp.action" :disabled="true" :autosize="{ minRows: 4, maxRows: 10}" type="textarea" placeholder="日志内容"
+          <el-input v-model="temp.action" :disabled="true" :autosize="{ minRows: 4, maxRows: 10}" type="textarea"
+                    placeholder="日志内容"
                     style="width: 60%"/>
         </el-form-item>
       </el-form>
@@ -79,8 +80,8 @@
 
   export default {
     name: 'JobProject',
-    components: {Pagination},
-    directives: {waves},
+    components: { Pagination },
+    directives: { waves },
     filters: {
       statusFilter(status) {
         const statusMap = {
@@ -91,11 +92,11 @@
         return statusMap[status]
       },
       ellipsis(value) {
-        if (!value) return "";
-        if (value.length > 26) {
-          return value.slice(0, 26) + "...";
+        if (!value) return ''
+        if (value.length > 100) {
+          return value.slice(0, 100) + '...'
         }
-        return value;
+        return value
       }
     },
     data() {
@@ -134,8 +135,8 @@
       fetchData() {
         this.listLoading = true
         logApi.list(this.listQuery).then(response => {
-          const {records} = response
-          const {total} = response
+          const { records } = response
+          const { total } = response
           this.total = total
           this.list = records
           this.listLoading = false

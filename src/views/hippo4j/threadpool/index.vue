@@ -5,6 +5,7 @@
         v-model="listQuery.tenantId"
         placeholder="租户ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="tenantSelectList()"
       >
@@ -19,6 +20,7 @@
         v-model="listQuery.itemId"
         placeholder="项目ID"
         style="width:220px"
+        filterable
         class="filter-item"
         @change="itemSelectList()"
       >
@@ -33,6 +35,7 @@
         v-model="listQuery.tpId"
         placeholder="线程池ID"
         style="width:220px"
+        filterable
         class="filter-item"
       >
         <el-option
@@ -66,35 +69,35 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      border
       fit
+      stripe
       highlight-current-row
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" align="center">
+      <el-table-column label="租户ID" width="150">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" align="center">
+      <el-table-column label="项目ID" width="260">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="线程池ID" align="center">
+      <el-table-column label="线程池ID" width="260">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
-      <el-table-column label="核心线程" align="center">
+      <el-table-column label="核心线程" width="100">
         <template slot-scope="scope">{{ scope.row.coreSize }}</template>
       </el-table-column>
-      <el-table-column label="最大线程" align="center">
+      <el-table-column label="最大线程" width="100">
         <template slot-scope="scope">{{ scope.row.maxSize }}</template>
       </el-table-column>
-      <el-table-column label="队列类型" align="center">
+      <el-table-column label="队列类型" width="260">
         <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
       </el-table-column>
-      <el-table-column label="队列容量" align="center">
+      <el-table-column label="队列容量" width="100">
         <template slot-scope="scope">{{ scope.row.capacity }}</template>
       </el-table-column>
-      <el-table-column label="是否报警" align="center">
+      <el-table-column label="是否报警" width="160">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.isAlarm"
@@ -111,14 +114,15 @@
       <el-table-column
         label="操作"
         align="center"
-        width="180"
+        width="120"
+        fixed="right"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" :disabled="isEditDisabled" type="danger"
+          <el-button size="small" :disabled="isEditDisabled" type="text"
                      @click="handleDelete(row)"
           >
             删除

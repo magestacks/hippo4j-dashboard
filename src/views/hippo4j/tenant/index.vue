@@ -31,46 +31,45 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      element-loading-text="Loading"
-      border
-      fit
       highlight-current-row
+      element-loading-text="Loading"
+      highlight-current-row
+      stripe
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" align="center">
+      <el-table-column label="租户ID">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="租户名称" align="center">
+      <el-table-column label="租户名称">
         <template slot-scope="scope">{{ scope.row.tenantName }}</template>
       </el-table-column>
-      <el-table-column label="租户简介" align="center">
+      <el-table-column label="租户简介">
         <!-- <template slot-scope="scope">{{ scope.row.tenantDesc | ellipsis }}</template> -->
         <template slot-scope="scope">{{ scope.row.tenantDesc }}</template>
       </el-table-column>
-      <el-table-column label="OWNER" align="center">
+      <el-table-column label="OWNER">
         <template slot-scope="scope"
         >{{ scope.row.owner }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center">
+      <el-table-column label="创建时间">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
-      <el-table-column label="修改时间" align="center">
+      <el-table-column label="修改时间">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
       <el-table-column
         label="操作"
-        align="center"
-        width="180"
+        width="100"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="primary" :disabled="isEditDisabled" size="mini" @click="handleUpdate(row)">
+          <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button size="mini" :disabled="isEditDisabled" type="danger" @click="handleDelete(row)">
+          <el-button size="small" :disabled="isEditDisabled" type="text" @click="handleDelete(row)">
             删除
           </el-button>
         </template>
