@@ -274,7 +274,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="KATime/S" prop="keepAliveTime">
+            <el-form-item label="空闲回收时间" prop="keepAliveTime">
               <el-input-number
                 v-model="temp.keepAliveTime"
                 placeholder="Time / S"
