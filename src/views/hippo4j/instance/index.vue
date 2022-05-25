@@ -112,7 +112,7 @@
       <el-table-column label="拒绝策略" width="260">
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
       </el-table-column>
-      <el-table-column label="线程存活" width="100">
+      <el-table-column label="空闲回收" width="100">
         <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
       </el-table-column>
       <!--<el-table-column label="是否报警" width="200">
