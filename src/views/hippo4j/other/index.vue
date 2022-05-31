@@ -45,13 +45,20 @@
           :value="item.key"
         />
       </el-select>
-      <el-input
+      <el-select
         v-model="listQuery.threadPoolKey"
-        clearable
         placeholder="线程池标识"
-        style="width: 200px;"
+        style="width:220px"
+        filterable
         class="filter-item"
-      />
+      >
+        <el-option
+          v-for="item in threadPoolKeyOptions"
+          :key="item.key"
+          :label="item.display_name"
+          :value="item.key"
+        />
+      </el-select>
       <el-button
         v-waves
         class="filter-item"
@@ -60,6 +67,10 @@
         @click="fetchData"
       >
         搜索
+      </el-button>
+      <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
+                 @click="refreshData">
+        重置
       </el-button>
     </div>
     <el-table
@@ -385,6 +396,7 @@
         instanceDialogFormVisible: false,
         threadPoolOptions: [],
         itemOptions: [],
+        threadPoolKeyOptions: [],
         itemTempOptions: [],
         queueTypeOptions: [
           { key: 1, display_name: 'ArrayBlockingQueue' },
@@ -542,13 +554,13 @@
 
       tenantSelectList() {
         this.listQuery.itemId = null
-        this.listQuery.tpId = null
+        this.listQuery.threadPoolKey = null
 
         this.temp.itemId = null
 
         this.itemOptions = []
         this.itemTempOptions = []
-        this.threadPoolOptions = []
+        this.threadPoolKeyOptions = []
         const tenantId = { tenantId: this.listQuery.tenantId, size: this.size }
         itemApi.list(tenantId).then(response => {
           const { records } = response
@@ -561,34 +573,20 @@
         })
       },
 
-      tenantTempSelectList() {
-        this.itemTempOptions = []
-        if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
-          this.temp.itemId = null
-        }
-        const tenantId = { tenantId: this.temp.tenantId, size: this.size }
-        itemApi.list(tenantId).then(response => {
-          const { records } = response
-          for (let i = 0; i < records.length; i++) {
-            this.itemTempOptions.push({
-              key: records[i].itemId,
-              display_name: records[i].itemId + ' ' + records[i].itemName
-            })
-          }
-        })
-      },
-
       itemSelectList() {
         this.listQuery.tpId = null
 
-        this.threadPoolOptions = []
-        const itemId = { itemId: this.listQuery.itemId, size: this.size }
-        threadPoolApi.list(itemId).then(response => {
-          const { records } = response
-          for (let i = 0; i < records.length; i++) {
-            this.threadPoolOptions.push({
-              key: records[i].tpId,
-              display_name: records[i].tpId
+        this.threadPoolKeyOptions = []
+        const data = {
+          mark: this.listQuery.mark,
+          tenantId: this.listQuery.tenantId,
+          itemId: this.listQuery.itemId
+        }
+        threadPoolAdapterApi.listKey(data).then(response => {
+          for (let i = 0; i < response.length; i++) {
+            this.threadPoolKeyOptions.push({
+              key: response[i],
+              display_name: response[i]
             })
           }
         })
@@ -620,8 +618,16 @@
             clientAddress: row.clientAddress
           }
         }
-
         this.refresh(row)
+      },
+
+      refreshData() {
+        this.listQuery.mark = null
+        this.listQuery.tenantId = null
+        this.listQuery.itemId = null
+        this.listQuery.threadPoolKey = null
+        this.itemOptions = []
+        this.threadPoolKeyOptions = []
       },
 
       refresh(row) {

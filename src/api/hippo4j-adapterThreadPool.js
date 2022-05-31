@@ -7,6 +7,13 @@ export function list(data) {
   })
 }
 
+export function listKey(data) {
+  return request({
+    url: '/hippo4j/v1/cs/adapter/thread-pool/query/key?mark=' + data.mark + '&tenant=' + data.tenantId + '&item=' + data.itemId,
+    method: 'get'
+  })
+}
+
 export function updatePool(data) {
   return request({
     url: '/hippo4j/v1/cs/adapter/thread-pool/update',
