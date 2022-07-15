@@ -221,10 +221,40 @@ export const asyncRoutes = [
     meta: { title: '更多线程池', icon: 'other4' },
     children: [
       {
-        path: 'index',
-        name: 'index',
-        component: () => import('@/views/hippo4j/other/index'),
-        meta: { title: '更多线程池' }
+        path: 'dubbo',
+        name: 'dubbo',
+        component: () => import('@/views/hippo4j/other/dubbo/index'),
+        meta: { title: 'Dubbo' }
+      },
+      {
+        path: 'kafka',
+        name: 'kafka',
+        component: () => import('@/views/hippo4j/other/kafka/index'),
+        meta: { title: 'Kafka' }
+      },
+      {
+        path: 'hystrix',
+        name: 'hystrix',
+        component: () => import('@/views/hippo4j/other/hystrix/index'),
+        meta: { title: 'Hystrix' }
+      },
+      {
+        path: 'rabbitmq',
+        name: 'rabbitmq',
+        component: () => import('@/views/hippo4j/other/rabbitmq/index'),
+        meta: { title: 'RabbitMQ' }
+      },
+      {
+        path: 'rocketmq',
+        name: 'rocketmq',
+        component: () => import('@/views/hippo4j/other/rocketmq/index'),
+        meta: { title: 'RocketMQ' }
+      },
+      {
+        path: 'rocketmqstream',
+        name: 'rocketmqstream',
+        component: () => import('@/views/hippo4j/other/rocketmqstream/index'),
+        meta: { title: 'RocketMQStream' }
       }
     ]
   },
