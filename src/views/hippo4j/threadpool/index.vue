@@ -61,6 +61,7 @@
         type="primary"
         icon="el-icon-edit"
         @click="handleCreate"
+        :disabled="isEditDisabled"
       >
         添加
       </el-button>
