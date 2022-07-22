@@ -90,6 +90,7 @@
       <el-table-column
         label="操作"
         width="120"
+        fixed="right"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
