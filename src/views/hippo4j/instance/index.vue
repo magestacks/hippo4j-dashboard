@@ -2,29 +2,29 @@
   <div class="app-container">
     <div class="filter-container">
       <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" filterable class="filter-item"
-        @change="tenantSelectList()">
-        <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+                 @change="tenantSelectList()">
+        <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
       <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" filterable class="filter-item"
-        @change="itemSelectList()">
-        <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+                 @change="itemSelectList()">
+        <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
       <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" filterable class="filter-item">
-        <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+        <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
 
       <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-search"
-        @click="fetchData">
+                 @click="fetchData">
         搜索
       </el-button>
       <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
-        @click="refreshData">
+                 @click="refreshData">
         重置
       </el-button>
     </div>
 
     <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" fit max-height="714" stripe
-      highlight-current-row>
+              highlight-current-row>
       <el-table-column label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
@@ -96,194 +96,171 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total > 0" :total="total" :page.sync="listQuery.current" :limit.sync="listQuery.size"
-      @pagination="fetchData" />
+                @pagination="fetchData"/>
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="instanceDialogFormVisible" width="1000px">
-      <test></test>
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="right" label-width="110px">
-        <h3>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;线程池负载高时, 禁止频繁刷新此页面!!!
-        </h3>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label=""></el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="线程池ID">
-              <el-input v-model="runTimeTemp.tpId" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="环境标识">
-              <el-input v-model="runTimeTemp.active" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="实例Host">
-              <el-input v-model="runTimeTemp.host" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="实例标识">
-              <el-input v-model="runTimeTemp.identify" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="运行状态">
-              <el-input v-model="runTimeTemp.state" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《负载相关》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="当前负载" prop="currentLoad">
-              <el-input v-model="runTimeTemp.currentLoad" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="峰值负载" prop="peakLoad">
-              <el-input v-model="runTimeTemp.peakLoad" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="内存占比" prop="currentLoad">
-              <el-input v-model="runTimeTemp.memoryProportion" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="剩余内存" prop="currentLoad">
-              <el-input v-model="runTimeTemp.freeMemory" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《线程相关》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="核心线程">
-              <el-input v-model="runTimeTemp.coreSize" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="当前线程" prop="poolSize">
-              <el-input v-model="runTimeTemp.poolSize" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="最大线程" prop="maximumSize">
-              <el-input v-model="runTimeTemp.maximumSize" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="活跃线程" prop="activeSize">
-              <el-input v-model="runTimeTemp.activeSize" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="LargestSize" prop="largestPoolSize">
-              <el-input v-model="runTimeTemp.largestPoolSize" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《队列相关》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="阻塞队列">
-              <el-input v-model="runTimeTemp.queueType" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="队列容量" prop="queueCapacity">
-              <el-input v-model="runTimeTemp.queueCapacity" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="队列元素" prop="queueSize">
-              <el-input v-model="runTimeTemp.queueSize" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="队列剩余容量" prop="queueRemainingCapacity">
-              <el-input v-model="runTimeTemp.queueRemainingCapacity" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《其它信息》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="任务总量" prop="completedTaskCount">
-              <el-input v-model="runTimeTemp.completedTaskCount" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="拒绝次数" prop="rejectCount">
-              <el-input v-model="runTimeTemp.rejectCount" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="最后更新时间" prop="clientLastRefreshTime">
-              <el-input v-model="runTimeTemp.clientLastRefreshTime" :disabled="true" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="拒绝策略" prop="RejectedExecutionHandler">
-              <el-input v-model="runTimeTemp.rejectedName" :disabled="true" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+      <template>
+        <el-descriptions class="margin-top" title="基础信息" :column="3" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              线程池ID
+            </template>
+            {{ runTimeTemp.tpId }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              环境标识
+            </template>
+            <el-tag :type="runTimeTemp.active | statusFilter">
+              {{ runTimeTemp.active }}
+            </el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              运行状态
+            </template>
+            <el-tag>{{ runTimeTemp.state }}</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              实例Host
+            </template>
+            {{ runTimeTemp.host }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              实例标识
+            </template>
+            {{ runTimeTemp.identify }}
+          </el-descriptions-item>
+        </el-descriptions>
+        <br/>
+        <br/>
+        <el-descriptions class="margin-top" title="负载信息" :column="3" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              当前负载
+            </template>
+            {{ runTimeTemp.currentLoad }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              峰值负载
+            </template>
+            {{ runTimeTemp.peakLoad }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              剩余内存
+            </template>
+            {{ runTimeTemp.freeMemory }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              内存占比
+            </template>
+            {{ runTimeTemp.memoryProportion }}
+          </el-descriptions-item>
+        </el-descriptions>
+        <br/>
+        <br/>
+        <el-descriptions class="margin-top" title="线程信息" :column="3" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              核心线程
+            </template>
+            {{ runTimeTemp.coreSize }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              当前线程
+            </template>
+            {{ runTimeTemp.poolSize }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              最大线程
+            </template>
+            {{ runTimeTemp.maximumSize }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              活跃线程
+            </template>
+            {{ runTimeTemp.activeSize }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              同存最大线程
+            </template>
+            {{ runTimeTemp.largestPoolSize }}
+          </el-descriptions-item>
+        </el-descriptions>
+        <br/>
+        <br/>
+        <el-descriptions class="margin-top" title="队列信息" :column="3" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              队列容量
+            </template>
+            {{ runTimeTemp.queueCapacity }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              队列元素
+            </template>
+            {{ runTimeTemp.queueSize }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              队列剩余容量
+            </template>
+            {{ runTimeTemp.queueRemainingCapacity }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              阻塞队列
+            </template>
+            {{ runTimeTemp.queueType }}
+          </el-descriptions-item>
+        </el-descriptions>
+        <br/>
+        <br/>
+        <el-descriptions class="margin-top" title="其它信息" :column="3" :size="size" border>
+          <el-descriptions-item>
+            <template slot="label">
+              任务总量
+            </template>
+            {{ runTimeTemp.completedTaskCount }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              拒绝次数
+            </template>
+            {{ runTimeTemp.rejectCount }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              最后更新时间
+            </template>
+            {{ runTimeTemp.clientLastRefreshTime }}
+          </el-descriptions-item>
+          <el-descriptions-item>
+            <template slot="label">
+              拒绝策略
+            </template>
+            {{ runTimeTemp.rejectedName }}
+          </el-descriptions-item>
+        </el-descriptions>
+      </template>
       <div slot="footer" class="dialog-footer">
         <el-button @click="instanceDialogFormVisible = false">
-          关闭
+          <i class="el-icon-close"/>
+          关 闭
         </el-button>
         <el-button type="primary" @click="handleInfo()">
-          刷新
+          <i class="el-icon-refresh-right"/>
+          刷 新
         </el-button>
       </div>
     </el-dialog>
@@ -299,14 +276,14 @@
           <el-col :span="12">
             <el-form-item label="租户ID" prop="tenantId">
               <el-select v-model="temp.tenantId" placeholder="请选择租户" style="display:block;"
-                :disabled="dialogStatus === 'create' ? false : true">
-                <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+                         :disabled="dialogStatus === 'create' ? false : true">
+                <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="核心线程" prop="coreSize">
-              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999" />
+              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -315,14 +292,14 @@
           <el-col :span="12">
             <el-form-item label="项目ID" prop="itemId">
               <el-select v-model="temp.itemId" placeholder="请选择项目" style="display:block;"
-                :disabled="dialogStatus === 'create' ? false : true">
-                <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key" />
+                         :disabled="dialogStatus === 'create' ? false : true">
+                <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="最大线程" prop="maxSize">
-              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999" />
+              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -331,7 +308,7 @@
           <el-col :span="12">
             <el-form-item label="线程池ID" prop="tpId">
               <el-input v-model="temp.tpId" size="medium" placeholder="请输入线程池ID"
-                :disabled="dialogStatus === 'create' ? false : true" />
+                        :disabled="dialogStatus === 'create' ? false : true"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -344,16 +321,16 @@
           <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
               <el-select v-model="temp.queueType" placeholder="队列类型" :disabled="true" style="display:block;"
-                @change="selectQueueType">
+                         @change="selectQueueType">
                 <el-option v-for="item in queueTypeOptions" :key="item.key" :label="item.display_name"
-                  :value="item.key" />
+                           :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
               <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="2147483647"
-                :disabled="temp.queueType != 9 ? true : false" />
+                               :disabled="temp.queueType != 9 ? true : false"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -363,13 +340,13 @@
             <el-form-item label="核心线程超时" prop="isAlarm">
               <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
                 <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
-                  :value="item.key" />
+                           :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="空闲回收时间" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="1" :max="99999" />
+              <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="1" :max="99999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -378,9 +355,9 @@
           <el-col :span="12">
             <el-form-item label="拒绝策略" prop="rejectedType">
               <el-select v-model="temp.rejectedType" style="display:block;" placeholder="拒绝策略"
-                @change="selectRejectedType">
+                         @change="selectRejectedType">
                 <el-option v-for="item in rejectedOptions" :key="item.key" :label="item.display_name"
-                  :value="item.key" />
+                           :value="item.key"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -388,7 +365,7 @@
         <el-row v-if="isRejectShow" :gutter="20">
           <el-col :span="12">
             <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
-              <el-input v-model="temp.customRejectedType" placeholder="请输入自定义 SPI 拒绝策略标识" @input="onInput()" />
+              <el-input v-model="temp.customRejectedType" placeholder="请输入自定义 SPI 拒绝策略标识" @input="onInput()"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -404,8 +381,8 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogPluginVisible" title="Reading statistics">
       <el-table :data="pluginData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
+        <el-table-column prop="key" label="Channel"/>
+        <el-table-column prop="pv" label="Pv"/>
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">
@@ -426,8 +403,11 @@
         </li>
       </ul>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="isStackShow = false">关 闭</el-button>
+        <el-button @click="isStackShow = false">
+          <i class="el-icon-close"/>关 闭
+        </el-button>
         <el-button type="primary" @click="handleStackInfo">
+          <i class="el-icon-refresh-right"/>
           刷 新
         </el-button>
       </span>
@@ -445,8 +425,8 @@ import Pagination from '@/components/Pagination'
 import axios from 'axios'
 
 export default {
-  components: { Pagination },
-  directives: { waves },
+  components: {Pagination},
+  directives: {waves},
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -518,43 +498,43 @@ export default {
       threadPoolOptions: [],
       itemOptions: [],
       queueTypeOptions: [
-        { key: 1, display_name: 'ArrayBlockingQueue' },
-        { key: 2, display_name: 'LinkedBlockingQueue' },
-        { key: 3, display_name: 'LinkedBlockingDeque' },
-        { key: 4, display_name: 'SynchronousQueue' },
-        { key: 5, display_name: 'LinkedTransferQueue' },
-        { key: 6, display_name: 'PriorityBlockingQueue' },
+        {key: 1, display_name: 'ArrayBlockingQueue'},
+        {key: 2, display_name: 'LinkedBlockingQueue'},
+        {key: 3, display_name: 'LinkedBlockingDeque'},
+        {key: 4, display_name: 'SynchronousQueue'},
+        {key: 5, display_name: 'LinkedTransferQueue'},
+        {key: 6, display_name: 'PriorityBlockingQueue'},
         {
           key: 9,
           display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'
         }
       ],
       rejectedOptions: [
-        { key: 1, display_name: 'CallerRunsPolicy' },
-        { key: 2, display_name: 'AbortPolicy' },
-        { key: 3, display_name: 'DiscardPolicy' },
-        { key: 4, display_name: 'DiscardOldestPolicy' },
-        { key: 5, display_name: 'RunsOldestTaskPolicy' },
-        { key: 6, display_name: 'SyncPutQueuePolicy' },
-        { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
+        {key: 1, display_name: 'CallerRunsPolicy'},
+        {key: 2, display_name: 'AbortPolicy'},
+        {key: 3, display_name: 'DiscardPolicy'},
+        {key: 4, display_name: 'DiscardOldestPolicy'},
+        {key: 5, display_name: 'RunsOldestTaskPolicy'},
+        {key: 6, display_name: 'SyncPutQueuePolicy'},
+        {key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）'}
       ],
-      alarmTypes: [{ key: 1, display_name: '报警' }, { key: 0, display_name: '不报警' }],
+      alarmTypes: [{key: 1, display_name: '报警'}, {key: 0, display_name: '不报警'}],
       allowCoreThreadTimeOutTypes: [
-        { key: 1, display_name: '超时' },
-        { key: 0, display_name: '不超时' }
+        {key: 1, display_name: '超时'},
+        {key: 0, display_name: '不超时'}
       ],
       rules: {
-        tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        maxSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        isAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        capacityAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        livenessAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        rejectedType: [{ required: true, message: 'this is required', trigger: 'blur' }]
+        tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+        maxSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+        queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
+        keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
+        isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
       },
       dialogStatus: '',
       textMap: {
@@ -599,7 +579,7 @@ export default {
       this.listLoading = true
       const listArray = [this.listQuery.itemId, this.listQuery.tpId]
       instanceApi.list(listArray).then(response => {
-        const { records } = response
+        const {records} = response
         this.list = response
         this.listLoading = false
       })
@@ -612,8 +592,8 @@ export default {
       this.threadPoolOptions = []
     },
     initSelect() {
-      tenantApi.list({ size: this.size }).then(response => {
-        const { records } = response
+      tenantApi.list({size: this.size}).then(response => {
+        const {records} = response
         for (let i = 0; i < records.length; i++) {
           this.tenantOptions.push({
             key: records[i].tenantId,
@@ -714,7 +694,7 @@ export default {
       } else {
         clientAddressStr = clientAddress
       }
-      threadPoolApi.runState({ 'clientAddress': clientAddressStr, 'tpId': row.tpId }).then(response => {
+      threadPoolApi.runState({'clientAddress': clientAddressStr, 'tpId': row.tpId}).then(response => {
         this.instanceDialogFormVisible = true
         this.runTimeTemp = response
       }).catch(error => {
@@ -727,11 +707,11 @@ export default {
       this.handleStackInfo()
     },
     handleStackInfo() {
-      const { clientAddress, tpId } = this.rowInfo
+      const {clientAddress, tpId} = this.rowInfo
       const clientBasePath = this.rowInfo.clientBasePath || ''
 
       let clientAddressStr = clientAddress + clientBasePath
-      threadPoolApi.runThreadState({ 'clientAddress': clientAddressStr, 'tpId': tpId }).then(response => {
+      threadPoolApi.runThreadState({'clientAddress': clientAddressStr, 'tpId': tpId}).then(response => {
         const data = response
         if (data && data.length != 0) {
           this.stackInfo = data
@@ -789,9 +769,9 @@ export default {
 
       this.itemOptions = []
       this.threadPoolOptions = []
-      const tenantId = { tenantId: this.listQuery.tenantId, size: this.size }
+      const tenantId = {tenantId: this.listQuery.tenantId, size: this.size}
       itemApi.list(tenantId).then(response => {
-        const { records } = response
+        const {records} = response
         for (var i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
@@ -805,9 +785,9 @@ export default {
       this.listQuery.tpId = null
 
       this.threadPoolOptions = []
-      const itemId = { itemId: this.listQuery.itemId, size: this.size }
+      const itemId = {itemId: this.listQuery.itemId, size: this.size}
       threadPoolApi.list(itemId).then(response => {
-        const { records } = response
+        const {records} = response
         for (var i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
             key: records[i].tpId,
@@ -844,7 +824,7 @@ export default {
   height: 400px;
   overflow: auto;
 
-  &>li {
+  & > li {
     margin-bottom: 24px;
 
     p:first-child {
