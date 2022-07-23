@@ -21,6 +21,7 @@
       element-loading-text="Loading"
       stripe
       fit
+      border
       highlight-current-row
     >
       <el-table-column label="序号" width="95">

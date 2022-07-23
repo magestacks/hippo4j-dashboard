@@ -46,6 +46,7 @@
       :data="list"
       element-loading-text="Loading"
       stripe
+      border
       fit
       max-height="714"
       highlight-current-row

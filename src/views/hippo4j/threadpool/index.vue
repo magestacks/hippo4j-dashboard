@@ -69,6 +69,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      border
       element-loading-text="Loading"
       fit
       stripe
@@ -177,7 +178,10 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="核心线程" prop="coreSize">
-              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999"/>
+              <el-input-number v-model="temp.coreSize" placeholder="核心线程" controls-position="right" :min="1"
+                               :max="9999"></el-input-number>
+
+              <!--              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999"/>-->
             </el-form-item>
           </el-col>
         </el-row>
@@ -202,7 +206,10 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="最大线程" prop="maxSize">
-              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999"/>
+              <el-input-number v-model="temp.maxSize" placeholder="最大线程" controls-position="right" :min="1"
+                               :max="9999"/>
+
+              <!--              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999"/>-->
             </el-form-item>
           </el-col>
         </el-row>
@@ -246,67 +253,19 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number
-                v-model="temp.capacity"
-                placeholder="队列容量"
-                :min="0"
-                :max="2147483647"
-                :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+              <!--              <el-input-number
+                              v-model="temp.capacity"
+                              placeholder="队列容量"
+                              :min="0"
+                              :max="2147483647"
+                              :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
+                            />-->
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="核心线程超时" prop="isAlarm">
-              <el-select
-                v-model="temp.allowCoreThreadTimeOut"
-                placeholder="核心线程超时"
-                style="display:block;"
-              >
-                <el-option
-                  v-for="item in allowCoreThreadTimeOutTypes"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="空闲回收时间" prop="keepAliveTime">
-              <el-input-number
-                v-model="temp.keepAliveTime"
-                placeholder="Time / S"
-                :min="1"
-                :max="99999"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+              <el-input-number v-model="temp.capacity" placeholder="队列容量" controls-position="right" :min="0"
+                               :max="2147483647"
+                               :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"/>
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="是否报警" prop="isAlarm">
-              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
-                <el-option
-                  v-for="item in alarmTypes"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="活跃度报警" prop="livenessAlarm">
-              <el-input-number
-                v-model="temp.livenessAlarm"
-                placeholder="活跃度报警"
-                :min="30"
-                :max="90"
-              />
+
             </el-form-item>
           </el-col>
         </el-row>
@@ -329,19 +288,92 @@
               </el-select>
             </el-form-item>
           </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="空闲回收" prop="keepAliveTime">
+              <el-input-number v-model="temp.keepAliveTime" placeholder="空闲回收 / S" controls-position="right" :min="1"
+                               :max="9999"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="是否报警" prop="isAlarm">
+<!--              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
+                <el-option
+                  v-for="item in alarmTypes"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
+              </el-select>-->
+              <template>
+                <div>
+                  <el-radio-group v-model="temp.isAlarm">
+                    <el-radio-button :label="1">报警</el-radio-button>
+                    <el-radio-button :label="0">不报警</el-radio-button>
+                  </el-radio-group>
+                </div>
+<!--                <el-radio-group v-model="temp.isAlarm">
+                  <el-radio :label="1">报警</el-radio>
+                  <el-radio :label="0">不报警</el-radio>
+                </el-radio-group>-->
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="活跃度报警" prop="livenessAlarm">
+              <template>
+                <div>
+                  <el-radio-group v-model="temp.livenessAlarm">
+                    <el-radio-button :label="40">40%</el-radio-button>
+                    <el-radio-button :label="60">60%</el-radio-button>
+                    <el-radio-button :label="80">80%</el-radio-button>
+                  </el-radio-group>
+                </div>
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="线程超时" prop="isAlarm">
+              <template>
+                <div>
+                  <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                    <el-radio-button :label="1">超时</el-radio-button>
+                    <el-radio-button :label="0">不超时</el-radio-button>
+                  </el-radio-group>
+                </div>
+<!--                <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                  <el-radio :label="1">超时</el-radio>
+                  <el-radio :label="0">不超时</el-radio>
+                </el-radio-group>-->
+              </template>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="容量报警" prop="capacityAlarm">
-              <el-input-number
-                v-model="temp.capacityAlarm"
-                placeholder="容量报警"
-                :min="30"
-                :max="90"
-              />
+<!--              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" controls-position="right" :min="30"
+                               :max="90"/>-->
+              <template>
+                <div>
+                  <el-radio-group v-model="temp.capacityAlarm">
+                    <el-radio-button :label="40">40%</el-radio-button>
+                    <el-radio-button :label="60">60%</el-radio-button>
+                    <el-radio-button :label="80">80%</el-radio-button>
+                  </el-radio-group>
+                </div>
+              </template>
+
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row v-if="isRejectShow" :gutter="20">
+
           <el-col :span="12">
             <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
               <el-input
@@ -375,362 +407,363 @@
 </template>
 
 <script>
-  import * as itemApi from '@/api/hippo4j-item'
-  import * as tenantApi from '@/api/hippo4j-tenant'
-  import * as threadPoolApi from '@/api/hippo4j-threadPool'
-  import waves from '@/directive/waves'
-  import Pagination from '@/components/Pagination'
+import * as itemApi from '@/api/hippo4j-item'
+import * as tenantApi from '@/api/hippo4j-tenant'
+import * as threadPoolApi from '@/api/hippo4j-threadPool'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
-  export default {
-    name: 'JobProject',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
-      },
-      queueFilter(type) {
-        if ('1' == type) {
-          return 'ArrayBlockingQueue'
-        } else if ('2' == type) {
-          return 'LinkedBlockingQueue'
-        } else if ('3' == type) {
-          return 'LinkedBlockingDeque'
-        } else if ('4' == type) {
-          return 'SynchronousQueue'
-        } else if ('5' == type) {
-          return 'LinkedTransferQueue'
-        } else if ('6' == type) {
-          return 'PriorityBlockingQueue'
-        } else if ('9' == type) {
-          return 'ResizableLinkedBlockingQueue'
-        }
+export default {
+  name: 'JobProject',
+  components: {Pagination},
+  directives: {waves},
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger'
       }
+      return statusMap[status]
     },
-    data() {
-      return {
-        isRejectShow: false, // 是否显示spi拒绝策略
-        list: null,
-        listLoading: true,
-        total: 0,
-        listQuery: {
-          current: 1,
-          size: 10,
-          tpId: '',
-          itemId: ''
-        },
-        pluginTypeOptions: ['reader', 'writer'],
-        dialogPluginVisible: false,
-        pluginData: [],
-        isEditDisabled: false,
-        dialogFormVisible: false,
-        tenantOptions: [],
-        threadPoolOptions: [],
-        itemOptions: [],
-        itemTempOptions: [],
-        queueTypeOptions: [
-          { key: 1, display_name: 'ArrayBlockingQueue' },
-          { key: 2, display_name: 'LinkedBlockingQueue' },
-          { key: 3, display_name: 'LinkedBlockingDeque' },
-          { key: 4, display_name: 'SynchronousQueue' },
-          { key: 5, display_name: 'LinkedTransferQueue' },
-          { key: 6, display_name: 'PriorityBlockingQueue' },
-          { key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)' }
-        ],
-        rejectedOptions: [
-          { key: 1, display_name: 'CallerRunsPolicy' },
-          { key: 2, display_name: 'AbortPolicy' },
-          { key: 3, display_name: 'DiscardPolicy' },
-          { key: 4, display_name: 'DiscardOldestPolicy' },
-          { key: 5, display_name: 'RunsOldestTaskPolicy' },
-          { key: 6, display_name: 'SyncPutQueuePolicy' },
-          { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
-        ],
-        alarmTypes: [{ key: 1, display_name: '报警' }, { key: 0, display_name: '不报警' }],
-        allowCoreThreadTimeOutTypes: [
-          { key: 1, display_name: '超时' },
-          { key: 0, display_name: '不超时' }
-        ],
-        size: 500,
-        dialogStatus: '',
-        textMap: {
-          update: 'Edit',
-          create: 'Create'
-        },
-        rules: {
-          tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          maxSize: [
-            { required: true, message: 'this is required', trigger: 'blur' },
-            {
-              validator: (rule, value, callback) => {
-                if (parseInt(value) < parseInt(this.temp.coreSize)) {
-                  callback('最大线程必须大于等于核心线程')
-                }
-                callback()
+    queueFilter(type) {
+      if ('1' == type) {
+        return 'ArrayBlockingQueue'
+      } else if ('2' == type) {
+        return 'LinkedBlockingQueue'
+      } else if ('3' == type) {
+        return 'LinkedBlockingDeque'
+      } else if ('4' == type) {
+        return 'SynchronousQueue'
+      } else if ('5' == type) {
+        return 'LinkedTransferQueue'
+      } else if ('6' == type) {
+        return 'PriorityBlockingQueue'
+      } else if ('9' == type) {
+        return 'ResizableLinkedBlockingQueue'
+      }
+    }
+  },
+  data() {
+    return {
+      isRejectShow: false, // 是否显示spi拒绝策略
+      list: null,
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        current: 1,
+        size: 10,
+        tpId: '',
+        itemId: ''
+      },
+      pluginTypeOptions: ['reader', 'writer'],
+      dialogPluginVisible: false,
+      pluginData: [],
+      isEditDisabled: false,
+      dialogFormVisible: false,
+      tenantOptions: [],
+      threadPoolOptions: [],
+      itemOptions: [],
+      itemTempOptions: [],
+      queueTypeOptions: [
+        {key: 1, display_name: 'ArrayBlockingQueue'},
+        {key: 2, display_name: 'LinkedBlockingQueue'},
+        {key: 3, display_name: 'LinkedBlockingDeque'},
+        {key: 4, display_name: 'SynchronousQueue'},
+        {key: 5, display_name: 'LinkedTransferQueue'},
+        {key: 6, display_name: 'PriorityBlockingQueue'},
+        {key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'}
+      ],
+      rejectedOptions: [
+        {key: 1, display_name: 'CallerRunsPolicy'},
+        {key: 2, display_name: 'AbortPolicy'},
+        {key: 3, display_name: 'DiscardPolicy'},
+        {key: 4, display_name: 'DiscardOldestPolicy'},
+        {key: 5, display_name: 'RunsOldestTaskPolicy'},
+        {key: 6, display_name: 'SyncPutQueuePolicy'},
+        {key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）'}
+      ],
+      alarmTypes: [{key: 1, display_name: '报警'}, {key: 0, display_name: '不报警'}],
+      allowCoreThreadTimeOutTypes: [
+        {key: 1, display_name: '超时'},
+        {key: 0, display_name: '不超时'}
+      ],
+      size: 500,
+      dialogStatus: '',
+      textMap: {
+        update: 'Edit',
+        create: 'Create'
+      },
+      rules: {
+        tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+        maxSize: [
+          {required: true, message: 'this is required', trigger: 'blur'},
+          {
+            validator: (rule, value, callback) => {
+              if (parseInt(value) < parseInt(this.temp.coreSize)) {
+                callback('最大线程必须大于等于核心线程')
               }
+              callback()
             }
-          ],
-          queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          allowCoreThreadTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          isAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          capacityAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          livenessAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          rejectedType: [{ required: true, message: 'this is required', trigger: 'blur' }]
-        },
-        temp: {
-          id: undefined,
-          tenantId: '',
-          itemId: '',
-          rejectedType: null,
-          customRejectedType: null
-        },
-        visible: true
-      }
-    },
-    created() {
-      this.fetchData()
-      // 初始化租户、项目
-      this.initSelect()
-    },
-    mounted() {
-      this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
-    },
-    methods: {
-      onInput() {
-        this.$forceUpdate()
+          }
+        ],
+        queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
+        allowCoreThreadTimeOut: [{required: true, message: 'this is required', trigger: 'blur'}],
+        keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
+        capacity: [{required: true, message: 'this is required', trigger: 'blur'}],
+        isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
       },
-      fetchData() {
-        this.listLoading = true
-        threadPoolApi.list(this.listQuery).then(response => {
-          const { records } = response
-          const { total } = response
-          this.total = total
-          this.list = records
-          this.listLoading = false
+      temp: {
+        id: undefined,
+        tenantId: '',
+        itemId: '',
+        rejectedType: null,
+        customRejectedType: null
+      },
+      visible: true
+    }
+  },
+  created() {
+    this.fetchData()
+    // 初始化租户、项目
+    this.initSelect()
+  },
+  mounted() {
+    this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
+  },
+  methods: {
+    onInput() {
+      this.$forceUpdate()
+    },
+    fetchData() {
+      this.listLoading = true
+      threadPoolApi.list(this.listQuery).then(response => {
+        const {records} = response
+        const {total} = response
+        this.total = total
+        this.list = records
+        this.listLoading = false
+      })
+    },
+    changeAlarm(row) {
+      threadPoolApi.alarmEnable(row).then(() => {
+        this.fetchData()
+        this.$notify({
+          title: 'Success',
+          message: 'Update Successfully',
+          type: 'success',
+          duration: 2000
         })
-      },
-      changeAlarm(row) {
-        threadPoolApi.alarmEnable(row).then(() => {
-          this.fetchData()
-          this.$notify({
-            title: 'Success',
-            message: 'Update Successfully',
-            type: 'success',
-            duration: 2000
+      })
+    },
+    initSelect() {
+      tenantApi.list({size: this.size}).then(response => {
+        const {records} = response
+        for (let i = 0; i < records.length; i++) {
+          this.tenantOptions.push({
+            key: records[i].tenantId,
+            display_name: records[i].tenantId + ' ' + records[i].tenantName
           })
-        })
-      },
-      initSelect() {
-        tenantApi.list({ size: this.size }).then(response => {
-          const { records } = response
-          for (let i = 0; i < records.length; i++) {
-            this.tenantOptions.push({
-              key: records[i].tenantId,
-              display_name: records[i].tenantId + ' ' + records[i].tenantName
-            })
-          }
-        })
-      },
-      resetTemp() {
-        this.isRejectShow = false
-        this.temp = {
-          id: undefined,
-          tenantId: '',
-          itemId: '',
-          rejectedType: null,
-          customRejectedType: null
         }
-      },
-      handleCreate() {
-        this.resetTemp()
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
-        this.isRejectShow = false
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      createData() {
-        this.$refs['dataForm'].validate(valid => {
-          if (valid) {
-            if (this.isRejectShow) {
-              if (this.temp.customRejectedType == null) {
-                this.temp.rejectedType = 2
-              } else {
-                this.temp.rejectedType = this.temp.customRejectedType
-              }
+      })
+    },
+    resetTemp() {
+      this.isRejectShow = false
+      this.temp = {
+        id: undefined,
+        tenantId: '',
+        itemId: '',
+        rejectedType: null,
+        customRejectedType: null
+      }
+    },
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.isRejectShow = false
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          if (this.isRejectShow) {
+            if (this.temp.customRejectedType == null) {
+              this.temp.rejectedType = 2
+            } else {
+              this.temp.rejectedType = this.temp.customRejectedType
             }
-            threadPoolApi.created(this.temp).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Created Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
           }
-        })
-      },
-      handleUpdate(row) {
-        this.temp = Object.assign({}, row) // copy obj
-        let rejectedType = this.temp.rejectedType
-        if (
-          rejectedType != 1 &&
-          rejectedType != 2 &&
-          rejectedType != 3 &&
-          rejectedType != 4 &&
-          rejectedType != 5 &&
-          rejectedType != 6
-        ) {
-          this.isRejectShow = true
-          this.temp.customRejectedType = this.temp.rejectedType
-          this.temp.rejectedType = 99
-        } else {
-          this.isRejectShow = false
-        }
-        this.dialogStatus = 'update'
-        this.dialogFormVisible = true
-
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      updateData() {
-        this.$refs['dataForm'].validate(valid => {
-          if (valid) {
-            let rejectedType = this.temp.rejectedType
-            if (
-              rejectedType != 1 &&
-              rejectedType != 2 &&
-              rejectedType != 3 &&
-              rejectedType != 4 &&
-              rejectedType != 5 &&
-              rejectedType != 6
-            ) {
-              if (this.temp.customRejectedType != null) {
-                this.temp.rejectedType = this.temp.customRejectedType
-              }
-            }
-            const tempData = Object.assign({}, this.temp)
-            threadPoolApi.updated(tempData).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
-      openDelConfirm(name) {
-        return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-      },
-      handleDelete(row) {
-        const role = this.$cookie.get('userName') === 'admin' ? true : false
-        if (!role) {
-          this.$message.error('请联系管理员删除')
-          return
-        }
-
-        this.openDelConfirm(row.tpId).then(() => {
-          threadPoolApi.deleted(row).then(response => {
+          threadPoolApi.created(this.temp).then(() => {
             this.fetchData()
+            this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: 'Delete Successfully',
+              message: 'Created Successfully',
               type: 'success',
               duration: 2000
             })
           })
-        })
-      },
-      selectQueueType(value) {
-        if (value === 4) {
-          this.temp.capacity = 0
-        } else if (value === 5) {
-          this.temp.capacity = 2147483647
         }
-      },
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      let rejectedType = this.temp.rejectedType
+      if (
+        rejectedType != 1 &&
+        rejectedType != 2 &&
+        rejectedType != 3 &&
+        rejectedType != 4 &&
+        rejectedType != 5 &&
+        rejectedType != 6
+      ) {
+        this.isRejectShow = true
+        this.temp.customRejectedType = this.temp.rejectedType
+        this.temp.rejectedType = 99
+      } else {
+        this.isRejectShow = false
+      }
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
 
-      tenantSelectList() {
-        this.listQuery.itemId = null
-        this.listQuery.tpId = null
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          let rejectedType = this.temp.rejectedType
+          if (
+            rejectedType != 1 &&
+            rejectedType != 2 &&
+            rejectedType != 3 &&
+            rejectedType != 4 &&
+            rejectedType != 5 &&
+            rejectedType != 6
+          ) {
+            if (this.temp.customRejectedType != null) {
+              this.temp.rejectedType = this.temp.customRejectedType
+            }
+          }
+          const tempData = Object.assign({}, this.temp)
+          threadPoolApi.updated(tempData).then(() => {
+            this.fetchData()
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    openDelConfirm(name) {
+      return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+    },
+    handleDelete(row) {
+      const role = this.$cookie.get('userName') === 'admin' ? true : false
+      if (!role) {
+        this.$message.error('请联系管理员删除')
+        return
+      }
 
+      this.openDelConfirm(row.tpId).then(() => {
+        threadPoolApi.deleted(row).then(response => {
+          this.fetchData()
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      })
+    },
+    selectQueueType(value) {
+      if (value === 4) {
+        this.temp.capacity = 0
+      } else if (value === 5) {
+        this.temp.capacity = 2147483647
+      }
+    },
+
+    tenantSelectList() {
+      this.listQuery.itemId = null
+      this.listQuery.tpId = null
+
+      this.temp.itemId = null
+
+      this.itemOptions = []
+      this.itemTempOptions = []
+      this.threadPoolOptions = []
+      const tenantId = {tenantId: this.listQuery.tenantId, size: this.size}
+      itemApi.list(tenantId).then(response => {
+        const {records} = response
+        for (let i = 0; i < records.length; i++) {
+          this.itemOptions.push({
+            key: records[i].itemId,
+            display_name: records[i].itemId + ' ' + records[i].itemName
+          })
+        }
+      })
+    },
+
+    tenantTempSelectList() {
+      this.itemTempOptions = []
+      if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
         this.temp.itemId = null
-
-        this.itemOptions = []
-        this.itemTempOptions = []
-        this.threadPoolOptions = []
-        const tenantId = { tenantId: this.listQuery.tenantId, size: this.size }
-        itemApi.list(tenantId).then(response => {
-          const { records } = response
-          for (let i = 0; i < records.length; i++) {
-            this.itemOptions.push({
-              key: records[i].itemId,
-              display_name: records[i].itemId + ' ' + records[i].itemName
-            })
-          }
-        })
-      },
-
-      tenantTempSelectList() {
-        this.itemTempOptions = []
-        if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
-          this.temp.itemId = null
+      }
+      const tenantId = {tenantId: this.temp.tenantId, size: this.size}
+      itemApi.list(tenantId).then(response => {
+        const {records} = response
+        for (let i = 0; i < records.length; i++) {
+          this.itemTempOptions.push({
+            key: records[i].itemId,
+            display_name: records[i].itemId + ' ' + records[i].itemName
+          })
         }
-        const tenantId = { tenantId: this.temp.tenantId, size: this.size }
-        itemApi.list(tenantId).then(response => {
-          const { records } = response
-          for (let i = 0; i < records.length; i++) {
-            this.itemTempOptions.push({
-              key: records[i].itemId,
-              display_name: records[i].itemId + ' ' + records[i].itemName
-            })
-          }
-        })
-      },
+      })
+    },
 
-      itemSelectList() {
-        this.listQuery.tpId = null
+    itemSelectList() {
+      this.listQuery.tpId = null
 
-        this.threadPoolOptions = []
-        const itemId = { itemId: this.listQuery.itemId, size: this.size }
-        threadPoolApi.list(itemId).then(response => {
-          const { records } = response
-          for (let i = 0; i < records.length; i++) {
-            this.threadPoolOptions.push({
-              key: records[i].tpId,
-              display_name: records[i].tpId
-            })
-          }
-        })
-      },
-
-      selectRejectedType(value) {
-        if (value == 99) {
-          this.isRejectShow = true
-        } else {
-          this.isRejectShow = false
+      this.threadPoolOptions = []
+      const itemId = {itemId: this.listQuery.itemId, size: this.size}
+      threadPoolApi.list(itemId).then(response => {
+        const {records} = response
+        for (let i = 0; i < records.length; i++) {
+          this.threadPoolOptions.push({
+            key: records[i].tpId,
+            display_name: records[i].tpId
+          })
         }
+      })
+    },
+
+    selectRejectedType(value) {
+      if (value == 99) {
+        this.isRejectShow = true
+      } else {
+        this.isRejectShow = false
       }
     }
   }
+}
 </script>

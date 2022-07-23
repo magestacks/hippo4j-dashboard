@@ -69,6 +69,7 @@
       :data="list"
       element-loading-text="Loading"
       fit
+      border
       stripe
       highlight-current-row
     >

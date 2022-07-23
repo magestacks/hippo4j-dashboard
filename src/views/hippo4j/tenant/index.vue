@@ -31,6 +31,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      border
       highlight-current-row
       element-loading-text="Loading"
       highlight-current-row

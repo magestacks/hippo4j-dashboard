@@ -23,7 +23,7 @@
       </el-button>
     </div>
 
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" fit max-height="714" stripe
+    <el-table v-loading="listLoading" border :data="list" element-loading-text="Loading" fit max-height="714" stripe
               highlight-current-row>
       <el-table-column label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>

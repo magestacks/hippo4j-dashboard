@@ -62,6 +62,7 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      border
       element-loading-text="Loading"
       stripe
       fit

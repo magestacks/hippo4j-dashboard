@@ -65,6 +65,7 @@
       element-loading-text="Loading"
       stripe
       fit
+      border
       max-height="714"
       highlight-current-row
     >
