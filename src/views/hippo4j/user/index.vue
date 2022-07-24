@@ -21,17 +21,20 @@
       element-loading-text="Loading"
       stripe
       fit
+      border
       highlight-current-row
     >
       <el-table-column label="序号" width="95">
-        <template slot-scope="scope">{{ scope.$index+1 }}</template>
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="用户名">
         <template slot-scope="scope">{{ scope.row.userName }}</template>
       </el-table-column>
       <el-table-column label="角色">
         <template slot-scope="scope">
-          <span>{{ scope.row.role }}</span>
+          <span>
+            <el-tag :type="scope.row.role | statusFilter">{{ scope.row.role }}</el-tag>
+            </span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间">
@@ -93,141 +96,140 @@
 </template>
 
 <script>
-  import * as user from '@/api/hippo4j-user'
-  import waves from '@/directive/waves'
-  import Pagination from '@/components/Pagination'
+import * as user from '@/api/hippo4j-user'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
-  export default {
-    name: 'User',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  name: 'User',
+  components: {Pagination},
+  directives: {waves},
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        ROLE_ADMIN: 'danger',
+        ROLE_USER: '',
       }
-    },
-    data() {
-      return {
-        list: null,
-        listLoading: true,
-        total: 0,
-        listQuery: {
-          current: 1,
-          size: 10,
-          userName: undefined
-        },
-        roles: ['ROLE_USER', 'ROLE_ADMIN'],
-        dialogPluginVisible: false,
-        pluginData: [],
-        dialogFormVisible: false,
-        dialogStatus: '',
-        textMap: {
-          update: 'Edit',
-          create: 'Create'
-        },
-        rules: {
-          role: [{ required: true, message: 'role is required', trigger: 'change' }],
-          userName: [{ required: true, message: 'userName is required', trigger: 'blur' }],
-          password: [{ required: false, message: 'password is required', trigger: 'blur' }]
-        },
-        temp: {
-          id: undefined,
-          role: '',
-          userName: '',
-          password: '',
-          permission: ''
-        },
-        resetTemp() {
-          this.temp = this.$options.data().temp
-        }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      list: null,
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        current: 1,
+        size: 10,
+        userName: undefined
+      },
+      roles: ['ROLE_USER', 'ROLE_ADMIN'],
+      dialogPluginVisible: false,
+      pluginData: [],
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: 'Edit',
+        create: 'Create'
+      },
+      rules: {
+        role: [{required: true, message: 'role is required', trigger: 'change'}],
+        userName: [{required: true, message: 'userName is required', trigger: 'blur'}],
+        password: [{required: false, message: 'password is required', trigger: 'blur'}]
+      },
+      temp: {
+        id: undefined,
+        role: '',
+        userName: '',
+        password: '',
+        permission: ''
+      },
+      resetTemp() {
+        this.temp = this.$options.data().temp
       }
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      user.getList(this.listQuery).then(response => {
+        this.total = response.total
+        this.list = response.records
+        this.listLoading = false
+      })
     },
-    created() {
-      this.fetchData()
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
-    methods: {
-      fetchData() {
-        this.listLoading = true
-        user.getList(this.listQuery).then(response => {
-          this.total = response.total
-          this.list = response.records
-          this.listLoading = false
-        })
-      },
-      handleCreate() {
-        this.resetTemp()
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      createData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            user.createUser(this.temp).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Created Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
-      handleUpdate(row) {
-        this.temp = Object.assign({}, row) // copy obj
-        this.dialogStatus = 'update'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            const tempData = Object.assign({}, this.temp)
-            user.updateUser(tempData).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
-      openDelConfirm(name) {
-        return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-      },
-      handleDelete(row) {
-        this.openDelConfirm(row.userName).then(() => {
-          user.deleteUser(row.userName).then(response => {
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          user.createUser(this.temp).then(() => {
             this.fetchData()
+            this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: 'Delete Successfully',
+              message: 'Created Successfully',
               type: 'success',
               duration: 2000
             })
           })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          user.updateUser(tempData).then(() => {
+            this.fetchData()
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    openDelConfirm(name) {
+      return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+    },
+    handleDelete(row) {
+      this.openDelConfirm(row.userName).then(() => {
+        user.deleteUser(row.userName).then(response => {
+          this.fetchData()
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
         })
-      }
+      })
     }
   }
+}
 </script>

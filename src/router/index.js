@@ -166,6 +166,21 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/hippo4j/container/threadPool',
+    component: Layout,
+    redirect: '/hippo4j/container/threadPoolList',
+    name: 'server-thread-pool',
+    meta: { title: '容器线程池', icon: 'vessel3' },
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/hippo4j/server/index'),
+        meta: { title: '容器线程池' }
+      }
+    ]
+  },
+  {
     path: '/hippo4j/jdk/threadPool',
     component: Layout,
     redirect: '/hippo4j/jdk/threadPoolList',
@@ -198,27 +213,13 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/hippo4j/container/threadPool',
-    component: Layout,
-    redirect: '/hippo4j/container/threadPoolList',
-    name: 'server-thread-pool',
-    meta: { title: '容器线程池', icon: 'vessel3' },
-    children: [
-      {
-        path: 'index',
-        name: 'index',
-        component: () => import('@/views/hippo4j/server/index'),
-        meta: { title: '容器线程池' }
-      }
-    ]
-  },
+
   {
     path: '/hippo4j/other/threadPool',
     component: Layout,
     redirect: '/hippo4j/other/threadPoolList',
     name: 'other-thread-pool',
-    meta: { title: '更多线程池', icon: 'other4' },
+    meta: { title: '框架线程池', icon: 'other4' },
     children: [
       {
         path: 'dubbo',

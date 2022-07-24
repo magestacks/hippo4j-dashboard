@@ -8,9 +8,10 @@
         搜索
       </el-button>
     </div>
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading" stripe fit highlight-current-row>
+    <el-table v-loading="listLoading" border :data="list" element-loading-text="Loading" stripe fit
+              highlight-current-row>
       <el-table-column label="序号" fixed width="95">
-        <template slot-scope="scope">{{ scope.$index+1 }}</template>
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="业务类型" width="200">
         <template slot-scope="scope">{{ scope.row.category }}</template>
@@ -74,142 +75,142 @@
 </template>
 
 <script>
-  import * as logApi from '@/api/hippo4j-log'
-  import waves from '@/directive/waves'
-  import Pagination from '@/components/Pagination'
+import * as logApi from '@/api/hippo4j-log'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
-  export default {
-    name: 'JobProject',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  name: 'JobProject',
+  components: {Pagination},
+  directives: {waves},
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    },
+    ellipsis(value) {
+      if (!value) return ''
+      if (value.length > 100) {
+        return value.slice(0, 100) + '...'
+      }
+      return value
+    }
+  },
+  data() {
+    return {
+      list: null,
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        current: 1,
+        size: 10,
+        tenantId: ''
       },
-      ellipsis(value) {
-        if (!value) return ''
-        if (value.length > 100) {
-          return value.slice(0, 100) + '...'
-        }
-        return value
+      pluginTypeOptions: ['reader', 'writer'],
+      dialogPluginVisible: false,
+      pluginData: [],
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: 'Info',
+        create: 'Create'
+      },
+      temp: {
+        id: undefined,
+        tenantId: '',
+        tenantName: '',
+        owner: '',
+        tenantDesc: ''
+      },
+      visible: true
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      logApi.list(this.listQuery).then(response => {
+        const {records} = response
+        const {total} = response
+        this.total = total
+        this.list = records
+        this.listLoading = false
+      })
+    },
+    resetTemp() {
+      this.temp = {
+        id: undefined,
+        tenantName: '',
+        tenantDesc: ''
       }
     },
-    data() {
-      return {
-        list: null,
-        listLoading: true,
-        total: 0,
-        listQuery: {
-          current: 1,
-          size: 10,
-          tenantId: ''
-        },
-        pluginTypeOptions: ['reader', 'writer'],
-        dialogPluginVisible: false,
-        pluginData: [],
-        dialogFormVisible: false,
-        dialogStatus: '',
-        textMap: {
-          update: 'Info',
-          create: 'Create'
-        },
-        temp: {
-          id: undefined,
-          tenantId: '',
-          tenantName: '',
-          owner: '',
-          tenantDesc: ''
-        },
-        visible: true
-      }
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
-    created() {
-      this.fetchData()
-    },
-    methods: {
-      fetchData() {
-        this.listLoading = true
-        logApi.list(this.listQuery).then(response => {
-          const { records } = response
-          const { total } = response
-          this.total = total
-          this.list = records
-          this.listLoading = false
-        })
-      },
-      resetTemp() {
-        this.temp = {
-          id: undefined,
-          tenantName: '',
-          tenantDesc: ''
-        }
-      },
-      handleCreate() {
-        this.resetTemp()
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      createData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            jobProjectApi.created(this.temp).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Created Successfully',
-                type: 'success',
-                duration: 2000
-              })
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          jobProjectApi.created(this.temp).then(() => {
+            this.fetchData()
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
             })
-          }
-        })
-      },
-      handleUpdate(row) {
-        this.temp = Object.assign({}, row) // copy obj
-        this.dialogStatus = 'update'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            const tempData = Object.assign({}, this.temp)
-            jobProjectApi.updated(tempData).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
-      handleDelete(row) {
-        console.log('删除')
-        jobProjectApi.deleted(row.tenantId).then(response => {
-          this.fetchData()
-          this.$notify({
-            title: 'Success',
-            message: 'Delete Successfully',
-            type: 'success',
-            duration: 2000
           })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          jobProjectApi.updated(tempData).then(() => {
+            this.fetchData()
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    handleDelete(row) {
+      console.log('删除')
+      jobProjectApi.deleted(row.tenantId).then(response => {
+        this.fetchData()
+        this.$notify({
+          title: 'Success',
+          message: 'Delete Successfully',
+          type: 'success',
+          duration: 2000
         })
-      }
+      })
     }
   }
+}
 </script>

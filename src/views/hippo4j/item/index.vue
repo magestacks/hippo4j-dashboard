@@ -12,6 +12,7 @@
     </div>
     <el-table v-loading="listLoading"
               stripe
+              border
               :data="list"
               style="width: 100%"
               highlight-current-row
