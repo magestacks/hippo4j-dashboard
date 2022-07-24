@@ -166,7 +166,7 @@
       @pagination="fetchData"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="500px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="dataForm"
                :rules="rules" :model="temp" label-width="80px">
         <el-form-item label="租户ID" prop="tenantId">
@@ -271,6 +271,7 @@
           <el-input
             v-model="temp.receives"
             type="textarea"
+            :autosize="{ minRows: 4, maxRows: 4}"
             placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)
 - 钉钉：填写手机号
 - 企微：填写user_id会以@的消息发给用户，否则填写姓名，如：龙台
