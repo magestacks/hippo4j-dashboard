@@ -113,8 +113,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="instanceDialogFormVisible"
@@ -243,7 +241,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -251,45 +249,26 @@
         label-position="left"
         label-width="110px"
       >
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="核心线程" prop="coreSize">
-              <el-input v-model="temp.coreSize" placeholder="核心线程"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="最大线程" prop="maxSize">
-              <el-input v-model="temp.maximumSize" placeholder="最大线程"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <!--<el-col :span="12">
-            <el-form-item label="队列容量" prop="queueCapacity">
-              <el-input
-                v-model="temp.queueCapacity"
-                placeholder="队列容量"
-              />
-            </el-form-item>
-          </el-col>-->
-          <el-col :span="12">
-            <el-form-item label="空闲回收时间" prop="keepAliveTime">
-              <el-input
-                v-model="temp.keepAliveTime"
-                placeholder="Time / S"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="全部修改" prop="allUpdate">
-              <!--<el-radio-group v-model="temp.allUpdate">
-                <el-radio label="1" border>Yes</el-radio>
-                <el-radio label="0" border>No</el-radio>
-              </el-radio-group>-->
-              <el-switch v-model="temp.allUpdate"></el-switch>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item label="核心线程" prop="coreSize">
+          <template>
+            <el-input-number v-model="temp.coreSize" controls-position="right" :min="1" :max="9999"></el-input-number>
+          </template>
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maximumSize">
+          <template>
+            <el-input-number v-model="temp.maximumSize" controls-position="right" :min="1"
+                             :max="9999"></el-input-number>
+          </template>
+        </el-form-item>
+        <el-form-item label="空闲回收时间" prop="keepAliveTime">
+          <template>
+            <el-input-number v-model="temp.keepAliveTime" placeholder="Time / S" controls-position="right"
+                             :min="1"></el-input-number>
+          </template>
+        </el-form-item>
+        <el-form-item label="全部修改" prop="allUpdate">
+          <el-switch v-model="temp.allUpdate"></el-switch>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -388,7 +367,20 @@ export default {
         create: 'Create',
         info: 'Info'
       },
-      rules: {},
+      rules: {
+        coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+        maximumSize: [
+          {required: true, message: 'this is required', trigger: 'blur'},
+          {
+            validator: (rule, value, callback) => {
+              if (parseInt(value) < parseInt(this.temp.coreSize)) {
+                callback('最大线程必须大于等于核心线程')
+              }
+              callback()
+            }
+          }
+        ],
+      },
       temp: {
         id: undefined,
         tenantId: '',

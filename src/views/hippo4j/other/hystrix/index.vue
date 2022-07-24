@@ -128,153 +128,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog
-      :title="textMap[dialogStatus]"
-      :visible.sync="instanceDialogFormVisible"
-      width="1000px"
-    >
-      <test></test>
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="right"
-        label-width="110px"
-      >
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《负载相关》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="当前负载" prop="currentLoad">
-              <el-input v-model="runTimeTemp.currentLoad" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="峰值负载" prop="peakLoad">
-              <el-input v-model="runTimeTemp.peakLoad" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="内存占比" prop="currentLoad">
-              <el-input v-model="runTimeTemp.memoryProportion" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="剩余内存" prop="currentLoad">
-              <el-input v-model="runTimeTemp.freeMemory" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《线程相关》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="核心线程">
-              <el-input v-model="runTimeTemp.coreSize" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="当前线程" prop="poolSize">
-              <el-input v-model="runTimeTemp.poolSize" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="最大线程" prop="maximumSize">
-              <el-input v-model="runTimeTemp.maximumSize" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="活跃线程" prop="activeSize">
-              <el-input v-model="runTimeTemp.activeSize" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="LargestSize" prop="largestPoolSize">
-              <el-input v-model="runTimeTemp.largestPoolSize" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《队列相关》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="阻塞队列">
-              <el-input v-model="runTimeTemp.queueType" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="队列容量" prop="queueCapacity">
-              <el-input v-model="runTimeTemp.queueCapacity" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="队列元素" prop="queueSize">
-              <el-input v-model="runTimeTemp.queueSize" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="队列剩余容量" prop="queueRemainingCapacity">
-              <el-input v-model="runTimeTemp.queueRemainingCapacity" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《其它信息》"></el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="最后更新时间" prop="clientLastRefreshTime">
-              <el-input v-model="runTimeTemp.clientLastRefreshTime" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="任务总量" prop="completedTaskCount">
-              <el-input v-model="runTimeTemp.completedTaskCount" :disabled="true"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="instanceDialogFormVisible = false">
-          关闭
-        </el-button>
-        <el-button type="primary" @click="handleInfo()">
-          刷新
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -282,30 +136,20 @@
         label-position="left"
         label-width="110px"
       >
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="核心线程" prop="coreSize">
-              <el-input v-model="temp.coreSize" placeholder="核心线程"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="最大线程" prop="maxSize">
-              <el-input v-model="temp.maximumSize" placeholder="最大线程"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="全部修改" prop="allUpdate">
-              <!--<el-radio-group v-model="temp.allUpdate">
-                <el-radio label="1" border>Yes</el-radio>
-                <el-radio label="0" border>No</el-radio>
-              </el-radio-group>-->
-              <el-switch v-model="temp.allUpdate"></el-switch>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
+        <el-form-item label="核心线程" prop="coreSize">
+          <template>
+            <el-input-number v-model="temp.coreSize" controls-position="right" :min="1" :max="9999"></el-input-number>
+          </template>
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maximumSize">
+          <template>
+            <el-input-number v-model="temp.maximumSize" controls-position="right" :min="1"
+                             :max="9999"></el-input-number>
+          </template>
+        </el-form-item>
+        <el-form-item label="全部修改" prop="allUpdate">
+          <el-switch v-model="temp.allUpdate"></el-switch>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -414,7 +258,20 @@
           update: 'Edit',
           create: 'Create'
         },
-        rules: {},
+        rules: {
+          coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+          maximumSize: [
+            {required: true, message: 'this is required', trigger: 'blur'},
+            {
+              validator: (rule, value, callback) => {
+                if (parseInt(value) < parseInt(this.temp.coreSize)) {
+                  callback('最大线程必须大于等于核心线程')
+                }
+                callback()
+              }
+            }
+          ],
+        },
         temp: {
           id: undefined,
           tenantId: '',
