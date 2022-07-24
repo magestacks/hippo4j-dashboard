@@ -103,15 +103,13 @@
       <el-table-column label="队列容量" width="100">
         <template slot-scope="scope">{{ scope.row.capacity }}</template>
       </el-table-column>
-      <el-table-column label="是否报警" width="160">
+      <el-table-column label="是否报警" width="100">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.isAlarm"
             active-color="#00A854"
-            active-text="报警"
             :active-value="1"
             inactive-color="#F04134"
-            inactive-text="忽略"
             :inactive-value="0"
             @change="changeAlarm(scope.row)"
           />
@@ -144,19 +142,14 @@
       @pagination="fetchData"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="800px">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
         label-position="left"
-        label-width="110px"
+        label-width="100px"
       >
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《基本信息》"></el-form-item>
-          </el-col>
-        </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="租户ID" prop="tenantId">
@@ -180,8 +173,6 @@
             <el-form-item label="核心线程" prop="coreSize">
               <el-input-number v-model="temp.coreSize" placeholder="核心线程" controls-position="right" :min="1"
                                :max="9999"></el-input-number>
-
-              <!--              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999"/>-->
             </el-form-item>
           </el-col>
         </el-row>
@@ -208,8 +199,6 @@
             <el-form-item label="最大线程" prop="maxSize">
               <el-input-number v-model="temp.maxSize" placeholder="最大线程" controls-position="right" :min="1"
                                :max="9999"/>
-
-              <!--              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999"/>-->
             </el-form-item>
           </el-col>
         </el-row>
@@ -226,12 +215,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="《扩展信息》"></el-form-item>
-          </el-col>
+          <el-col :span="12"></el-col>
         </el-row>
+
 
         <el-row :gutter="20">
           <el-col :span="12">
@@ -253,23 +240,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <!--              <el-input-number
-                              v-model="temp.capacity"
-                              placeholder="队列容量"
-                              :min="0"
-                              :max="2147483647"
-                              :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
-                            />-->
-
               <el-input-number v-model="temp.capacity" placeholder="队列容量" controls-position="right" :min="0"
                                :max="2147483647"
                                :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"/>
-
-
             </el-form-item>
           </el-col>
         </el-row>
-
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="拒绝策略" prop="rejectedType">
@@ -300,14 +276,14 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="是否报警" prop="isAlarm">
-<!--              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
-                <el-option
-                  v-for="item in alarmTypes"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>-->
+              <!--              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
+                              <el-option
+                                v-for="item in alarmTypes"
+                                :key="item.key"
+                                :label="item.display_name"
+                                :value="item.key"
+                              />
+                            </el-select>-->
               <template>
                 <div>
                   <el-radio-group v-model="temp.isAlarm">
@@ -315,10 +291,10 @@
                     <el-radio-button :label="0">不报警</el-radio-button>
                   </el-radio-group>
                 </div>
-<!--                <el-radio-group v-model="temp.isAlarm">
-                  <el-radio :label="1">报警</el-radio>
-                  <el-radio :label="0">不报警</el-radio>
-                </el-radio-group>-->
+                <!--                <el-radio-group v-model="temp.isAlarm">
+                                  <el-radio :label="1">报警</el-radio>
+                                  <el-radio :label="0">不报警</el-radio>
+                                </el-radio-group>-->
               </template>
             </el-form-item>
           </el-col>
@@ -347,17 +323,17 @@
                     <el-radio-button :label="0">不超时</el-radio-button>
                   </el-radio-group>
                 </div>
-<!--                <el-radio-group v-model="temp.allowCoreThreadTimeOut">
-                  <el-radio :label="1">超时</el-radio>
-                  <el-radio :label="0">不超时</el-radio>
-                </el-radio-group>-->
+                <!--                <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                                  <el-radio :label="1">超时</el-radio>
+                                  <el-radio :label="0">不超时</el-radio>
+                                </el-radio-group>-->
               </template>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="容量报警" prop="capacityAlarm">
-<!--              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" controls-position="right" :min="30"
-                               :max="90"/>-->
+              <!--              <el-input-number v-model="temp.capacityAlarm" placeholder="容量报警" controls-position="right" :min="30"
+                                             :max="90"/>-->
               <template>
                 <div>
                   <el-radio-group v-model="temp.capacityAlarm">

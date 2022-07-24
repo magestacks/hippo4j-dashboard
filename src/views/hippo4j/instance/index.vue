@@ -265,13 +265,8 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="1000px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="800px">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="基本信息"></el-form-item>
-          </el-col>
-        </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="租户ID" prop="tenantId">
@@ -283,7 +278,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="核心线程" prop="coreSize">
-              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999"/>
+              <el-input-number v-model="temp.coreSize" placeholder="核心线程" controls-position="right" :min="1"
+                               :max="9999"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -299,7 +295,8 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="最大线程" prop="maxSize">
-              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999"/>
+              <el-input-number v-model="temp.maxSize" placeholder="最大线程" controls-position="right" :min="1"
+                               :max="9999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -314,11 +311,6 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="扩展信息"></el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
               <el-select v-model="temp.queueType" placeholder="队列类型" :disabled="true" style="display:block;"
                          @change="selectQueueType">
@@ -329,24 +321,34 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" :min="0" :max="2147483647"
-                               :disabled="temp.queueType != 9 ? true : false"/>
+              <el-input-number v-model="temp.capacity" placeholder="队列容量" controls-position="right" :min="0"
+                               :max="2147483647"
+                               :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"/>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="核心线程超时" prop="isAlarm">
-              <el-select v-model="temp.allowCoreThreadTimeOut" placeholder="核心线程超时" style="display:block;">
-                <el-option v-for="item in allowCoreThreadTimeOutTypes" :key="item.key" :label="item.display_name"
-                           :value="item.key"/>
-              </el-select>
+            <el-form-item label="线程超时" prop="isAlarm">
+              <template>
+                <div>
+                  <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                    <el-radio-button :label="1">超时</el-radio-button>
+                    <el-radio-button :label="0">不超时</el-radio-button>
+                  </el-radio-group>
+                </div>
+                <!--                <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                                  <el-radio :label="1">超时</el-radio>
+                                  <el-radio :label="0">不超时</el-radio>
+                                </el-radio-group>-->
+              </template>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="空闲回收时间" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="Time/S" :min="1" :max="99999"/>
+            <el-form-item label="空闲回收" prop="keepAliveTime">
+              <el-input-number v-model="temp.keepAliveTime" placeholder="空闲回收 / S" controls-position="right" :min="1"
+                               :max="9999"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -532,6 +534,7 @@ export default {
         queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
         keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
         isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
+        capacity: [{required: true, message: 'this is required', trigger: 'blur'}],
         capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
         livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
         rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
