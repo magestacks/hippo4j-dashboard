@@ -80,7 +80,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/admin/index'),
         name: 'Dashboard',
-        meta: { title: '运行报表', icon: 'dashboard2', affix: true }
+        meta: {title: '运行报表', icon: 'dashboard2', affix: true}
       }
     ]
   },
@@ -106,7 +106,7 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        meta: {title: 'Profile', icon: 'user', noCache: true}
       }
     ]
   },
@@ -125,13 +125,13 @@ export const asyncRoutes = [
         path: '401',
         component: () => import('@/views/error-page/401'),
         name: 'Page401',
-        meta: { title: '401', noCache: true }
+        meta: {title: '401', noCache: true}
       },
       {
         path: '404',
         component: () => import('@/views/error-page/404'),
         name: 'Page404',
-        meta: { title: '404', noCache: true }
+        meta: {title: '404', noCache: true}
       }
     ]
   },
@@ -140,13 +140,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/tenantList',
     name: 'tenant',
-    meta: { title: '租户管理', icon: 'lessee' },
+    meta: {title: '租户管理', icon: 'lessee'},
     children: [
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/hippo4j/tenant/index'),
-        meta: { title: '租户管理', icon: 'lessee' }
+        meta: {title: '租户管理', icon: 'lessee'}
       }
     ]
   },
@@ -155,13 +155,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/itemList',
     name: 'item',
-    meta: { title: '项目管理', icon: 'item4' },
+    meta: {title: '项目管理', icon: 'item4'},
     children: [
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/hippo4j/item/index'),
-        meta: { title: '项目管理', icon: 'item4' }
+        meta: {title: '项目管理', icon: 'item4'}
       }
     ]
   },
@@ -170,13 +170,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/container/threadPoolList',
     name: 'server-thread-pool',
-    meta: { title: '容器线程池', icon: 'vessel3' },
+    meta: {title: '容器线程池', icon: 'vessel3'},
     children: [
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/hippo4j/server/index'),
-        meta: { title: '容器线程池' }
+        meta: {title: '容器线程池'}
       }
     ]
   },
@@ -185,32 +185,26 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/jdk/threadPoolList',
     name: 'thread-pool',
-    meta: { title: 'JDK 线程池', icon: 'pool3' },
+    meta: {title: 'JDK 线程池', icon: 'pool3'},
     children: [
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/hippo4j/threadpool/index'),
-        meta: { title: '线程池管理' }
+        meta: {title: '线程池管理'}
       },
       {
         path: 'instance',
         name: 'instance',
         component: () => import('@/views/hippo4j/instance/index'),
-        meta: { title: '线程池实例' }
+        meta: {title: '线程池实例'}
       },
       {
         path: 'monitor',
         name: 'monitor',
         component: () => import('@/views/hippo4j/monitor/index'),
-        meta: { title: '线程池监控' }
+        meta: {title: '线程池监控'}
       },
-      {
-        path: 'notify',
-        name: 'notify',
-        component: () => import('@/views/hippo4j/notify/index'),
-        meta: { title: '线程池报警' }
-      }
     ]
   },
 
@@ -219,43 +213,58 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/other/threadPoolList',
     name: 'other-thread-pool',
-    meta: { title: '框架线程池', icon: 'other4' },
+    meta: {title: '框架线程池', icon: 'other4'},
     children: [
       {
         path: 'dubbo',
         name: 'dubbo',
         component: () => import('@/views/hippo4j/other/dubbo/index'),
-        meta: { title: 'Dubbo' }
+        meta: {title: 'Dubbo'}
       },
       {
         path: 'kafka',
         name: 'kafka',
         component: () => import('@/views/hippo4j/other/kafka/index'),
-        meta: { title: 'Kafka' }
+        meta: {title: 'Kafka'}
       },
       {
         path: 'hystrix',
         name: 'hystrix',
         component: () => import('@/views/hippo4j/other/hystrix/index'),
-        meta: { title: 'Hystrix' }
+        meta: {title: 'Hystrix'}
       },
       {
         path: 'rabbitmq',
         name: 'rabbitmq',
         component: () => import('@/views/hippo4j/other/rabbitmq/index'),
-        meta: { title: 'RabbitMQ' }
+        meta: {title: 'RabbitMQ'}
       },
       {
         path: 'rocketmq',
         name: 'rocketmq',
         component: () => import('@/views/hippo4j/other/rocketmq/index'),
-        meta: { title: 'RocketMQ' }
+        meta: {title: 'RocketMQ'}
       },
       {
         path: 'rocketmqstream',
         name: 'rocketmqstream',
         component: () => import('@/views/hippo4j/other/rocketmqstream/index'),
-        meta: { title: 'RocketMQStream' }
+        meta: {title: 'RocketMQStream'}
+      }
+    ]
+  },
+  {
+    path: '/notify',
+    component: Layout,
+    redirect: '/hippo4j/notifyList',
+    name: 'notify',
+    meta: {title: '通知报警', icon: 'notify'},
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/hippo4j/notify/index'),
+        meta: {title: '通知报警', icon: 'notify'}
       }
     ]
   },
@@ -264,13 +273,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/userList',
     name: 'user',
-    meta: { title: '用户权限', icon: 'user6', roles: ['ROLE_ADMIN'] },
+    meta: {title: '用户权限', icon: 'user6', roles: ['ROLE_ADMIN']},
     children: [
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/hippo4j/user/index'),
-        meta: { title: '用户权限', icon: 'user6' }
+        meta: {title: '用户权限', icon: 'user6'}
       }
     ]
   },
@@ -279,13 +288,13 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/logList',
     name: 'log',
-    meta: { title: '日志管理', icon: 'log3' },
+    meta: {title: '日志管理', icon: 'log3'},
     children: [
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/hippo4j/log/index'),
-        meta: { title: '日志管理', icon: 'log3' }
+        meta: {title: '日志管理', icon: 'log3'}
       }
     ]
   },
@@ -296,18 +305,18 @@ export const asyncRoutes = [
     children: [
       {
         path: 'https://hippo4j.cn',
-        meta: { title: '官网外链', icon: 'link3' }
+        meta: {title: '官网外链', icon: 'link3'}
       }
     ]
   },
 
   toolRouter,
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 

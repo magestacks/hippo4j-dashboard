@@ -166,8 +166,9 @@
       @pagination="fetchData"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm"
+               style="width: 500px; margin-left:50px;"
                :rules="rules" :model="temp" label-width="80px">
         <el-form-item label="租户ID" prop="tenantId">
           <el-select
@@ -238,13 +239,17 @@
             </div>
           </template>
         </el-form-item>
-        <el-form-item label="通知类型" prop="type">
+
+        <el-form-item label="通知类型" prop="configType">
+<!--          <el-tooltip :content="123">
+            <i class="el-icon-question"/>
+          </el-tooltip>-->
           <template>
             <div>
-              <el-radio-group v-model="temp.type">
-                <el-radio-button label="CONFIG">CONFIG</el-radio-button>
-                <el-radio-button label="ALARM">ALARM</el-radio-button>
-              </el-radio-group>
+              <el-checkbox v-model="temp.configType" :disabled="dialogStatus === 'create' ? false : true" label="CONFIG"
+                           border/>
+              <el-checkbox v-model="temp.alarmType" :disabled="dialogStatus === 'create' ? false : true" label="ALARM"
+                           border/>
             </div>
           </template>
         </el-form-item>
@@ -253,8 +258,8 @@
             v-model="temp.interval"
             placeholder="报警间隔 / Min"
             controls-position="right"
-            :min="0"
-            :disabled="temp.type === 'CONFIG' ? true : false"
+            :min="0" :max="999999"
+            :disabled="temp.alarmType === true ? false : true"
           />
         </el-form-item>
 
@@ -274,154 +279,13 @@
             :autosize="{ minRows: 4, maxRows: 4}"
             placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)
 - 钉钉：填写手机号
-- 企微：填写user_id会以@的消息发给用户，否则填写姓名，如：龙台
+- 企微：填写user_id会以@的消息发给用户，否则填写姓名，如：小马哥
 - 飞书：填写ou_开头用户唯一标识会以@的消息发给用户，填写手机号则是普通的@"
           />
         </el-form-item>
       </el-form>
-      <!--      <el-form
-              ref="dataForm"
-              :rules="rules"
-              :model="temp"
-              label-position="left"
-              label-width="110px"
-            >
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="租户ID" prop="tenantId">
-                    <el-select
-                      v-model="temp.tenantId"
-                      placeholder="请选择租户"
-                      style="display:block;"
-                      :disabled="dialogStatus === 'create' ? false : true"
-                      @change="tenantTempSelectList()"
-                    >
-                      <el-option
-                        v-for="item in tenantOptions"
-                        :key="item.key"
-                        :label="item.display_name"
-                        :value="item.key"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="通知平台" prop="platform">
-                    <template>
-                      <div>
-                        <el-radio-group v-model="temp.platform">
-                          <el-radio-button label="DING">DING</el-radio-button>
-                          <el-radio-button label="LARK">LARK</el-radio-button>
-                          <el-radio-button label="WECHAT">WECHAT</el-radio-button>
-                        </el-radio-group>
-                      </div>
-                    </template>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="项目ID" prop="itemId">
-                    <el-select
-                      v-model="temp.itemId"
-                      placeholder="请选择项目"
-                      style="display:block;"
-                      :disabled="dialogStatus === 'create' ? false : true"
-                      @change="itemTempSelectList()"
-                    >
-                      <el-option
-                        v-for="item in itemTempOptions"
-                        :key="item.key"
-                        :label="item.display_name"
-                        :value="item.key"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="通知类型" prop="type">
-                    <template>
-                      <div>
-                        <el-radio-group v-model="temp.type">
-                          <el-radio-button label="CONFIG">CONFIG</el-radio-button>
-                          <el-radio-button label="ALARM">ALARM</el-radio-button>
-                        </el-radio-group>
-                      </div>
-                    </template>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="线程池ID" prop="tpId">
-                    <el-select
-                      v-model="temp.tpId"
-                      placeholder="线程池ID"
-                      style="display:block;"
-                      :disabled="dialogStatus === 'create' ? false : true"
-                    >
-                      <el-option
-                        v-for="item in threadPoolTempOptions"
-                        :key="item.key"
-                        :label="item.display_name"
-                        :value="item.key"
-                      />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="是否启用" prop="enable">
-                    <template>
-                      <div>
-                        <el-radio-group v-model="temp.enable">
-                          <el-radio-button :label="1">启用</el-radio-button>
-                          <el-radio-button :label="0">停用</el-radio-button>
-                        </el-radio-group>
-                      </div>
-                    </template>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="Token" prop="secretKey">
-                    <el-input v-model="temp.secretKey" size="medium" placeholder="请输入Token"/>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="报警间隔" prop="interval">
-                    <el-input-number
-                      v-model="temp.interval"
-                      placeholder="报警间隔 / Min"
-                      controls-position="right"
-                      :min="0"
-                      :disabled="temp.type === 'CONFIG' ? true : false"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
-              <el-row :gutter="40">
-                <el-col :span="24">
-                  <el-form-item label="接收者" prop="receives">
-                    <el-input
-                      v-model="temp.receives"
-                      :autosize="{ minRows: 6, maxRows: 10 }"
-                      type="textarea"
-                      placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)
-      钉钉：填写手机号
-      企微：填写user_id会以@的消息发给用户，否则填写姓名，如：龙台
-      飞书：填写ou_开头用户唯一标识会以@的消息发给用户，填写手机号则是普通的@"
-                      style="width: 83%"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>-->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
+        <el-button @click="cleanForm()">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
@@ -497,10 +361,7 @@ export default {
       tenantOptions: [],
       itemOptions: [],
       itemTempOptions: [],
-
       identifyOptions: [],
-
-      tenantOptions: [],
       threadPoolTempOptions: [],
       threadPoolOptions: [],
       platformTypes: [
@@ -527,13 +388,15 @@ export default {
         receives: [{required: true, message: 'this is required', trigger: 'blur'}],
         secretKey: [{required: true, message: 'this is required', trigger: 'blur'}],
         platform: [{required: true, message: 'this is required', trigger: 'blur'}],
-        type: [{required: true, message: 'this is required', trigger: 'blur'}],
+        configType: [{required: true, message: 'this is required', trigger: 'blur'}],
         enable: [{required: true, message: 'this is required', trigger: 'blur'}]
       },
       temp: {
         id: undefined,
         tenantId: '',
-        interval: undefined
+        interval: undefined,
+        configType: false,
+        alarmType: false
       },
       visible: true
     }
@@ -557,7 +420,7 @@ export default {
     initSelect() {
       tenantApi.list({}).then(response => {
         const {records} = response
-        for (var i = 0; i < records.length; i++) {
+        for (let i = 0; i < records.length; i++) {
           this.tenantOptions.push({
             key: records[i].tenantId,
             display_name: records[i].tenantId + ' ' + records[i].tenantName
@@ -567,7 +430,7 @@ export default {
 
       itemApi.list({}).then(response => {
         const {records} = response
-        for (var i = 0; i < records.length; i++) {
+        for (let i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
             display_name: records[i].itemId + ' ' + records[i].itemName
@@ -577,7 +440,7 @@ export default {
 
       threadPoolApi.list({}).then(response => {
         const {records} = response
-        for (var i = 0; i < records.length; i++) {
+        for (let i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
             key: records[i].tpId,
             display_name: records[i].tpId
@@ -589,7 +452,11 @@ export default {
       this.temp = {
         id: undefined,
         tenantName: '',
-        tenantDesc: ''
+        tenantDesc: '',
+        tenantId: '',
+        interval: undefined,
+        configType: false,
+        alarmType: false
       }
     },
     handleCreate() {
@@ -600,9 +467,15 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    cleanForm() {
+      this.resetTemp()
+      this.dialogFormVisible = false
+    },
     createData() {
+      this.selectType(this.temp.configType, this.temp.alarmType)
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+
           notifyApi.created(this.temp).then(() => {
             this.fetchData()
             this.dialogFormVisible = false
@@ -625,7 +498,7 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
-        this.selectType(this.temp.type)
+        this.selectType(this.temp.configType, this.temp.alarmType)
       })
     },
     updateData() {
@@ -678,11 +551,12 @@ export default {
       })
     },
 
-    selectType(value) {
-      if (value === 'CONFIG') {
+    selectType(configType, alarmType) {
+      if (configType != null && configType != undefined && configType === true && (alarmType == null || alarmType == undefined || alarmType === false)) {
         this.temp.interval = undefined
         this.rules['interval'] = []
-      } else {
+      }
+      if (configType != null && configType != undefined && alarmType === true) {
         this.rules['interval'] = [{required: true, message: 'this is required', trigger: 'blur'}]
       }
     },
