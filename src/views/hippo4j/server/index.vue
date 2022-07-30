@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户ID"
+        placeholder="租户 ID（必填）"
         style="width:220px"
         filterable
         class="filter-item"
@@ -18,7 +18,7 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目ID"
+        placeholder="项目 ID（必填）"
         style="width:220px"
         filterable
         class="filter-item"

@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.tenantId" placeholder="租户ID" style="width:220px" filterable class="filter-item"
+      <el-select v-model="listQuery.tenantId" placeholder="租户 ID（必填）" style="width:220px" filterable class="filter-item"
                  @change="tenantSelectList()">
         <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.itemId" placeholder="项目ID" style="width:220px" filterable class="filter-item"
+      <el-select v-model="listQuery.itemId" placeholder="项目 ID （必填）" style="width:220px" filterable class="filter-item"
                  @change="itemSelectList()">
         <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.tpId" placeholder="线程池ID" style="width:220px" filterable class="filter-item">
+      <el-select v-model="listQuery.tpId" placeholder="线程池 ID （必填）" style="width:220px" filterable class="filter-item">
         <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
 
