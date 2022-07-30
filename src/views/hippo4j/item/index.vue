@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.itemId" clearable placeholder="项目ID" style="width: 200px;" class="filter-item"/>
+      <el-input v-model="listQuery.itemId" clearable placeholder="项目 ID" style="width: 200px;" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索
       </el-button>
@@ -18,7 +18,7 @@
               highlight-current-row
               element-loading-text="Loading">
       <el-table-column fixed label="序号" width="95">
-        <template slot-scope="scope">{{ scope.$index+1 }}</template>
+        <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="租户ID" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
@@ -103,177 +103,177 @@
 </template>
 
 <script>
-  import * as jobProjectApi from '@/api/hippo4j-item'
-  import * as tenantApi from '@/api/hippo4j-tenant'
-  import waves from '@/directive/waves'
-  import Pagination from '@/components/Pagination'
+import * as jobProjectApi from '@/api/hippo4j-item'
+import * as tenantApi from '@/api/hippo4j-tenant'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 
-  export default {
-    name: 'JobProject',
-    components: { Pagination },
-    directives: { waves },
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'gray',
-          deleted: 'danger'
-        }
-        return statusMap[status]
+export default {
+  name: 'JobProject',
+  components: {Pagination},
+  directives: {waves},
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'gray',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    },
+    ellipsis(value) {
+      if (!value) return ''
+      if (value.length > 26) {
+        return value.slice(0, 26) + '...'
+      }
+      return value
+    }
+  },
+  data() {
+    return {
+      list: null,
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        current: 1,
+        size: 10,
+        itemId: ''
       },
-      ellipsis(value) {
-        if (!value) return ''
-        if (value.length > 26) {
-          return value.slice(0, 26) + '...'
+      pluginTypeOptions: ['reader', 'writer'],
+      dialogPluginVisible: false,
+      pluginData: [],
+      dialogFormVisible: false,
+      tenantOptions: [],
+      dialogStatus: '',
+      isEditDisabled: false,
+      textMap: {
+        update: 'Edit',
+        create: 'Create'
+      },
+      rules: {
+        tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
+        itemName: [{required: true, message: 'this is required', trigger: 'blur'}],
+        owner: [{required: true, message: 'this is required', trigger: 'blur'}],
+        itemDesc: [{required: true, message: 'this is required', trigger: 'blur'}]
+      },
+      temp: {
+        id: undefined,
+        tenantId: '',
+        tenantName: '',
+        owner: '',
+        tenantDesc: ''
+      },
+      visible: true
+    }
+  },
+  created() {
+    this.fetchData()
+    // 初始化租户
+    this.initSelect()
+  },
+  mounted() {
+    this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      jobProjectApi.list(this.listQuery).then(response => {
+        const {records} = response
+        const {total} = response
+        this.total = total
+        this.list = records
+        this.listLoading = false
+      })
+    },
+    initSelect() {
+      tenantApi.list({}).then(response => {
+        const {records} = response
+        for (var i = 0; i < records.length; i++) {
+          this.tenantOptions.push({
+            key: records[i].tenantId,
+            display_name: records[i].tenantId + ' ' + records[i].tenantName
+          })
         }
-        return value
+      })
+    },
+    resetTemp() {
+      this.temp = {
+        id: undefined,
+        tenantName: '',
+        tenantDesc: ''
       }
     },
-    data() {
-      return {
-        list: null,
-        listLoading: true,
-        total: 0,
-        listQuery: {
-          current: 1,
-          size: 10,
-          itemId: ''
-        },
-        pluginTypeOptions: ['reader', 'writer'],
-        dialogPluginVisible: false,
-        pluginData: [],
-        dialogFormVisible: false,
-        tenantOptions: [],
-        dialogStatus: '',
-        isEditDisabled: false,
-        textMap: {
-          update: 'Edit',
-          create: 'Create'
-        },
-        rules: {
-          tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          itemName: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          owner: [{ required: true, message: 'this is required', trigger: 'blur' }],
-          itemDesc: [{ required: true, message: 'this is required', trigger: 'blur' }]
-        },
-        temp: {
-          id: undefined,
-          tenantId: '',
-          tenantName: '',
-          owner: '',
-          tenantDesc: ''
-        },
-        visible: true
-      }
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
-    created() {
-      this.fetchData()
-      // 初始化租户
-      this.initSelect()
-    },
-    mounted() {
-      this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
-    },
-    methods: {
-      fetchData() {
-        this.listLoading = true
-        jobProjectApi.list(this.listQuery).then(response => {
-          const { records } = response
-          const { total } = response
-          this.total = total
-          this.list = records
-          this.listLoading = false
-        })
-      },
-      initSelect() {
-        tenantApi.list({}).then(response => {
-          const { records } = response
-          for (var i = 0; i < records.length; i++) {
-            this.tenantOptions.push({
-              key: records[i].tenantId,
-              display_name: records[i].tenantId + ' ' + records[i].tenantName
-            })
-          }
-        })
-      },
-      resetTemp() {
-        this.temp = {
-          id: undefined,
-          tenantName: '',
-          tenantDesc: ''
-        }
-      },
-      handleCreate() {
-        this.resetTemp()
-        this.dialogStatus = 'create'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      createData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            jobProjectApi.created(this.temp).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Created Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
-      handleUpdate(row) {
-        this.temp = Object.assign({}, row) // copy obj
-        this.dialogStatus = 'update'
-        this.dialogFormVisible = true
-        this.$nextTick(() => {
-          this.$refs['dataForm'].clearValidate()
-        })
-      },
-      updateData() {
-        this.$refs['dataForm'].validate((valid) => {
-          if (valid) {
-            const tempData = Object.assign({}, this.temp)
-            jobProjectApi.updated(tempData).then(() => {
-              this.fetchData()
-              this.dialogFormVisible = false
-              this.$notify({
-                title: 'Success',
-                message: 'Update Successfully',
-                type: 'success',
-                duration: 2000
-              })
-            })
-          }
-        })
-      },
-      openDelConfirm(name) {
-        return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-      },
-      handleDelete(row) {
-        this.openDelConfirm(row.itemId).then(() => {
-          const delObj = [row.tenantId, row.itemId]
-          jobProjectApi.deleted(delObj).then(response => {
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          jobProjectApi.created(this.temp).then(() => {
             this.fetchData()
+            this.dialogFormVisible = false
             this.$notify({
               title: 'Success',
-              message: 'Delete Successfully',
+              message: 'Created Successfully',
               type: 'success',
               duration: 2000
             })
           })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          jobProjectApi.updated(tempData).then(() => {
+            this.fetchData()
+            this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    openDelConfirm(name) {
+      return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+    },
+    handleDelete(row) {
+      this.openDelConfirm(row.itemId).then(() => {
+        const delObj = [row.tenantId, row.itemId]
+        jobProjectApi.deleted(delObj).then(response => {
+          this.fetchData()
+          this.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
         })
-      }
+      })
     }
   }
+}
 </script>
