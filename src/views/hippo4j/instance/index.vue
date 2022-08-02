@@ -114,7 +114,9 @@
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
       </el-table-column>
       <el-table-column label="空闲回收" width="100">
-        <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
+        <template slot-scope="scope">
+          {{ scope.row.keepAliveTime }}
+        </template>
       </el-table-column>
       <!--<el-table-column label="是否报警" width="200">
         <template slot-scope="scope">
