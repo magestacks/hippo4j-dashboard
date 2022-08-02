@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户 ID（必填）"
+        placeholder="租户（必填）"
         style="width:220px"
         filterable
         class="filter-item"
@@ -18,7 +18,7 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目 ID（必填）"
+        placeholder="项目（必填）"
         style="width:220px"
         filterable
         class="filter-item"
@@ -33,7 +33,7 @@
       </el-select>
       <el-select
         v-model="listQuery.tpId"
-        placeholder="线程池 ID（必填）"
+        placeholder="线程池（必填）"
         style="width:220px"
         filterable
         class="filter-item"
@@ -88,18 +88,16 @@
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;padding-left:32px">
       <el-col :span="12">
         <el-form label-position="left" style="customStyle">
-          <el-form-item label="租户ID" label-width="200px">
+          <el-form-item label="租户" label-width="200px">
             <span>{{ temp.tenantId }}</span>
           </el-form-item>
-          <el-form-item label="项目ID" label-width="200px">
+          <el-form-item label="项目" label-width="200px">
             <span>{{ temp.itemId }}</span>
           </el-form-item>
-
-          <el-form-item label="线程池ID" label-width="200px">
+          <el-form-item label="线程池" label-width="200px">
             <span>{{ temp.tpId }}</span>
           </el-form-item>
-
-          <el-form-item label="实例ID" label-width="200px">
+          <el-form-item label="实例" label-width="200px">
             <span>{{ fromIdentify }}</span>
           </el-form-item>
           <el-form-item label="是否报警" label-width="200px">
@@ -118,11 +116,9 @@
           <el-form-item label="最大线程" label-width="200px">
             <span>{{ temp.maxSize }}</span>
           </el-form-item>
-
           <el-form-item label="队列类型" label-width="200px">
             <span>{{ temp.queueType | queueFilter }}</span>
           </el-form-item>
-
           <el-form-item label="队列容量" label-width="200px">
             <span>{{ temp.capacity }}</span>
           </el-form-item>
@@ -268,15 +264,15 @@
       },
       fetchData() {
         if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
-          this.$message.warning('租户 ID 不允许为空')
+          this.$message.warning('租户不允许为空')
           return
         }
         if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
-          this.$message.warning('项目 ID 不允许为空')
+          this.$message.warning('项目不允许为空')
           return
         }
         if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
-          this.$message.warning('线程池 ID 不允许为空')
+          this.$message.warning('线程池不允许为空')
           return
         }
         if (this.listQuery.identify == null || Object.keys(this.listQuery.identify).length == 0) {
