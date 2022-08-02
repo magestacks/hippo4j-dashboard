@@ -39,10 +39,10 @@
       <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" width="200">
+      <el-table-column label="租户" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" width="300">
+      <el-table-column label="项目" width="300">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
       <el-table-column label="项目名称" width="300">

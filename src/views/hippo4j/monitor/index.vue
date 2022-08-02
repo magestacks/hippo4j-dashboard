@@ -3,8 +3,8 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户ID"
-        style="width: 220px"
+        placeholder="租户（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -18,8 +18,8 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目ID"
-        style="width: 220px"
+        placeholder="项目（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -33,8 +33,8 @@
       </el-select>
       <el-select
         v-model="listQuery.tpId"
-        placeholder="线程池ID"
-        style="width: 220px"
+        placeholder="线程池（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
         @change="threadPoolSelectList()"
@@ -48,8 +48,8 @@
       </el-select>
       <el-select
         v-model="listQuery.identify"
-        placeholder="IP : Port"
-        style="width: 220px"
+        placeholder="IP : Port（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
       >
@@ -82,7 +82,6 @@
         重置
       </el-button>
     </div>
-
     <el-empty v-if="!temp.isAlarm" description="暂无结果" />
     <el-row v-else :gutter="10">
       <el-col :span="6">

@@ -31,31 +31,32 @@
     <el-table
       v-loading="listLoading"
       :data="list"
+      stripe
       border
       highlight-current-row
       element-loading-text="Loading"
       stripe
     >
-      <el-table-column label="序号" width="95">
+      <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID">
+      <el-table-column label="租户" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="租户名称">
+      <el-table-column label="租户名称" width="210">
         <template slot-scope="scope">{{ scope.row.tenantName }}</template>
       </el-table-column>
-      <el-table-column label="租户简介">
+      <el-table-column label="租户简介" width="400">
         <!-- <template slot-scope="scope">{{ scope.row.tenantDesc | ellipsis }}</template> -->
         <template slot-scope="scope">{{ scope.row.tenantDesc }}</template>
       </el-table-column>
       <el-table-column label="OWNER">
         <template slot-scope="scope">{{ scope.row.owner }} </template>
       </el-table-column>
-      <el-table-column label="创建时间">
+      <el-table-column label="创建时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
-      <el-table-column label="修改时间">
+      <el-table-column label="修改时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
       <el-table-column label="操作" width="100" class-name="small-padding fixed-width">
@@ -85,11 +86,11 @@
         label-position="left"
         label-width="100px"
       >
-        <el-form-item label="租户ID" prop="tenantId">
+        <el-form-item label="租户" prop="tenantId">
           <el-input
             v-model="temp.tenantId"
             :disabled="dialogStatus === 'create' ? false : true"
-            placeholder="租户ID"
+            placeholder="租户"
             style="width: 40%"
           />
         </el-form-item>
