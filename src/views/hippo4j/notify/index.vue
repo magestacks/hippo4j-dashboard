@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户 ID"
+        placeholder="租户"
         style="width:220px"
         filterable
         class="filter-item"
@@ -18,7 +18,7 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目 ID"
+        placeholder="项目"
         style="width:220px"
         filterable
         class="filter-item"
@@ -33,7 +33,7 @@
       </el-select>
       <el-select
         v-model="listQuery.tpId"
-        placeholder="线程池 ID"
+        placeholder="线程池"
         style="width:220px"
         filterable
         class="filter-item"
@@ -76,13 +76,13 @@
       <el-table-column label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" width="150">
+      <el-table-column label="租户" width="150">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" width="260">
+      <el-table-column label="项目" width="260">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="线程池ID" width="260">
+      <el-table-column label="线程池" width="260">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
       <el-table-column label="通知平台" width="150">
@@ -170,7 +170,7 @@
       <el-form ref="dataForm"
                style="width: 500px; margin-left:50px;"
                :rules="rules" :model="temp" label-width="80px">
-        <el-form-item label="租户ID" prop="tenantId">
+        <el-form-item label="租户" prop="tenantId">
           <el-select
             v-model="temp.tenantId"
             placeholder="请选择租户"
@@ -186,7 +186,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="项目ID" prop="itemId">
+        <el-form-item label="项目" prop="itemId">
           <el-select
             v-model="temp.itemId"
             placeholder="请选择项目"
@@ -202,10 +202,10 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="线程池ID" prop="tpId">
+        <el-form-item label="线程池" prop="tpId">
           <el-select
             v-model="temp.tpId"
-            placeholder="线程池ID"
+            placeholder="线程池"
             style="display:block;"
             :disabled="dialogStatus === 'create' ? false : true"
           >

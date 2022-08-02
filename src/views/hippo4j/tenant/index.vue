@@ -4,7 +4,7 @@
       <el-input
         v-model="listQuery.tenantId"
         clearable
-        placeholder="租户 ID"
+        placeholder="租户"
         style="width: 200px;"
         class="filter-item"
       />
@@ -41,7 +41,7 @@
       <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" width="200">
+      <el-table-column label="租户" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
       <el-table-column label="租户名称" width="210">
@@ -94,11 +94,11 @@
         label-position="left"
         label-width="100px"
       >
-        <el-form-item label="租户ID" prop="tenantId">
+        <el-form-item label="租户" prop="tenantId">
           <el-input
             v-model="temp.tenantId"
             :disabled="dialogStatus === 'create' ? false : true"
-            placeholder="租户ID"
+            placeholder="租户"
             style="width: 40%"
           />
         </el-form-item>

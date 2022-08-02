@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.itemId" clearable placeholder="项目 ID" style="width: 200px;" class="filter-item"/>
+      <el-input v-model="listQuery.itemId" clearable placeholder="项目" style="width: 200px;" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="fetchData">
         搜索
       </el-button>
@@ -20,10 +20,10 @@
       <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" width="200">
+      <el-table-column label="租户" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" width="300">
+      <el-table-column label="项目" width="300">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
       <el-table-column label="项目名称" width="300">
@@ -60,14 +60,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="800px">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px">
-        <el-form-item label="租户ID" prop="tenantId">
-          <el-select v-model="temp.tenantId" placeholder="租户ID" filterable clearable class="filter-item"
+        <el-form-item label="租户" prop="tenantId">
+          <el-select v-model="temp.tenantId" placeholder="租户" filterable clearable class="filter-item"
                      style="width: 40%" :disabled="dialogStatus==='create'?false:true">
             <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="项目ID" prop="itemId">
-          <el-input v-model="temp.itemId" :disabled="dialogStatus==='create'?false:true" placeholder="项目ID"
+        <el-form-item label="项目" prop="itemId">
+          <el-input v-model="temp.itemId" :disabled="dialogStatus==='create'?false:true" placeholder="项目"
                     style="width: 40%"/>
         </el-form-item>
         <el-form-item label="项目名称" prop="itemName">

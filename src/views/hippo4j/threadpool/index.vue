@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户 ID"
+        placeholder="租户"
         style="width:220px"
         filterable
         class="filter-item"
@@ -18,7 +18,7 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目 ID"
+        placeholder="项目"
         style="width:220px"
         filterable
         class="filter-item"
@@ -33,7 +33,7 @@
       </el-select>
       <el-select
         v-model="listQuery.tpId"
-        placeholder="线程池 ID"
+        placeholder="线程池"
         style="width:220px"
         filterable
         class="filter-item"
@@ -78,13 +78,13 @@
       <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户ID" width="150">
+      <el-table-column label="租户" width="150">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目ID" width="260">
+      <el-table-column label="项目" width="260">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="线程池ID" width="260">
+      <el-table-column label="线程池" width="260">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
       <el-table-column label="核心线程" width="100">
@@ -142,7 +142,7 @@
       @pagination="fetchData"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="800px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="950px">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -152,7 +152,7 @@
       >
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="租户ID" prop="tenantId">
+            <el-form-item label="租户" prop="tenantId">
               <el-select
                 v-model="temp.tenantId"
                 placeholder="请选择租户"
@@ -179,7 +179,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="项目ID" prop="itemId">
+            <el-form-item label="项目" prop="itemId">
               <el-select
                 v-model="temp.itemId"
                 placeholder="请选择项目"
@@ -205,11 +205,11 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="线程池ID" prop="tpId">
+            <el-form-item label="线程池" prop="tpId">
               <el-input
                 v-model="temp.tpId"
                 size="medium"
-                placeholder="请输入线程池ID"
+                placeholder="请输入线程池 "
                 :disabled="dialogStatus === 'create' ? false : true"
               />
             </el-form-item>
@@ -248,21 +248,21 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="拒绝策略" prop="rejectedType">
-              <el-select
-                v-model="temp.rejectedType"
-                style="display:block;"
-                placeholder="拒绝策略"
-                @change="selectRejectedType"
-              >
-                <el-option
-                  v-for="item in rejectedOptions"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
+            <el-form-item label="线程超时" prop="isAlarm">
+              <template>
+                <div>
+                  <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                    <el-radio-button :label="1">超时</el-radio-button>
+                    <el-radio-button :label="0">不超时</el-radio-button>
+                  </el-radio-group>
+                </div>
+                <!--                <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                                  <el-radio :label="1">超时</el-radio>
+                                  <el-radio :label="0">不超时</el-radio>
+                                </el-radio-group>-->
+              </template>
             </el-form-item>
+
           </el-col>
 
           <el-col :span="12">
@@ -315,19 +315,20 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="线程超时" prop="isAlarm">
-              <template>
-                <div>
-                  <el-radio-group v-model="temp.allowCoreThreadTimeOut">
-                    <el-radio-button :label="1">超时</el-radio-button>
-                    <el-radio-button :label="0">不超时</el-radio-button>
-                  </el-radio-group>
-                </div>
-                <!--                <el-radio-group v-model="temp.allowCoreThreadTimeOut">
-                                  <el-radio :label="1">超时</el-radio>
-                                  <el-radio :label="0">不超时</el-radio>
-                                </el-radio-group>-->
-              </template>
+            <el-form-item label="拒绝策略" prop="rejectedType">
+              <el-select
+                v-model="temp.rejectedType"
+                style="display:block;"
+                placeholder="拒绝策略"
+                @change="selectRejectedType"
+              >
+                <el-option
+                  v-for="item in rejectedOptions"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -448,7 +449,7 @@ export default {
         {key: 4, display_name: 'SynchronousQueue'},
         {key: 5, display_name: 'LinkedTransferQueue'},
         {key: 6, display_name: 'PriorityBlockingQueue'},
-        {key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'}
+        {key: 9, display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)'}
       ],
       rejectedOptions: [
         {key: 1, display_name: 'CallerRunsPolicy'},

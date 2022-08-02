@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select v-model="listQuery.tenantId" placeholder="租户 ID（必填）" style="width:220px" filterable class="filter-item"
+      <el-select v-model="listQuery.tenantId" placeholder="租户（必填）" style="width:220px" filterable class="filter-item"
                  @change="tenantSelectList()">
         <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.itemId" placeholder="项目 ID （必填）" style="width:220px" filterable class="filter-item"
+      <el-select v-model="listQuery.itemId" placeholder="项目 （必填）" style="width:220px" filterable class="filter-item"
                  @change="itemSelectList()">
         <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
-      <el-select v-model="listQuery.tpId" placeholder="线程池 ID （必填）" style="width:220px" filterable class="filter-item">
+      <el-select v-model="listQuery.tpId" placeholder="线程池 （必填）" style="width:220px" filterable class="filter-item">
         <el-option v-for="item in threadPoolOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
       </el-select>
 
@@ -103,7 +103,7 @@
         <el-descriptions class="margin-top" title="基础信息" :column="3" :size="size" border>
           <el-descriptions-item>
             <template slot="label">
-              线程池ID
+              线程池
             </template>
             {{ runTimeTemp.tpId }}
           </el-descriptions-item>
@@ -269,7 +269,7 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="租户ID" prop="tenantId">
+            <el-form-item label="租户" prop="tenantId">
               <el-select v-model="temp.tenantId" placeholder="请选择租户" style="display:block;"
                          :disabled="dialogStatus === 'create' ? false : true">
                 <el-option v-for="item in tenantOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
@@ -286,7 +286,7 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="项目ID" prop="itemId">
+            <el-form-item label="项目" prop="itemId">
               <el-select v-model="temp.itemId" placeholder="请选择项目" style="display:block;"
                          :disabled="dialogStatus === 'create' ? false : true">
                 <el-option v-for="item in itemOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
@@ -303,8 +303,8 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="线程池ID" prop="tpId">
-              <el-input v-model="temp.tpId" size="medium" placeholder="请输入线程池ID"
+            <el-form-item label="线程池" prop="tpId">
+              <el-input v-model="temp.tpId" size="medium" placeholder="请输入线程池"
                         :disabled="dialogStatus === 'create' ? false : true"/>
             </el-form-item>
           </el-col>
@@ -508,7 +508,7 @@ export default {
         {key: 6, display_name: 'PriorityBlockingQueue'},
         {
           key: 9,
-          display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'
+          display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)'
         }
       ],
       rejectedOptions: [
@@ -568,15 +568,15 @@ export default {
     },
     fetchData() {
       if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
-        this.$message.warning('租户 ID 不允许为空')
+        this.$message.warning('租户不允许为空')
         return
       }
       if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
-        this.$message.warning('项目 ID 不允许为空')
+        this.$message.warning('项目不允许为空')
         return
       }
       if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
-        this.$message.warning('线程池 ID 不允许为空')
+        this.$message.warning('线程池不允许为空')
         return
       }
       this.listLoading = true
