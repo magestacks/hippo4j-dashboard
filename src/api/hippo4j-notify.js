@@ -1,48 +1,48 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export function list(data) {
   return request({
     url: '/hippo4j/v1/cs/notify/query/page',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function tenantList(data) {
   return request({
     url: '/hippo4j/v1/cs/item/query/page',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function updated(data) {
   return request({
     url: '/hippo4j/v1/cs/notify/update',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function created(data) {
   return request({
     url: '/hippo4j/v1/cs/notify/save',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function deleted(data) {
   return request({
     url: '/hippo4j/v1/cs/notify/remove',
     method: 'delete',
-    data
-  })
+    data,
+  });
 }
 
 export function enable(data) {
   return request({
     url: '/hippo4j/v1/cs/notify/enable/' + data.id + '/' + data.enable,
-    method: 'post'
-  })
+    method: 'post',
+  });
 }

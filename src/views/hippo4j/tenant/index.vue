@@ -4,7 +4,7 @@
       <el-input
         v-model="listQuery.tenantId"
         clearable
-        placeholder="租户ID"
+        placeholder="租户"
         style="width: 200px"
         class="filter-item"
       />

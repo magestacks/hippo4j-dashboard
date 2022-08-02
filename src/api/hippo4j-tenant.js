@@ -1,33 +1,32 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export function list(data) {
   return request({
     url: '/hippo4j/v1/cs/tenant/query/page',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function updated(data) {
   return request({
     url: '/hippo4j/v1/cs/tenant/update',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function created(data) {
   return request({
     url: '/hippo4j/v1/cs/tenant/save',
     method: 'post',
-    data
-  })
+    data,
+  });
 }
 
 export function deleted(data) {
   return request({
     url: '/hippo4j/v1/cs/tenant/delete/' + data,
-    method: 'delete'
-  })
+    method: 'delete',
+  });
 }
-
