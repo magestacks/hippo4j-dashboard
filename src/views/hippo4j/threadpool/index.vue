@@ -4,7 +4,7 @@
       <el-select
         v-model="listQuery.tenantId"
         placeholder="租户"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -19,7 +19,7 @@
       <el-select
         v-model="listQuery.itemId"
         placeholder="项目"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -34,7 +34,7 @@
       <el-select
         v-model="listQuery.tpId"
         placeholder="线程池"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
       >
@@ -260,7 +260,6 @@
                                 </el-radio-group>-->
               </template>
             </el-form-item>
-
           </el-col>
 
           <el-col :span="12">
@@ -430,13 +429,13 @@ export default {
       itemOptions: [],
       itemTempOptions: [],
       queueTypeOptions: [
-        {key: 1, display_name: 'ArrayBlockingQueue'},
-        {key: 2, display_name: 'LinkedBlockingQueue'},
-        {key: 3, display_name: 'LinkedBlockingDeque'},
-        {key: 4, display_name: 'SynchronousQueue'},
-        {key: 5, display_name: 'LinkedTransferQueue'},
-        {key: 6, display_name: 'PriorityBlockingQueue'},
-        {key: 9, display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)'}
+        { key: 1, display_name: 'ArrayBlockingQueue' },
+        { key: 2, display_name: 'LinkedBlockingQueue' },
+        { key: 3, display_name: 'LinkedBlockingDeque' },
+        { key: 4, display_name: 'SynchronousQueue' },
+        { key: 5, display_name: 'LinkedTransferQueue' },
+        { key: 6, display_name: 'PriorityBlockingQueue' },
+        { key: 9, display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)' },
       ],
       rejectedOptions: [
         { key: 1, display_name: 'CallerRunsPolicy' },

@@ -32,7 +32,6 @@
       v-loading="listLoading"
       :data="list"
       stripe
-      border
       highlight-current-row
       element-loading-text="Loading"
     >
@@ -58,7 +57,12 @@
       <el-table-column label="修改时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="100" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        width="100"
+        fixed="right"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="{ row }">
           <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
             编辑
