@@ -57,7 +57,7 @@
       </el-button>
       <el-button
         class="filter-item"
-        style="margin-left: 10px;"
+        style="margin-left: 10px"
         type="primary"
         icon="el-icon-edit"
         @click="handleCreate"
@@ -123,12 +123,8 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button size="small" :disabled="isEditDisabled" type="text"
-                     @click="handleDelete(row)"
-          >
+          <el-button type="text" size="small" @click="handleUpdate(row)"> 编辑 </el-button>
+          <el-button size="small" :disabled="isEditDisabled" type="text" @click="handleDelete(row)">
             删除
           </el-button>
         </template>
@@ -156,7 +152,7 @@
               <el-select
                 v-model="temp.tenantId"
                 placeholder="请选择租户"
-                style="display:block;"
+                style="display: block"
                 :disabled="dialogStatus === 'create' ? false : true"
                 @change="tenantTempSelectList()"
               >
@@ -171,8 +167,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="核心线程" prop="coreSize">
-              <el-input-number v-model="temp.coreSize" placeholder="核心线程" controls-position="right" :min="1"
-                               :max="9999"></el-input-number>
+              <el-input-number v-model="temp.coreSize" placeholder="核心线程" :min="1" :max="999" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -183,7 +178,7 @@
               <el-select
                 v-model="temp.itemId"
                 placeholder="请选择项目"
-                style="display:block;"
+                style="display: block"
                 :disabled="dialogStatus === 'create' ? false : true"
               >
                 <el-option
@@ -197,8 +192,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="最大线程" prop="maxSize">
-              <el-input-number v-model="temp.maxSize" placeholder="最大线程" controls-position="right" :min="1"
-                               :max="9999"/>
+              <el-input-number v-model="temp.maxSize" placeholder="最大线程" :min="1" :max="999" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -219,14 +213,13 @@
           <el-col :span="12"></el-col>
         </el-row>
 
-
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="队列类型" prop="queueType">
               <el-select
                 v-model="temp.queueType"
                 placeholder="队列类型"
-                style="display:block;"
+                style="display: block"
                 @change="selectQueueType"
               >
                 <el-option
@@ -240,9 +233,14 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="队列容量" prop="capacity">
-              <el-input-number v-model="temp.capacity" placeholder="队列容量" controls-position="right" :min="0"
-                               :max="2147483647"
-                               :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"/>
+              <el-input-number
+                v-model="temp.capacity"
+                placeholder="队列容量"
+                controls-position="right"
+                :min="0"
+                :max="2147483647"
+                :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -267,8 +265,13 @@
 
           <el-col :span="12">
             <el-form-item label="空闲回收" prop="keepAliveTime">
-              <el-input-number v-model="temp.keepAliveTime" placeholder="空闲回收 / S" controls-position="right" :min="1"
-                               :max="9999"/>
+              <el-input-number
+                v-model="temp.keepAliveTime"
+                placeholder="空闲回收 / S"
+                controls-position="right"
+                :min="1"
+                :max="9999"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -276,26 +279,14 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="是否报警" prop="isAlarm">
-              <!--              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display:block;">
-                              <el-option
-                                v-for="item in alarmTypes"
-                                :key="item.key"
-                                :label="item.display_name"
-                                :value="item.key"
-                              />
-                            </el-select>-->
-              <template>
-                <div>
-                  <el-radio-group v-model="temp.isAlarm">
-                    <el-radio-button :label="1">报警</el-radio-button>
-                    <el-radio-button :label="0">不报警</el-radio-button>
-                  </el-radio-group>
-                </div>
-                <!--                <el-radio-group v-model="temp.isAlarm">
-                                  <el-radio :label="1">报警</el-radio>
-                                  <el-radio :label="0">不报警</el-radio>
-                                </el-radio-group>-->
-              </template>
+              <el-select v-model="temp.isAlarm" placeholder="是否报警" style="display: block">
+                <el-option
+                  v-for="item in alarmTypes"
+                  :key="item.key"
+                  :label="item.display_name"
+                  :value="item.key"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -318,7 +309,7 @@
             <el-form-item label="拒绝策略" prop="rejectedType">
               <el-select
                 v-model="temp.rejectedType"
-                style="display:block;"
+                style="display: block"
                 placeholder="拒绝策略"
                 @change="selectRejectedType"
               >
@@ -344,13 +335,11 @@
                   </el-radio-group>
                 </div>
               </template>
-
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row v-if="isRejectShow" :gutter="20">
-
           <el-col :span="12">
             <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
               <el-input
@@ -363,9 +352,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
+        <el-button @click="dialogFormVisible = false"> 取消 </el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           确认
         </el-button>
@@ -373,8 +360,8 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogPluginVisible" title="Reading statistics">
       <el-table :data="pluginData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel"/>
-        <el-table-column prop="pv" label="Pv"/>
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
@@ -384,42 +371,42 @@
 </template>
 
 <script>
-import * as itemApi from '@/api/hippo4j-item'
-import * as tenantApi from '@/api/hippo4j-tenant'
-import * as threadPoolApi from '@/api/hippo4j-threadPool'
-import waves from '@/directive/waves'
-import Pagination from '@/components/Pagination'
+import * as itemApi from '@/api/hippo4j-item';
+import * as tenantApi from '@/api/hippo4j-tenant';
+import * as threadPoolApi from '@/api/hippo4j-threadPool';
+import waves from '@/directive/waves';
+import Pagination from '@/components/Pagination';
 
 export default {
   name: 'JobProject',
-  components: {Pagination},
-  directives: {waves},
+  components: { Pagination },
+  directives: { waves },
   filters: {
     statusFilter(status) {
       const statusMap = {
         published: 'success',
         draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
+        deleted: 'danger',
+      };
+      return statusMap[status];
     },
     queueFilter(type) {
       if ('1' == type) {
-        return 'ArrayBlockingQueue'
+        return 'ArrayBlockingQueue';
       } else if ('2' == type) {
-        return 'LinkedBlockingQueue'
+        return 'LinkedBlockingQueue';
       } else if ('3' == type) {
-        return 'LinkedBlockingDeque'
+        return 'LinkedBlockingDeque';
       } else if ('4' == type) {
-        return 'SynchronousQueue'
+        return 'SynchronousQueue';
       } else if ('5' == type) {
-        return 'LinkedTransferQueue'
+        return 'LinkedTransferQueue';
       } else if ('6' == type) {
-        return 'PriorityBlockingQueue'
+        return 'PriorityBlockingQueue';
       } else if ('9' == type) {
-        return 'ResizableLinkedBlockingQueue'
+        return 'ResizableLinkedBlockingQueue';
       }
-    }
+    },
   },
   data() {
     return {
@@ -431,7 +418,7 @@ export default {
         current: 1,
         size: 10,
         tpId: '',
-        itemId: ''
+        itemId: '',
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
@@ -452,149 +439,151 @@ export default {
         {key: 9, display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)'}
       ],
       rejectedOptions: [
-        {key: 1, display_name: 'CallerRunsPolicy'},
-        {key: 2, display_name: 'AbortPolicy'},
-        {key: 3, display_name: 'DiscardPolicy'},
-        {key: 4, display_name: 'DiscardOldestPolicy'},
-        {key: 5, display_name: 'RunsOldestTaskPolicy'},
-        {key: 6, display_name: 'SyncPutQueuePolicy'},
-        {key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）'}
+        { key: 1, display_name: 'CallerRunsPolicy' },
+        { key: 2, display_name: 'AbortPolicy' },
+        { key: 3, display_name: 'DiscardPolicy' },
+        { key: 4, display_name: 'DiscardOldestPolicy' },
+        { key: 5, display_name: 'RunsOldestTaskPolicy' },
+        { key: 6, display_name: 'SyncPutQueuePolicy' },
+        { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' },
       ],
-      alarmTypes: [{key: 1, display_name: '报警'}, {key: 0, display_name: '不报警'}],
+      alarmTypes: [
+        { key: 1, display_name: '报警' },
+        { key: 0, display_name: '不报警' },
+      ],
       allowCoreThreadTimeOutTypes: [
-        {key: 1, display_name: '超时'},
-        {key: 0, display_name: '不超时'}
+        { key: 1, display_name: '超时' },
+        { key: 0, display_name: '不超时' },
       ],
       size: 500,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
-        create: 'Create'
+        create: 'Create',
       },
       rules: {
-        tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
-        itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
-        tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
-        coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+        tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
         maxSize: [
-          {required: true, message: 'this is required', trigger: 'blur'},
+          { required: true, message: 'this is required', trigger: 'blur' },
           {
             validator: (rule, value, callback) => {
               if (parseInt(value) < parseInt(this.temp.coreSize)) {
-                callback('最大线程必须大于等于核心线程')
+                callback('最大线程必须大于等于核心线程');
               }
-              callback()
-            }
-          }
+              callback();
+            },
+          },
         ],
-        queueType: [{required: true, message: 'this is required', trigger: 'blur'}],
-        allowCoreThreadTimeOut: [{required: true, message: 'this is required', trigger: 'blur'}],
-        keepAliveTime: [{required: true, message: 'this is required', trigger: 'blur'}],
-        capacity: [{required: true, message: 'this is required', trigger: 'blur'}],
-        isAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-        capacityAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-        livenessAlarm: [{required: true, message: 'this is required', trigger: 'blur'}],
-        rejectedType: [{required: true, message: 'this is required', trigger: 'blur'}]
+        queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        allowCoreThreadTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        isAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        capacityAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        livenessAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        rejectedType: [{ required: true, message: 'this is required', trigger: 'blur' }],
       },
       temp: {
         id: undefined,
         tenantId: '',
         itemId: '',
         rejectedType: null,
-        customRejectedType: null
+        customRejectedType: null,
       },
-      visible: true
-    }
+      visible: true,
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
     // 初始化租户、项目
-    this.initSelect()
+    this.initSelect();
   },
   mounted() {
-    this.isEditDisabled = this.$cookie.get('userName') !== 'admin'
+    this.isEditDisabled = this.$cookie.get('userName') !== 'admin';
   },
   methods: {
     onInput() {
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     fetchData() {
-      this.listLoading = true
-      threadPoolApi.list(this.listQuery).then(response => {
-        const {records} = response
-        const {total} = response
-        this.total = total
-        this.list = records
-        this.listLoading = false
-      })
+      this.listLoading = true;
+      threadPoolApi.list(this.listQuery).then((response) => {
+        const { records } = response;
+        const { total } = response;
+        this.total = total;
+        this.list = records;
+        this.listLoading = false;
+      });
     },
     changeAlarm(row) {
       threadPoolApi.alarmEnable(row).then(() => {
-        this.fetchData()
+        this.fetchData();
         this.$notify({
           title: 'Success',
           message: 'Update Successfully',
           type: 'success',
-          duration: 2000
-        })
-      })
+          duration: 2000,
+        });
+      });
     },
     initSelect() {
-      tenantApi.list({size: this.size}).then(response => {
-        const {records} = response
+      tenantApi.list({ size: this.size }).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.tenantOptions.push({
             key: records[i].tenantId,
-            display_name: records[i].tenantId + ' ' + records[i].tenantName
-          })
+            display_name: records[i].tenantId + ' ' + records[i].tenantName,
+          });
         }
-      })
+      });
     },
     resetTemp() {
-      this.isRejectShow = false
+      this.isRejectShow = false;
       this.temp = {
         id: undefined,
         tenantId: '',
         itemId: '',
         rejectedType: null,
-        customRejectedType: null
-      }
+        customRejectedType: null,
+      };
     },
     handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.isRejectShow = false
+      this.resetTemp();
+      this.dialogStatus = 'create';
+      this.dialogFormVisible = true;
+      this.isRejectShow = false;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs['dataForm'].clearValidate();
+      });
     },
     createData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.isRejectShow) {
             if (this.temp.customRejectedType == null) {
-              this.temp.rejectedType = 2
+              this.temp.rejectedType = 2;
             } else {
-              this.temp.rejectedType = this.temp.customRejectedType
+              this.temp.rejectedType = this.temp.customRejectedType;
             }
           }
           threadPoolApi.created(this.temp).then(() => {
-            this.fetchData()
-            this.dialogFormVisible = false
+            this.fetchData();
+            this.dialogFormVisible = false;
             this.$notify({
               title: 'Success',
               message: 'Created Successfully',
               type: 'success',
-              duration: 2000
-            })
-          })
+              duration: 2000,
+            });
+          });
         }
-      })
+      });
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      let rejectedType = this.temp.rejectedType
+      this.temp = Object.assign({}, row); // copy obj
+      let rejectedType = this.temp.rejectedType;
       if (
         rejectedType != 1 &&
         rejectedType != 2 &&
@@ -603,23 +592,23 @@ export default {
         rejectedType != 5 &&
         rejectedType != 6
       ) {
-        this.isRejectShow = true
-        this.temp.customRejectedType = this.temp.rejectedType
-        this.temp.rejectedType = 99
+        this.isRejectShow = true;
+        this.temp.customRejectedType = this.temp.rejectedType;
+        this.temp.rejectedType = 99;
       } else {
-        this.isRejectShow = false
+        this.isRejectShow = false;
       }
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.dialogStatus = 'update';
+      this.dialogFormVisible = true;
 
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs['dataForm'].clearValidate();
+      });
     },
     updateData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          let rejectedType = this.temp.rejectedType
+          let rejectedType = this.temp.rejectedType;
           if (
             rejectedType != 1 &&
             rejectedType != 2 &&
@@ -629,118 +618,114 @@ export default {
             rejectedType != 6
           ) {
             if (this.temp.customRejectedType != null) {
-              this.temp.rejectedType = this.temp.customRejectedType
+              this.temp.rejectedType = this.temp.customRejectedType;
             }
           }
-          const tempData = Object.assign({}, this.temp)
+          const tempData = Object.assign({}, this.temp);
           threadPoolApi.updated(tempData).then(() => {
-            this.fetchData()
-            this.dialogFormVisible = false
+            this.fetchData();
+            this.dialogFormVisible = false;
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
               type: 'success',
-              duration: 2000
-            })
-          })
+              duration: 2000,
+            });
+          });
         }
-      })
+      });
     },
     openDelConfirm(name) {
       return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      })
+        type: 'warning',
+      });
     },
     handleDelete(row) {
-      const role = this.$cookie.get('userName') === 'admin' ? true : false
+      const role = this.$cookie.get('userName') === 'admin' ? true : false;
       if (!role) {
-        this.$message.error('请联系管理员删除')
-        return
+        this.$message.error('请联系管理员删除');
+        return;
       }
 
       this.openDelConfirm(row.tpId).then(() => {
-        threadPoolApi.deleted(row).then(response => {
-          this.fetchData()
+        threadPoolApi.deleted(row).then((response) => {
+          this.fetchData();
           this.$notify({
             title: 'Success',
             message: 'Delete Successfully',
             type: 'success',
-            duration: 2000
-          })
-        })
-      })
+            duration: 2000,
+          });
+        });
+      });
     },
     selectQueueType(value) {
       if (value === 4) {
-        this.temp.capacity = 0
+        this.temp.capacity = 0;
       } else if (value === 5) {
-        this.temp.capacity = 2147483647
+        this.temp.capacity = 2147483647;
       }
     },
 
     tenantSelectList() {
-      this.listQuery.itemId = null
-      this.listQuery.tpId = null
+      this.listQuery.itemId = null;
+      this.listQuery.tpId = null;
 
-      this.temp.itemId = null
+      this.temp.itemId = null;
 
-      this.itemOptions = []
-      this.itemTempOptions = []
-      this.threadPoolOptions = []
-      const tenantId = {tenantId: this.listQuery.tenantId, size: this.size}
-      itemApi.list(tenantId).then(response => {
-        const {records} = response
+      this.itemOptions = [];
+      this.itemTempOptions = [];
+      this.threadPoolOptions = [];
+      const tenantId = { tenantId: this.listQuery.tenantId, size: this.size };
+      itemApi.list(tenantId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName
-          })
+            display_name: records[i].itemId + ' ' + records[i].itemName,
+          });
         }
-      })
+      });
     },
 
     tenantTempSelectList() {
-      this.itemTempOptions = []
+      this.itemTempOptions = [];
       if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
-        this.temp.itemId = null
+        this.temp.itemId = null;
       }
-      const tenantId = {tenantId: this.temp.tenantId, size: this.size}
-      itemApi.list(tenantId).then(response => {
-        const {records} = response
+      const tenantId = { tenantId: this.temp.tenantId, size: this.size };
+      itemApi.list(tenantId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemTempOptions.push({
             key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName
-          })
+            display_name: records[i].itemId + ' ' + records[i].itemName,
+          });
         }
-      })
+      });
     },
 
     itemSelectList() {
-      this.listQuery.tpId = null
+      this.listQuery.tpId = null;
 
-      this.threadPoolOptions = []
-      const itemId = {itemId: this.listQuery.itemId, size: this.size}
-      threadPoolApi.list(itemId).then(response => {
-        const {records} = response
+      this.threadPoolOptions = [];
+      const itemId = { itemId: this.listQuery.itemId, size: this.size };
+      threadPoolApi.list(itemId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
             key: records[i].tpId,
-            display_name: records[i].tpId
-          })
+            display_name: records[i].tpId,
+          });
         }
-      })
+      });
     },
 
     selectRejectedType(value) {
-      if (value == 99) {
-        this.isRejectShow = true
-      } else {
-        this.isRejectShow = false
-      }
-    }
-  }
-}
+      this.isRejectShow = value === 99 ? true : false;
+    },
+  },
+};
 </script>
