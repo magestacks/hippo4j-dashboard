@@ -4,7 +4,7 @@
       <el-select
         v-model="listQuery.tenantId"
         placeholder="租户（必填）"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -19,7 +19,7 @@
       <el-select
         v-model="listQuery.itemId"
         placeholder="项目（必填）"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -34,7 +34,7 @@
       <el-select
         v-model="listQuery.tpId"
         placeholder="线程池（必填）"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="threadPoolSelectList()"
@@ -49,7 +49,7 @@
       <el-select
         v-model="listQuery.identify"
         placeholder="IP : Port（必填）"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
       >
@@ -87,7 +87,7 @@
       <el-col :span="6">
         <el-card shadow="hover">
           <el-descriptions direction="vertical" :column="1" border>
-            <el-descriptions-item label="实例ID">{{ listQuery.identify }}</el-descriptions-item>
+            <el-descriptions-item label="实例 ID">{{ listQuery.identify }}</el-descriptions-item>
             <el-descriptions-item label="是否报警">
               {{ temp.isAlarm | alarmFilter }}
             </el-descriptions-item>
