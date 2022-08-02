@@ -35,7 +35,6 @@
       border
       highlight-current-row
       element-loading-text="Loading"
-      stripe
     >
       <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
@@ -164,6 +163,7 @@ export default {
         current: 1,
         size: 10,
         tenantId: '',
+        desc: true,
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,

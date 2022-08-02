@@ -195,6 +195,7 @@ export default {
         current: 1,
         size: 10,
         itemId: '',
+        desc: true,
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
