@@ -32,9 +32,9 @@
       v-loading="listLoading"
       :data="list"
       stripe
+      border
       highlight-current-row
       element-loading-text="Loading"
-      stripe
     >
       <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
@@ -46,7 +46,6 @@
         <template slot-scope="scope">{{ scope.row.tenantName }}</template>
       </el-table-column>
       <el-table-column label="租户简介" width="400">
-        <!-- <template slot-scope="scope">{{ scope.row.tenantDesc | ellipsis }}</template> -->
         <template slot-scope="scope">{{ scope.row.tenantDesc }}</template>
       </el-table-column>
       <el-table-column label="OWNER">
@@ -58,7 +57,12 @@
       <el-table-column label="修改时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="100" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        width="100"
+        fixed="right"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="{ row }">
           <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
             编辑
