@@ -17,8 +17,13 @@
       </el-select>
       <el-select
         v-model="listQuery.tenantId"
+<<<<<<< HEAD
         placeholder="租户ID"
         style="width: 220px"
+=======
+        placeholder="租户"
+        style="width:220px"
+>>>>>>> 3aa32af5917d5720c8920c9e47c9054388dfe233
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -32,8 +37,13 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
+<<<<<<< HEAD
         placeholder="项目ID"
         style="width: 220px"
+=======
+        placeholder="项目"
+        style="width:220px"
+>>>>>>> 3aa32af5917d5720c8920c9e47c9054388dfe233
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -209,95 +219,128 @@ export default {
       };
       return statusMap[status];
     },
-  },
-  data() {
-    return {
-      isRejectShow: false, // 是否显示spi拒绝策略
-      list: null,
-      listLoading: false,
-      total: 0,
-      listQuery: {
-        itemId: '',
-        mark: '',
-        tenantId: '',
-        threadPoolKey: '',
-      },
-      pluginTypeOptions: ['reader', 'writer'],
-      dialogPluginVisible: false,
-      pluginData: [],
-      dialogFormVisible: false,
-      runTimeTemp: {},
-      typeOptions: [
-        { key: 'Dubbo', display_name: 'Dubbo' },
-        { key: 'Kafka', display_name: 'Kafka' },
-        { key: 'KafkaSpringCloudStream', display_name: 'KafkaSpringCloudStream' },
-        { key: 'RocketMQ', display_name: 'RocketMQ' },
-        { key: 'RocketMQSpringCloudStream', display_name: 'RocketMQSpringCloudStream' },
-        { key: 'RabbitMQ', display_name: 'RabbitMQ' },
-        { key: 'RabbitMQSpringCloudStream', display_name: 'RabbitMQSpringCloudStream' },
-      ],
-      tenantOptions: [],
-      instanceDialogFormVisible: false,
-      threadPoolOptions: [],
-      itemOptions: [],
-      threadPoolKeyOptions: [],
-      itemTempOptions: [],
-      queueTypeOptions: [
-        { key: 1, display_name: 'ArrayBlockingQueue' },
-        { key: 2, display_name: 'LinkedBlockingQueue' },
-        { key: 3, display_name: 'LinkedBlockingDeque' },
-        { key: 4, display_name: 'SynchronousQueue' },
-        { key: 5, display_name: 'LinkedTransferQueue' },
-        { key: 6, display_name: 'PriorityBlockingQueue' },
-        { key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)' },
-      ],
-      rejectedOptions: [
-        { key: 1, display_name: 'CallerRunsPolicy' },
-        { key: 2, display_name: 'AbortPolicy' },
-        { key: 3, display_name: 'DiscardPolicy' },
-        { key: 4, display_name: 'DiscardOldestPolicy' },
-        { key: 5, display_name: 'RunsOldestTaskPolicy' },
-        { key: 6, display_name: 'SyncPutQueuePolicy' },
-        { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' },
-      ],
-      alarmTypes: [
-        { key: 1, display_name: '报警' },
-        { key: 0, display_name: '不报警' },
-      ],
-      allowCoreThreadTimeOutTypes: [
-        { key: 1, display_name: '超时' },
-        { key: 0, display_name: '不超时' },
-      ],
-      size: 500,
-      dialogStatus: '',
-      textMap: {
-        update: 'Edit',
-        create: 'Create',
-      },
-      rules: {
-        coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        maximumSize: [
-          { required: true, message: 'this is required', trigger: 'blur' },
-          {
-            validator: (rule, value, callback) => {
-              if (parseInt(value) < parseInt(this.temp.coreSize)) {
-                callback('最大线程必须大于等于核心线程');
-              }
-              callback();
-            },
-          },
+    data() {
+      return {
+        isRejectShow: false, // 是否显示spi拒绝策略
+        list: null,
+        listLoading: false,
+        total: 0,
+        listQuery: {
+          itemId: '',
+          mark: '',
+          tenantId: '',
+          threadPoolKey: ''
+
+        },
+        pluginTypeOptions: ['reader', 'writer'],
+        dialogPluginVisible: false,
+        pluginData: [],
+        dialogFormVisible: false,
+        runTimeTemp: {},
+        typeOptions: [
+          { key: 'Dubbo', display_name: 'Dubbo' },
+          { key: 'Kafka', display_name: 'Kafka' },
+          { key: 'KafkaSpringCloudStream', display_name: 'KafkaSpringCloudStream' },
+          { key: 'RocketMQ', display_name: 'RocketMQ' },
+          { key: 'RocketMQSpringCloudStream', display_name: 'RocketMQSpringCloudStream' },
+          { key: 'RabbitMQ', display_name: 'RabbitMQ' },
+          { key: 'RabbitMQSpringCloudStream', display_name: 'RabbitMQSpringCloudStream' }
         ],
+        tenantOptions: [],
+        instanceDialogFormVisible: false,
+        threadPoolOptions: [],
+        itemOptions: [],
+        threadPoolKeyOptions: [],
+        itemTempOptions: [],
+        queueTypeOptions: [
+          { key: 1, display_name: 'ArrayBlockingQueue' },
+          { key: 2, display_name: 'LinkedBlockingQueue' },
+          { key: 3, display_name: 'LinkedBlockingDeque' },
+          { key: 4, display_name: 'SynchronousQueue' },
+          { key: 5, display_name: 'LinkedTransferQueue' },
+          { key: 6, display_name: 'PriorityBlockingQueue' },
+          { key: 9, display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)' }
+        ],
+        rejectedOptions: [
+          { key: 1, display_name: 'CallerRunsPolicy' },
+          { key: 2, display_name: 'AbortPolicy' },
+          { key: 3, display_name: 'DiscardPolicy' },
+          { key: 4, display_name: 'DiscardOldestPolicy' },
+          { key: 5, display_name: 'RunsOldestTaskPolicy' },
+          { key: 6, display_name: 'SyncPutQueuePolicy' },
+          { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' }
+        ],
+        alarmTypes: [{ key: 1, display_name: '报警' }, { key: 0, display_name: '不报警' }],
+        allowCoreThreadTimeOutTypes: [
+          { key: 1, display_name: '超时' },
+          { key: 0, display_name: '不超时' }
+        ],
+        size: 500,
+        dialogStatus: '',
+        textMap: {
+          update: 'Edit',
+          create: 'Create'
+        },
+        rules: {
+          coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+          maximumSize: [
+            {required: true, message: 'this is required', trigger: 'blur'},
+            {
+              validator: (rule, value, callback) => {
+                if (parseInt(value) < parseInt(this.temp.coreSize)) {
+                  callback('最大线程必须大于等于核心线程')
+                }
+                callback()
+              }
+            }
+          ],
+        },
+        temp: {
+          id: undefined,
+          tenantId: '',
+          itemId: '',
+          rejectedType: null,
+          allUpdate: '1',
+          customRejectedType: null
+        },
+        visible: true
+      }
+    },
+    created() {
+      // 初始化租户、项目
+      this.initSelect()
+    },
+    methods: {
+      onInput() {
+        this.$forceUpdate()
       },
-      temp: {
-        id: undefined,
-        tenantId: '',
-        itemId: '',
-        rejectedType: null,
-        allUpdate: '1',
-        customRejectedType: null,
+      fetchData() {
+        if (!this.listQuery.mark) {
+          this.$message.warning('线程池类型不允许为空')
+          return
+        }
+        if (!this.listQuery.tenantId ) {
+          this.$message.warning('租户不允许为空')
+          return
+        }
+        if (!this.listQuery.itemId ) {
+          this.$message.warning('项目不允许为空')
+          return
+        }
+        if (!this.listQuery.threadPoolKey) {
+          this.$message.warning('线程池标识不允许为空')
+          return
+        }
+        this.listLoading = true
+        threadPoolAdapterApi.list(this.listQuery).then(response => {
+          if (response == null) {
+            this.listLoading = false
+          }
+          this.list = response
+          this.listLoading = false
+        })
       },
-      visible: true,
-    };
+    },
   },
   created() {
     // 初始化租户、项目

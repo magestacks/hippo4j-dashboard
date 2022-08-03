@@ -3,8 +3,8 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户ID"
-        style="width: 220px"
+        placeholder="租户（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -18,8 +18,8 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目ID"
-        style="width: 220px"
+        placeholder="项目（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -33,8 +33,8 @@
       </el-select>
       <el-select
         v-model="listQuery.threadPoolKey"
-        placeholder="线程池标识"
-        style="width: 220px"
+        placeholder="线程池标识（必填）"
+        style="width:220px"
         filterable
         class="filter-item"
       >
@@ -229,13 +229,13 @@ export default {
       threadPoolKeyOptions: [],
       itemTempOptions: [],
       queueTypeOptions: [
-        { key: 1, display_name: 'ArrayBlockingQueue' },
-        { key: 2, display_name: 'LinkedBlockingQueue' },
-        { key: 3, display_name: 'LinkedBlockingDeque' },
-        { key: 4, display_name: 'SynchronousQueue' },
-        { key: 5, display_name: 'LinkedTransferQueue' },
-        { key: 6, display_name: 'PriorityBlockingQueue' },
-        { key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)' },
+        {key: 1, display_name: 'ArrayBlockingQueue'},
+        {key: 2, display_name: 'LinkedBlockingQueue'},
+        {key: 3, display_name: 'LinkedBlockingDeque'},
+        {key: 4, display_name: 'SynchronousQueue'},
+        {key: 5, display_name: 'LinkedTransferQueue'},
+        {key: 6, display_name: 'PriorityBlockingQueue'},
+        {key: 9, display_name: 'ResizableLinkedBlockingQueue (动态修改队列大小)'}
       ],
       rejectedOptions: [
         { key: 1, display_name: 'CallerRunsPolicy' },
@@ -299,11 +299,11 @@ export default {
         return;
       }
       if (!this.listQuery.tenantId) {
-        this.$message.warning('租户 ID 不允许为空');
+        this.$message.warning('租户不允许为空');
         return;
       }
       if (!this.listQuery.itemId) {
-        this.$message.warning('项目 ID 不允许为空');
+        this.$message.warning('项目不允许为空');
         return;
       }
       if (!this.listQuery.threadPoolKey) {
