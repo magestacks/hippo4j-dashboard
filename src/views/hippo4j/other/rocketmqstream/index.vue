@@ -4,7 +4,7 @@
       <el-select
         v-model="listQuery.tenantId"
         placeholder="租户ID"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -19,7 +19,7 @@
       <el-select
         v-model="listQuery.itemId"
         placeholder="项目ID"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -34,7 +34,7 @@
       <el-select
         v-model="listQuery.threadPoolKey"
         placeholder="线程池标识"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
       >
@@ -54,8 +54,14 @@
       >
         搜索
       </el-button>
-      <el-button v-waves class="filter-item" type="primary" style="margin-left: 10px;" icon="el-icon-refresh"
-                 @click="refreshData">
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        style="margin-left: 10px"
+        icon="el-icon-refresh"
+        @click="refreshData"
+      >
         重置
       </el-button>
     </div>
@@ -105,12 +111,7 @@
       <el-table-column label="队列容量" >
         <template slot-scope="scope">{{ scope.row.queueCapacity }}</template>
       </el-table-column>-->
-      <el-table-column
-        label="操作"
-
-        width="180"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" width="180" class-name="small-padding fixed-width">
         <template slot-scope="{ row }">
           <!--<el-dropdown trigger="click">
             <span class="el-dropdown-link">
@@ -121,9 +122,7 @@
               <el-dropdown-item @click.native="handleUpdate(row)">编辑</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>-->
-          <el-button type="text" size="small" @click="handleUpdate(row)">
-            编辑
-          </el-button>
+          <el-button type="text" size="small" @click="handleUpdate(row)"> 编辑 </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -137,13 +136,22 @@
       >
         <el-form-item label="核心线程" prop="coreSize">
           <template>
-            <el-input-number v-model="temp.coreSize" controls-position="right" :min="1" :max="9999"></el-input-number>
+            <el-input-number
+              v-model="temp.coreSize"
+              controls-position="right"
+              :min="1"
+              :max="9999"
+            ></el-input-number>
           </template>
         </el-form-item>
         <el-form-item label="最大线程" prop="maximumSize">
           <template>
-            <el-input-number v-model="temp.maximumSize" controls-position="right" :min="1"
-                             :max="9999"></el-input-number>
+            <el-input-number
+              v-model="temp.maximumSize"
+              controls-position="right"
+              :min="1"
+              :max="9999"
+            ></el-input-number>
           </template>
         </el-form-item>
         <el-form-item label="全部修改" prop="allUpdate">
@@ -151,18 +159,14 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
-        <el-button type="primary" @click="updateData()">
-          确认
-        </el-button>
+        <el-button @click="dialogFormVisible = false"> 取消 </el-button>
+        <el-button type="primary" @click="updateData()"> 确认 </el-button>
       </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogPluginVisible" title="Reading statistics">
       <el-table :data="pluginData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel"/>
-        <el-table-column prop="pv" label="Pv"/>
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
@@ -172,28 +176,25 @@
 </template>
 
 <script>
-import * as itemApi from '@/api/hippo4j-item'
-import * as tenantApi from '@/api/hippo4j-tenant'
-import * as threadPoolApi from '@/api/hippo4j-threadPool'
-import * as threadPoolAdapterApi from '@/api/hippo4j-adapterThreadPool'
-import waves from '@/directive/waves'
-import Pagination from '@/components/Pagination'
-import axios from 'axios'
+import * as itemApi from '@/api/hippo4j-item';
+import * as tenantApi from '@/api/hippo4j-tenant';
+import * as threadPoolApi from '@/api/hippo4j-threadPool';
+import * as threadPoolAdapterApi from '@/api/hippo4j-adapterThreadPool';
+import waves from '@/directive/waves';
 
 export default {
   name: 'JobProject',
-  components: {Pagination},
-  directives: {waves},
+  directives: { waves },
   filters: {
     statusFilter(status) {
       const statusMap = {
         DEV: 'info',
         TEST: 'success',
         UAT: 'warning',
-        PROD: 'danger'
-      }
-      return statusMap[status]
-    }
+        PROD: 'danger',
+      };
+      return statusMap[status];
+    },
   },
   data() {
     return {
@@ -205,8 +206,7 @@ export default {
         itemId: '',
         mark: 'RocketMQSpringCloudStream',
         tenantId: '',
-        threadPoolKey: ''
-
+        threadPoolKey: '',
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
@@ -214,13 +214,13 @@ export default {
       dialogFormVisible: false,
       runTimeTemp: {},
       typeOptions: [
-        {key: 'Dubbo', display_name: 'Dubbo'},
-        {key: 'Kafka', display_name: 'Kafka'},
-        {key: 'KafkaSpringCloudStream', display_name: 'KafkaSpringCloudStream'},
-        {key: 'RocketMQ', display_name: 'RocketMQ'},
-        {key: 'RocketMQSpringCloudStream', display_name: 'RocketMQSpringCloudStream'},
-        {key: 'RabbitMQ', display_name: 'RabbitMQ'},
-        {key: 'RabbitMQSpringCloudStream', display_name: 'RabbitMQSpringCloudStream'}
+        { key: 'Dubbo', display_name: 'Dubbo' },
+        { key: 'Kafka', display_name: 'Kafka' },
+        { key: 'KafkaSpringCloudStream', display_name: 'KafkaSpringCloudStream' },
+        { key: 'RocketMQ', display_name: 'RocketMQ' },
+        { key: 'RocketMQSpringCloudStream', display_name: 'RocketMQSpringCloudStream' },
+        { key: 'RabbitMQ', display_name: 'RabbitMQ' },
+        { key: 'RabbitMQSpringCloudStream', display_name: 'RabbitMQSpringCloudStream' },
       ],
       tenantOptions: [],
       instanceDialogFormVisible: false,
@@ -229,46 +229,49 @@ export default {
       threadPoolKeyOptions: [],
       itemTempOptions: [],
       queueTypeOptions: [
-        {key: 1, display_name: 'ArrayBlockingQueue'},
-        {key: 2, display_name: 'LinkedBlockingQueue'},
-        {key: 3, display_name: 'LinkedBlockingDeque'},
-        {key: 4, display_name: 'SynchronousQueue'},
-        {key: 5, display_name: 'LinkedTransferQueue'},
-        {key: 6, display_name: 'PriorityBlockingQueue'},
-        {key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)'}
+        { key: 1, display_name: 'ArrayBlockingQueue' },
+        { key: 2, display_name: 'LinkedBlockingQueue' },
+        { key: 3, display_name: 'LinkedBlockingDeque' },
+        { key: 4, display_name: 'SynchronousQueue' },
+        { key: 5, display_name: 'LinkedTransferQueue' },
+        { key: 6, display_name: 'PriorityBlockingQueue' },
+        { key: 9, display_name: 'ResizableLinkedBlockingQueue (支持动态修改队列大小)' },
       ],
       rejectedOptions: [
-        {key: 1, display_name: 'CallerRunsPolicy'},
-        {key: 2, display_name: 'AbortPolicy'},
-        {key: 3, display_name: 'DiscardPolicy'},
-        {key: 4, display_name: 'DiscardOldestPolicy'},
-        {key: 5, display_name: 'RunsOldestTaskPolicy'},
-        {key: 6, display_name: 'SyncPutQueuePolicy'},
-        {key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）'}
+        { key: 1, display_name: 'CallerRunsPolicy' },
+        { key: 2, display_name: 'AbortPolicy' },
+        { key: 3, display_name: 'DiscardPolicy' },
+        { key: 4, display_name: 'DiscardOldestPolicy' },
+        { key: 5, display_name: 'RunsOldestTaskPolicy' },
+        { key: 6, display_name: 'SyncPutQueuePolicy' },
+        { key: 99, display_name: 'CustomRejectedPolicy（自定义 SPI 策略）' },
       ],
-      alarmTypes: [{key: 1, display_name: '报警'}, {key: 0, display_name: '不报警'}],
+      alarmTypes: [
+        { key: 1, display_name: '报警' },
+        { key: 0, display_name: '不报警' },
+      ],
       allowCoreThreadTimeOutTypes: [
-        {key: 1, display_name: '超时'},
-        {key: 0, display_name: '不超时'}
+        { key: 1, display_name: '超时' },
+        { key: 0, display_name: '不超时' },
       ],
       size: 500,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
-        create: 'Create'
+        create: 'Create',
       },
       rules: {
-        coreSize: [{required: true, message: 'this is required', trigger: 'blur'}],
+        coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
         maximumSize: [
-          {required: true, message: 'this is required', trigger: 'blur'},
+          { required: true, message: 'this is required', trigger: 'blur' },
           {
             validator: (rule, value, callback) => {
               if (parseInt(value) < parseInt(this.temp.coreSize)) {
-                callback('最大线程必须大于等于核心线程')
+                callback('最大线程必须大于等于核心线程');
               }
-              callback()
-            }
-          }
+              callback();
+            },
+          },
         ],
       },
       temp: {
@@ -277,218 +280,228 @@ export default {
         itemId: '',
         rejectedType: null,
         allUpdate: '1',
-        customRejectedType: null
+        customRejectedType: null,
       },
-      visible: true
-    }
+      visible: true,
+    };
   },
   created() {
     // 初始化租户、项目
-    this.initSelect()
+    this.initSelect();
   },
   methods: {
     onInput() {
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     fetchData() {
-      if (this.listQuery.mark == null || Object.keys(this.listQuery.mark).length == 0) {
-        this.$message.warning('线程池类型不允许为空')
-        return
+      if (!this.listQuery.mark) {
+        this.$message.warning('线程池类型不允许为空');
+        return;
       }
-      if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
-        this.$message.warning('租户 ID 不允许为空')
-        return
+      if (!this.listQuery.tenantId) {
+        this.$message.warning('租户 ID 不允许为空');
+        return;
       }
-      if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
-        this.$message.warning('项目 ID 不允许为空')
-        return
+      if (!this.listQuery.itemId) {
+        this.$message.warning('项目 ID 不允许为空');
+        return;
       }
-      if (this.listQuery.threadPoolKey == null || Object.keys(this.listQuery.threadPoolKey).length == 0) {
-        this.$message.warning('线程池标识不允许为空')
-        return
+      if (!this.listQuery.threadPoolKey) {
+        this.$message.warning('线程池标识不允许为空');
+        return;
       }
-      this.listLoading = true
-      threadPoolAdapterApi.list(this.listQuery).then(response => {
+      this.listLoading = true;
+      threadPoolAdapterApi.list(this.listQuery).then((response) => {
         if (response == null) {
-          this.listLoading = false
+          this.listLoading = false;
         }
-        this.list = response
-        this.listLoading = false
-      })
+        this.list = response;
+        this.listLoading = false;
+      });
     },
     initSelect() {
-      tenantApi.list({size: this.size}).then(response => {
-        const {records} = response
+      tenantApi.list({ size: this.size }).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.tenantOptions.push({
             key: records[i].tenantId,
-            display_name: records[i].tenantId + ' ' + records[i].tenantName
-          })
+            display_name: records[i].tenantId + ' ' + records[i].tenantName,
+          });
         }
-      })
+      });
     },
     resetTemp() {
-      this.isRejectShow = false
+      this.isRejectShow = false;
       this.temp = {
         id: undefined,
         tenantId: '',
         itemId: '',
         rejectedType: null,
-        customRejectedType: null
-      }
+        customRejectedType: null,
+      };
     },
     updateData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const clientAddressList = []
+          const clientAddressList = [];
           const tempData = {
-            'mark': this.listQuery.mark,
-            'tenant': this.listQuery.tenantId,
-            'item': this.listQuery.itemId,
-            'threadPoolKey': this.temp.threadPoolKey,
-            'identify': this.temp.identify,
-            'clientAddressList': clientAddressList,
-            'corePoolSize': this.temp.coreSize,
-            'maximumPoolSize': this.temp.maximumSize
-          }
-          if (this.temp.allUpdate === '0' || this.temp.allUpdate == undefined || this.temp.allUpdate == null) {
-            clientAddressList[0] = this.temp.clientAddress
+            mark: this.listQuery.mark,
+            tenant: this.listQuery.tenantId,
+            item: this.listQuery.itemId,
+            threadPoolKey: this.temp.threadPoolKey,
+            identify: this.temp.identify,
+            clientAddressList: clientAddressList,
+            corePoolSize: this.temp.coreSize,
+            maximumPoolSize: this.temp.maximumSize,
+          };
+          if (
+            this.temp.allUpdate === '0' ||
+            this.temp.allUpdate == undefined ||
+            this.temp.allUpdate == null
+          ) {
+            clientAddressList[0] = this.temp.clientAddress;
           } else {
             for (let i = 0; i < this.list.length; i++) {
               if (this.list[i] != null) {
-                clientAddressList[i] = this.list[i].clientAddress
+                clientAddressList[i] = this.list[i].clientAddress;
               }
             }
           }
-          this.updateExecute(tempData)
+          this.updateExecute(tempData);
         }
-      })
+      });
     },
 
     updateExecute(updateData) {
-      threadPoolAdapterApi.updatePool(updateData).then(response => {
-        this.dialogFormVisible = false
-        this.$notify({
-          title: 'Success',
-          message: 'Update Successfully',
-          type: 'success',
-          duration: 2000
+      threadPoolAdapterApi
+        .updatePool(updateData)
+        .then((response) => {
+          this.dialogFormVisible = false;
+          this.$notify({
+            title: 'Success',
+            message: 'Update Successfully',
+            type: 'success',
+            duration: 2000,
+          });
+          this.fetchData();
         })
-        this.fetchData()
-      }).catch(error => {
-        console.log(error)
-        this.$message.error('修改线程池失败')
-      })
+        .catch((error) => {
+          console.log(error);
+          this.$message.error('修改线程池失败');
+        });
     },
     openDelConfirm(name) {
       return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      })
+        type: 'warning',
+      });
     },
     selectQueueType(value) {
       if (value === 4) {
-        this.temp.capacity = 0
+        this.temp.capacity = 0;
       } else if (value === 5) {
-        this.temp.capacity = 2147483647
+        this.temp.capacity = 2147483647;
       }
     },
 
     tenantSelectList() {
-      this.listQuery.itemId = null
-      this.listQuery.threadPoolKey = null
+      this.listQuery.itemId = null;
+      this.listQuery.threadPoolKey = null;
 
-      this.temp.itemId = null
+      this.temp.itemId = null;
 
-      this.itemOptions = []
-      this.itemTempOptions = []
-      this.threadPoolKeyOptions = []
-      const tenantId = {tenantId: this.listQuery.tenantId, size: this.size}
-      itemApi.list(tenantId).then(response => {
-        const {records} = response
+      this.itemOptions = [];
+      this.itemTempOptions = [];
+      this.threadPoolKeyOptions = [];
+      const tenantId = { tenantId: this.listQuery.tenantId, size: this.size };
+      itemApi.list(tenantId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName
-          })
+            display_name: records[i].itemId + ' ' + records[i].itemName,
+          });
         }
-      })
+      });
     },
 
     itemSelectList() {
-      this.listQuery.tpId = null
+      this.listQuery.tpId = null;
 
-      this.threadPoolKeyOptions = []
+      this.threadPoolKeyOptions = [];
       const data = {
         mark: this.listQuery.mark,
         tenantId: this.listQuery.tenantId,
-        itemId: this.listQuery.itemId
-      }
-      threadPoolAdapterApi.listKey(data).then(response => {
+        itemId: this.listQuery.itemId,
+      };
+      threadPoolAdapterApi.listKey(data).then((response) => {
         for (let i = 0; i < response.length; i++) {
           this.threadPoolKeyOptions.push({
             key: response[i],
-            display_name: response[i]
-          })
+            display_name: response[i],
+          });
         }
-      })
+      });
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.temp = Object.assign({}, row); // copy obj
+      this.dialogStatus = 'update';
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs['dataForm'].clearValidate();
+      });
     },
     selectRejectedType(value) {
       if (value == 99) {
-        this.isRejectShow = true
+        this.isRejectShow = true;
       } else {
-        this.isRejectShow = false
+        this.isRejectShow = false;
       }
     },
 
     handleInfo(row) {
-      this.instanceDialogFormVisible = true
-      this.dialogStatus = 'info'
+      this.instanceDialogFormVisible = true;
+      this.dialogStatus = 'info';
 
       if (typeof row == 'undefined' || row == null) {
-        row = this.tempRow
+        row = this.tempRow;
       } else {
         this.tempRow = {
-          clientAddress: row.clientAddress
-        }
+          clientAddress: row.clientAddress,
+        };
       }
-      this.refresh(row)
+      this.refresh(row);
     },
 
     refreshData() {
-      this.listQuery.mark = null
-      this.listQuery.tenantId = null
-      this.listQuery.itemId = null
-      this.listQuery.threadPoolKey = null
-      this.itemOptions = []
-      this.threadPoolKeyOptions = []
+      this.listQuery.mark = null;
+      this.listQuery.tenantId = null;
+      this.listQuery.itemId = null;
+      this.listQuery.threadPoolKey = null;
+      this.itemOptions = [];
+      this.threadPoolKeyOptions = [];
     },
 
     refresh(row) {
-      let clientAddressStr = ''
-      const clientAddress = row.clientAddress
-      let clientBasePath = row.clientBasePath
+      let clientAddressStr = '';
+      const clientAddress = row.clientAddress;
+      let clientBasePath = row.clientBasePath;
       if (clientBasePath != null) {
-        clientAddressStr = clientAddress + clientBasePath
+        clientAddressStr = clientAddress + clientBasePath;
       } else {
-        clientAddressStr = clientAddress
+        clientAddressStr = clientAddress;
       }
-      threadPoolApi.webBaseState({'clientAddress': clientAddressStr}).then(response => {
-        this.runTimeTemp = response
-      }).catch(error => {
-        console.log(error)
-        this.$message.error('查询失败，请尝试刷新页面')
-      })
-    }
-  }
-}
+      threadPoolApi
+        .webBaseState({ clientAddress: clientAddressStr })
+        .then((response) => {
+          this.runTimeTemp = response;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$message.error('查询失败，请尝试刷新页面');
+        });
+    },
+  },
+};
 </script>

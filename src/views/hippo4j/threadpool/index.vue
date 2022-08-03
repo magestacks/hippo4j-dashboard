@@ -679,7 +679,7 @@ export default {
       this.threadPoolOptions = [];
       const tenantId = { tenantId: this.listQuery.tenantId, size: this.size };
       itemApi.list(tenantId).then((response) => {
-        const { records } = response;
+        const { records = [] } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
@@ -691,12 +691,12 @@ export default {
 
     tenantTempSelectList() {
       this.itemTempOptions = [];
-      if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
+      if (this.temp.itemId) {
         this.temp.itemId = null;
       }
       const tenantId = { tenantId: this.temp.tenantId, size: this.size };
       itemApi.list(tenantId).then((response) => {
-        const { records } = response;
+        const { records = [] } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemTempOptions.push({
             key: records[i].itemId,
@@ -712,7 +712,7 @@ export default {
       this.threadPoolOptions = [];
       const itemId = { itemId: this.listQuery.itemId, size: this.size };
       threadPoolApi.list(itemId).then((response) => {
-        const { records } = response;
+        const { records = [] } = response;
         for (let i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
             key: records[i].tpId,

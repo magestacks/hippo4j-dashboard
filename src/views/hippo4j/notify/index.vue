@@ -4,7 +4,7 @@
       <el-select
         v-model="listQuery.tenantId"
         placeholder="租户ID"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="tenantSelectList()"
@@ -19,7 +19,7 @@
       <el-select
         v-model="listQuery.itemId"
         placeholder="项目ID"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -34,7 +34,7 @@
       <el-select
         v-model="listQuery.tpId"
         placeholder="线程池ID"
-        style="width:220px"
+        style="width: 220px"
         filterable
         class="filter-item"
       >
@@ -56,7 +56,7 @@
       </el-button>
       <el-button
         class="filter-item"
-        style="margin-left: 10px;"
+        style="margin-left: 10px"
         type="primary"
         icon="el-icon-edit"
         @click="handleCreate"
@@ -102,13 +102,13 @@
               v-model="scope.row.enable"
               active-color="#13ce66"
               inactive-color="#ff4949"
-              @change="changeEnable(scope.row)"
               :active-value="1"
-              :inactive-value="0">
+              :inactive-value="0"
+              @change="changeEnable(scope.row)"
+            >
             </el-switch>
           </el-tooltip>
         </template>
-
       </el-table-column>
       <el-table-column label="通知间隔" width="150">
         <template slot-scope="scope">{{ scope.row.interval | intervals }}</template>
@@ -138,15 +138,12 @@
             </el-table-column>-->
       <el-table-column
         label="操作"
-
         fixed="right"
         width="180"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="handleUpdate(row)">
-            编辑
-          </el-button>
+          <el-button type="text" size="small" @click="handleUpdate(row)"> 编辑 </el-button>
           <el-button
             v-if="row.status !== 'deleted'"
             size="small"
@@ -167,13 +164,12 @@
     />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
-      <el-form ref="dataForm"
-               :rules="rules" :model="temp" label-width="80px">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-width="80px">
         <el-form-item label="租户ID" prop="tenantId">
           <el-select
             v-model="temp.tenantId"
             placeholder="请选择租户"
-            style="display:block;"
+            style="display: block"
             :disabled="dialogStatus === 'create' ? false : true"
             @change="tenantTempSelectList()"
           >
@@ -189,7 +185,7 @@
           <el-select
             v-model="temp.itemId"
             placeholder="请选择项目"
-            style="display:block;"
+            style="display: block"
             :disabled="dialogStatus === 'create' ? false : true"
             @change="itemTempSelectList()"
           >
@@ -205,7 +201,7 @@
           <el-select
             v-model="temp.tpId"
             placeholder="线程池ID"
-            style="display:block;"
+            style="display: block"
             :disabled="dialogStatus === 'create' ? false : true"
           >
             <el-option
@@ -260,9 +256,9 @@
 
         <el-form-item label="Token" prop="secretKey">
           <el-input
+            v-model="temp.secretKey"
             type="textarea"
             placeholder="请输入 Token"
-            v-model="temp.secretKey"
             show-word-limit
           />
         </el-form-item>
@@ -271,7 +267,7 @@
           <el-input
             v-model="temp.receives"
             type="textarea"
-            :autosize="{ minRows: 4, maxRows: 4}"
+            :autosize="{ minRows: 4, maxRows: 4 }"
             placeholder="多个接收者使用英文逗号 , 分割 (注意不要有空格)
 - 钉钉：填写手机号
 - 企微：填写user_id会以@的消息发给用户，否则填写姓名，如：龙台
@@ -421,9 +417,7 @@
               </el-row>
             </el-form>-->
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          取消
-        </el-button>
+        <el-button @click="dialogFormVisible = false"> 取消 </el-button>
         <el-button type="primary" @click="dialogStatus === 'create' ? createData() : updateData()">
           确认
         </el-button>
@@ -431,8 +425,8 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogPluginVisible" title="Reading statistics">
       <el-table :data="pluginData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel"/>
-        <el-table-column prop="pv" label="Pv"/>
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogPvVisible = false">Confirm</el-button>
@@ -442,42 +436,42 @@
 </template>
 
 <script>
-import * as itemApi from '@/api/hippo4j-item'
-import * as tenantApi from '@/api/hippo4j-tenant'
-import * as notifyApi from '@/api/hippo4j-notify'
-import * as threadPoolApi from '@/api/hippo4j-threadPool'
-import waves from '@/directive/waves'
-import Pagination from '@/components/Pagination'
+import * as itemApi from '@/api/hippo4j-item';
+import * as tenantApi from '@/api/hippo4j-tenant';
+import * as notifyApi from '@/api/hippo4j-notify';
+import * as threadPoolApi from '@/api/hippo4j-threadPool';
+import waves from '@/directive/waves';
+import Pagination from '@/components/Pagination';
 
 export default {
   name: 'JobProject',
-  components: {Pagination},
-  directives: {waves},
+  components: { Pagination },
+  directives: { waves },
   filters: {
     statusFilter(status) {
       const statusMap = {
         published: 'success',
         draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
+        deleted: 'danger',
+      };
+      return statusMap[status];
     },
 
     ellipsis(value) {
-      if (!value) return ''
+      if (!value) return '';
       if (value.length > 22) {
-        return value.slice(0, 22) + '...'
+        return value.slice(0, 22) + '...';
       }
-      return value
+      return value;
     },
 
     intervals(value) {
       if (value == null || value == '') {
-        return '-'
+        return '-';
       }
 
-      return value
-    }
+      return value;
+    },
   },
   data() {
     return {
@@ -488,7 +482,7 @@ export default {
         current: 1,
         size: 10,
         tpId: '',
-        itemId: ''
+        itemId: '',
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
@@ -497,270 +491,270 @@ export default {
       tenantOptions: [],
       itemOptions: [],
       itemTempOptions: [],
-
       identifyOptions: [],
-
-      tenantOptions: [],
       threadPoolTempOptions: [],
       threadPoolOptions: [],
       platformTypes: [
-        {key: 'DING', display_name: 'DING'},
-        {key: 'LARK', display_name: 'LARK'},
-        {key: 'WECHAT', display_name: 'WECHAT'}
+        { key: 'DING', display_name: 'DING' },
+        { key: 'LARK', display_name: 'LARK' },
+        { key: 'WECHAT', display_name: 'WECHAT' },
       ],
 
       typeTypes: [
-        {key: 'CONFIG', display_name: 'CONFIG'},
-        {key: 'ALARM', display_name: 'ALARM'}
+        { key: 'CONFIG', display_name: 'CONFIG' },
+        { key: 'ALARM', display_name: 'ALARM' },
       ],
 
-      enableTypes: [{key: 1, display_name: '启用'}, {key: 0, display_name: '停用'}],
+      enableTypes: [
+        { key: 1, display_name: '启用' },
+        { key: 0, display_name: '停用' },
+      ],
       dialogStatus: '',
       textMap: {
         update: 'Edit',
-        create: 'Create'
+        create: 'Create',
       },
       rules: {
-        tenantId: [{required: true, message: 'this is required', trigger: 'blur'}],
-        itemId: [{required: true, message: 'this is required', trigger: 'blur'}],
-        tpId: [{required: true, message: 'this is required', trigger: 'blur'}],
-        receives: [{required: true, message: 'this is required', trigger: 'blur'}],
-        secretKey: [{required: true, message: 'this is required', trigger: 'blur'}],
-        platform: [{required: true, message: 'this is required', trigger: 'blur'}],
-        type: [{required: true, message: 'this is required', trigger: 'blur'}],
-        enable: [{required: true, message: 'this is required', trigger: 'blur'}]
+        tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        receives: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        secretKey: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        platform: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        type: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        enable: [{ required: true, message: 'this is required', trigger: 'blur' }],
       },
       temp: {
         id: undefined,
         tenantId: '',
-        interval: undefined
+        interval: undefined,
       },
-      visible: true
-    }
+      visible: true,
+    };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
     // 初始化租户、项目
-    this.initSelect()
+    this.initSelect();
   },
   methods: {
     fetchData() {
-      this.listLoading = true
-      notifyApi.list(this.listQuery).then(response => {
-        const {records} = response
-        const {total} = response
-        this.total = total
-        this.list = records
-        this.listLoading = false
-      })
+      this.listLoading = true;
+      notifyApi.list(this.listQuery).then((response) => {
+        const { records } = response;
+        const { total } = response;
+        this.total = total;
+        this.list = records;
+        this.listLoading = false;
+      });
     },
     initSelect() {
-      tenantApi.list({}).then(response => {
-        const {records} = response
+      tenantApi.list({}).then((response) => {
+        const { records } = response;
         for (var i = 0; i < records.length; i++) {
           this.tenantOptions.push({
             key: records[i].tenantId,
-            display_name: records[i].tenantId + ' ' + records[i].tenantName
-          })
+            display_name: records[i].tenantId + ' ' + records[i].tenantName,
+          });
         }
-      })
+      });
 
-      itemApi.list({}).then(response => {
-        const {records} = response
+      itemApi.list({}).then((response) => {
+        const { records } = response;
         for (var i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName
-          })
+            display_name: records[i].itemId + ' ' + records[i].itemName,
+          });
         }
-      })
+      });
 
-      threadPoolApi.list({}).then(response => {
-        const {records} = response
+      threadPoolApi.list({}).then((response) => {
+        const { records } = response;
         for (var i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
             key: records[i].tpId,
-            display_name: records[i].tpId
-          })
+            display_name: records[i].tpId,
+          });
         }
-      })
+      });
     },
     resetTemp() {
       this.temp = {
         id: undefined,
         tenantName: '',
-        tenantDesc: ''
-      }
+        tenantDesc: '',
+      };
     },
     handleCreate() {
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.resetTemp();
+      this.dialogStatus = 'create';
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+        this.$refs['dataForm'].clearValidate();
+      });
     },
     createData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           notifyApi.created(this.temp).then(() => {
-            this.fetchData()
-            this.dialogFormVisible = false
+            this.fetchData();
+            this.dialogFormVisible = false;
             this.$notify({
               title: 'Success',
               message: 'Created Successfully',
               type: 'success',
-              duration: 2000
-            })
-          })
+              duration: 2000,
+            });
+          });
         }
-      })
+      });
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
+      this.temp = Object.assign({}, row); // copy obj
       if (this.temp.interval == null) {
-        this.temp.interval = undefined
+        this.temp.interval = undefined;
       }
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.dialogStatus = 'update';
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-        this.selectType(this.temp.type)
-      })
+        this.$refs['dataForm'].clearValidate();
+        this.selectType(this.temp.type);
+      });
     },
     updateData() {
-      this.$refs['dataForm'].validate(valid => {
+      this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
+          const tempData = Object.assign({}, this.temp);
           notifyApi.updated(tempData).then(() => {
-            this.fetchData()
-            this.dialogFormVisible = false
+            this.fetchData();
+            this.dialogFormVisible = false;
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
               type: 'success',
-              duration: 2000
-            })
-          })
+              duration: 2000,
+            });
+          });
         }
-      })
+      });
     },
     openDelConfirm(name) {
       return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
-      })
+        type: 'warning',
+      });
     },
     handleDelete(row) {
-      const name = '[' + row.tpId + ']-[' + row.platform + ']-[' + row.type + ']'
+      const name = '[' + row.tpId + ']-[' + row.platform + ']-[' + row.type + ']';
       this.openDelConfirm(name).then(() => {
-        notifyApi.deleted(row).then(response => {
-          this.fetchData()
+        notifyApi.deleted(row).then((response) => {
+          this.fetchData();
           this.$notify({
             title: 'Success',
             message: 'Delete Successfully',
             type: 'success',
-            duration: 2000
-          })
-        })
-      })
+            duration: 2000,
+          });
+        });
+      });
     },
     changeEnable(row) {
-      notifyApi.enable(row).then(response => {
-        this.fetchData()
+      notifyApi.enable(row).then((response) => {
+        this.fetchData();
         this.$notify({
           title: 'Success',
           message: 'Delete Successfully',
           type: 'success',
-          duration: 2000
-        })
-      })
+          duration: 2000,
+        });
+      });
     },
 
     selectType(value) {
       if (value === 'CONFIG') {
-        this.temp.interval = undefined
-        this.rules['interval'] = []
+        this.temp.interval = undefined;
+        this.rules['interval'] = [];
       } else {
-        this.rules['interval'] = [{required: true, message: 'this is required', trigger: 'blur'}]
+        this.rules['interval'] = [{ required: true, message: 'this is required', trigger: 'blur' }];
       }
     },
 
     tenantSelectList() {
-      this.listQuery.itemId = null
-      this.listQuery.tpId = null
+      this.listQuery.itemId = null;
+      this.listQuery.tpId = null;
 
-      this.temp.itemId = null
+      this.temp.itemId = null;
 
-      this.itemOptions = []
-      this.itemTempOptions = []
-      this.threadPoolOptions = []
-      const tenantId = {tenantId: this.listQuery.tenantId, size: this.size}
-      itemApi.list(tenantId).then(response => {
-        const {records} = response
+      this.itemOptions = [];
+      this.itemTempOptions = [];
+      this.threadPoolOptions = [];
+      const tenantId = { tenantId: this.listQuery.tenantId, size: this.size };
+      itemApi.list(tenantId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemOptions.push({
             key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName
-          })
+            display_name: records[i].itemId + ' ' + records[i].itemName,
+          });
         }
-      })
+      });
     },
 
     itemSelectList() {
-      this.listQuery.tpId = null
+      this.listQuery.tpId = null;
 
-      this.threadPoolOptions = []
-      const itemId = {itemId: this.listQuery.itemId, size: this.size}
-      threadPoolApi.list(itemId).then(response => {
-        const {records} = response
+      this.threadPoolOptions = [];
+      const itemId = { itemId: this.listQuery.itemId, size: this.size };
+      threadPoolApi.list(itemId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
             key: records[i].tpId,
-            display_name: records[i].tpId
-          })
+            display_name: records[i].tpId,
+          });
         }
-      })
+      });
     },
 
     tenantTempSelectList() {
-      this.itemTempOptions = []
-      this.threadPoolTempOptions = []
+      this.itemTempOptions = [];
+      this.threadPoolTempOptions = [];
       if (this.temp.itemId != null && Object.keys(this.temp.itemId).length != 0) {
-        this.temp.itemId = null
+        this.temp.itemId = null;
         if (this.temp.tpId != null && Object.keys(this.temp.tpId).length != 0) {
-          this.temp.tpId = null
+          this.temp.tpId = null;
         }
       }
-      const tenantId = {tenantId: this.temp.tenantId, size: this.size}
-      itemApi.list(tenantId).then(response => {
-        const {records} = response
+      const tenantId = { tenantId: this.temp.tenantId, size: this.size };
+      itemApi.list(tenantId).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.itemTempOptions.push({
             key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName
-          })
+            display_name: records[i].itemId + ' ' + records[i].itemName,
+          });
         }
-      })
+      });
     },
 
     itemTempSelectList() {
-      this.threadPoolTempOptions = []
+      this.threadPoolTempOptions = [];
       if (this.temp.tpId != null && Object.keys(this.temp.tpId).length != 0) {
-        this.temp.tpId = null
+        this.temp.tpId = null;
       }
-      const query = {tenantId: this.temp.tenantId, itemId: this.temp.itemId, size: this.size}
-      threadPoolApi.list(query).then(response => {
-        const {records} = response
+      const query = { tenantId: this.temp.tenantId, itemId: this.temp.itemId, size: this.size };
+      threadPoolApi.list(query).then((response) => {
+        const { records } = response;
         for (let i = 0; i < records.length; i++) {
           this.threadPoolTempOptions.push({
             key: records[i].tpId,
-            display_name: records[i].tpId
-          })
+            display_name: records[i].tpId,
+          });
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 </script>
