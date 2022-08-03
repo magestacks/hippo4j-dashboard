@@ -180,7 +180,7 @@
             <el-tag>{{ runTimeTemp.state }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item>
-            <template slot="label"> 实例 Host </template>
+            <template slot="label"> 实例Host </template>
             {{ runTimeTemp.host }}
           </el-descriptions-item>
           <el-descriptions-item>
@@ -560,7 +560,7 @@ export default {
   },
   data() {
     return {
-      list: null,
+      list: [],
       listLoading: false,
       total: 0,
       listQuery: {
@@ -653,22 +653,21 @@ export default {
       this.$forceUpdate();
     },
     fetchData() {
-      if (this.listQuery.tenantId == null || Object.keys(this.listQuery.tenantId).length == 0) {
+      if (!this.listQuery.tenantId) {
         this.$message.warning('租户不允许为空');
         return;
       }
-      if (this.listQuery.itemId == null || Object.keys(this.listQuery.itemId).length == 0) {
+      if (!this.listQuery.itemId) {
         this.$message.warning('项目不允许为空');
         return;
       }
-      if (this.listQuery.tpId == null || Object.keys(this.listQuery.tpId).length == 0) {
+      if (!this.listQuery.tpId) {
         this.$message.warning('线程池不允许为空');
         return;
       }
       this.listLoading = true;
       const listArray = [this.listQuery.itemId, this.listQuery.tpId];
       instanceApi.list(listArray).then((response) => {
-        const { records } = response;
         this.list = response;
         this.listLoading = false;
       });
@@ -681,15 +680,18 @@ export default {
       this.threadPoolOptions = [];
     },
     initSelect() {
-      tenantApi.list({ size: this.size }).then((response) => {
-        const { records } = response;
-        for (let i = 0; i < records.length; i++) {
-          this.tenantOptions.push({
-            key: records[i].tenantId,
-            display_name: records[i].tenantId + ' ' + records[i].tenantName,
-          });
-        }
-      });
+      tenantApi
+        .list({ size: this.size })
+        .then((response) => {
+          const { records } = response;
+          for (let i = 0; i < records.length; i++) {
+            this.tenantOptions.push({
+              key: records[i].tenantId,
+              display_name: records[i].tenantId + ' ' + records[i].tenantName,
+            });
+          }
+        })
+        .catch(() => {});
     },
     resetTemp() {
       this.isRejectShow = false;
@@ -711,34 +713,30 @@ export default {
       });
     },
     createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          threadPoolApi.created(this.temp).then(() => {
-            this.fetchData();
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000,
+      this.$refs['dataForm']
+        .validate((valid) => {
+          if (valid) {
+            threadPoolApi.created(this.temp).then(() => {
+              this.fetchData();
+              this.dialogFormVisible = false;
+              this.$notify({
+                title: 'Success',
+                message: 'Created Successfully',
+                type: 'success',
+                duration: 2000,
+              });
             });
-          });
-        }
-      });
+          }
+        })
+        .catch(() => {});
     },
     // 打开弹框
     handleUpdate(row) {
       this.temp = Object.assign({}, row); // copy obj
       this.dialogStatus = 'update';
-      let rejectedType = this.temp.rejectedType;
-      if (
-        rejectedType != 1 &&
-        rejectedType != 2 &&
-        rejectedType != 3 &&
-        rejectedType != 4 &&
-        rejectedType != 5 &&
-        rejectedType != 6
-      ) {
+      const rejectedType = this.temp.rejectedType;
+      const rejectTypeList = [1, 2, 3, 4, 5, 6];
+      if (!rejectTypeList.includes(rejectedType)) {
         this.isRejectShow = true;
         this.temp.customRejectedType = this.temp.rejectedType;
         this.temp.rejectedType = 99;
@@ -824,29 +822,26 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           let rejectedType = this.temp.rejectedType;
-          if (
-            rejectedType != 1 &&
-            rejectedType != 2 &&
-            rejectedType != 3 &&
-            rejectedType != 4 &&
-            rejectedType != 5 &&
-            rejectedType != 6
-          ) {
+          const rejectTypeList = [1, 2, 3, 4, 5, 6];
+          if (!rejectTypeList.includes(rejectedType)) {
             if (this.temp.customRejectedType != null) {
               this.temp.rejectedType = this.temp.customRejectedType;
             }
           }
           const tempData = Object.assign({}, this.temp);
-          instanceApi.updated(tempData).then(() => {
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000,
-            });
-            this.fetchData();
-          });
+          instanceApi
+            .updated(tempData)
+            .then(() => {
+              this.dialogFormVisible = false;
+              this.$notify({
+                title: 'Success',
+                message: 'Update Successfully',
+                type: 'success',
+                duration: 2000,
+              });
+              this.fetchData();
+            })
+            .catch(() => {});
         }
       });
     },
@@ -865,15 +860,18 @@ export default {
       this.itemOptions = [];
       this.threadPoolOptions = [];
       const tenantId = { tenantId: this.listQuery.tenantId, size: this.size };
-      itemApi.list(tenantId).then((response) => {
-        const { records } = response;
-        for (var i = 0; i < records.length; i++) {
-          this.itemOptions.push({
-            key: records[i].itemId,
-            display_name: records[i].itemId + ' ' + records[i].itemName,
-          });
-        }
-      });
+      itemApi
+        .list(tenantId)
+        .then((response) => {
+          const { records = [] } = response || {};
+          for (var i = 0; i < records.length; i++) {
+            this.itemOptions.push({
+              key: records[i].itemId,
+              display_name: records[i].itemId + ' ' + records[i].itemName,
+            });
+          }
+        })
+        .catch(() => {});
     },
 
     itemSelectList() {
@@ -881,15 +879,18 @@ export default {
 
       this.threadPoolOptions = [];
       const itemId = { itemId: this.listQuery.itemId, size: this.size };
-      threadPoolApi.list(itemId).then((response) => {
-        const { records } = response;
-        for (var i = 0; i < records.length; i++) {
-          this.threadPoolOptions.push({
-            key: records[i].tpId,
-            display_name: records[i].tpId,
-          });
-        }
-      });
+      threadPoolApi
+        .list(itemId)
+        .then((response) => {
+          const { records = [] } = response || {};
+          for (var i = 0; i < records.length; i++) {
+            this.threadPoolOptions.push({
+              key: records[i].tpId,
+              display_name: records[i].tpId,
+            });
+          }
+        })
+        .catch(() => {});
     },
   },
 };

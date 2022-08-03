@@ -130,29 +130,40 @@ export default {
       this.lineChartData = lineChartData[type];
     },
     chartInfo() {
-      dashborad.chartInfo().then((response) => {
-        this.show = true;
-        (this.countSucTotal = response.tenantCount),
-          (this.countRunningTotal = response.threadPoolCount),
-          (this.countFailTotal = response.itemCount),
-          (this.countRunningInstanceTotal = response.threadPoolInstanceCount);
-      });
+      dashborad
+        .chartInfo()
+        .then((res) => {
+          const { tenantCount, threadPoolCount, threadPoolInstanceCount, itemCount } = res || {};
+          this.show = true;
+          this.countSucTotal = tenantCount;
+          this.countRunningTotal = threadPoolCount;
+          this.countFailTotal = itemCount;
+          this.countRunningInstanceTotal = threadPoolInstanceCount;
+        })
+        .catch(() => {});
     },
 
     lintChart() {
-      dashborad.lineChart({}).then((response) => {
-        this.lineChartData.oneList = response.oneList;
-        this.lineChartData.twoList = response.twoList;
-        this.lineChartData.threeList = response.threeList;
-        this.lineChartData.fourList = response.fourList;
-      });
+      dashborad
+        .lineChart({})
+        .then((res) => {
+          const { oneList, twoList, threeList, fourList } = res || {};
+          this.lineChartData.oneList = oneList;
+          this.lineChartData.twoList = twoList;
+          this.lineChartData.threeList = threeList;
+          this.lineChartData.fourList = fourList;
+        })
+        .catch(() => {});
     },
 
     userInfo() {
-      var userName = this.$cookie.get('userName');
-      user.getCurrentUser(userName).then((response) => {
-        this.temp = response;
-      });
+      const userName = this.$cookie.get('userName');
+      user
+        .getCurrentUser(userName)
+        .then((response) => {
+          this.temp = response;
+        })
+        .catch(() => {});
     },
   },
 };

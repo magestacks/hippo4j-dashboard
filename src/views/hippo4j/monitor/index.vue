@@ -151,7 +151,6 @@
 
 <script>
 import LineChart from './components/LineChart';
-import * as dashborad from '@/api/dashborad';
 import waves from '@/directive/waves';
 import * as itemApi from '@/api/hippo4j-item';
 import * as tenantApi from '@/api/hippo4j-tenant';
@@ -202,17 +201,13 @@ export default {
     return {
       lineChartData1: [
         {
-          name: 'currentLoad',
+          name: 'activeSizeList',
           data: [],
         },
       ],
       lineChartData2: [
         {
           name: 'poolSizeList',
-          data: [],
-        },
-        {
-          name: 'activeSizeList',
           data: [],
         },
       ],
@@ -377,7 +372,6 @@ export default {
     initChart() {
       monitorApi.active(this.listQuery).then((res) => {
         const {
-          currentLoadList,
           poolSizeList,
           activeSizeList,
           queueSizeList,
@@ -387,9 +381,8 @@ export default {
           times,
         } = res || {};
         this.times = times;
-        this.lineChartData1[0].data = currentLoadList;
+        this.lineChartData1[0].data = activeSizeList;
         this.lineChartData2[0].data = poolSizeList;
-        this.lineChartData2[1].data = activeSizeList;
         this.lineChartData3[0].data = queueSizeList;
         this.lineChartData4[0].data = queueRemainingCapacityList;
         this.lineChartData5[0].data = completedTaskCountList;
@@ -407,24 +400,5 @@ export default {
   /* background-color: #2f4256; */
   position: relative;
   min-height: 100vh;
-
-  .github-corner {
-    position: absolute;
-    top: 0px;
-    border: 0;
-    right: 0;
-  }
-
-  .chart-wrapper {
-    background: #fff;
-    padding: 16px 16px 0;
-    margin-bottom: 32px;
-  }
-}
-
-@media (max-width: 1024px) {
-  .chart-wrapper {
-    padding: 8px;
-  }
 }
 </style>

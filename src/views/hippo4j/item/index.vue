@@ -4,7 +4,7 @@
       <el-input
         v-model="listQuery.itemId"
         clearable
-        placeholder="项目"
+        placeholder="项目ID"
         style="width: 200px"
         class="filter-item"
       />
@@ -31,7 +31,6 @@
     <el-table
       v-loading="listLoading"
       stripe
-      border
       :data="list"
       style="width: 100%"
       highlight-current-row
