@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-select
         v-model="listQuery.tenantId"
-        placeholder="租户ID"
+        placeholder="租户（必填）"
         style="width: 220px"
         filterable
         class="filter-item"
@@ -18,7 +18,7 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-        placeholder="项目ID"
+        placeholder="项目 （必填）"
         style="width: 220px"
         filterable
         class="filter-item"
@@ -33,7 +33,7 @@
       </el-select>
       <el-select
         v-model="listQuery.tpId"
-        placeholder="线程池ID"
+        placeholder="线程池 （必填）"
         style="width: 220px"
         filterable
         class="filter-item"
@@ -114,7 +114,9 @@
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
       </el-table-column>
       <el-table-column label="空闲回收" width="100">
-        <template slot-scope="scope">{{ scope.row.keepAliveTime }}</template>
+        <template slot-scope="scope">
+          {{ scope.row.keepAliveTime }}
+        </template>
       </el-table-column>
       <!--<el-table-column label="是否报警" width="200">
         <template slot-scope="scope">
@@ -164,7 +166,7 @@
       <template>
         <el-descriptions class="margin-top" title="基础信息" :column="3" :size="size" border>
           <el-descriptions-item>
-            <template slot="label"> 线程池ID </template>
+            <template slot="label"> 线程池 </template>
             {{ runTimeTemp.tpId }}
           </el-descriptions-item>
           <el-descriptions-item>
@@ -652,15 +654,15 @@ export default {
     },
     fetchData() {
       if (!this.listQuery.tenantId) {
-        this.$message.warning('租户 ID 不允许为空');
+        this.$message.warning('租户不允许为空');
         return;
       }
       if (!this.listQuery.itemId) {
-        this.$message.warning('项目 ID 不允许为空');
+        this.$message.warning('项目不允许为空');
         return;
       }
       if (!this.listQuery.tpId) {
-        this.$message.warning('线程池 ID 不允许为空');
+        this.$message.warning('线程池不允许为空');
         return;
       }
       this.listLoading = true;

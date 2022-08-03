@@ -4,7 +4,7 @@
       <el-input
         v-model="listQuery.tenantId"
         clearable
-        placeholder="租户ID"
+        placeholder="租户"
         style="width: 200px"
         class="filter-item"
       />
@@ -32,7 +32,6 @@
       v-loading="listLoading"
       :data="list"
       stripe
-      border
       highlight-current-row
       element-loading-text="Loading"
       stripe
@@ -164,6 +163,7 @@ export default {
         current: 1,
         size: 10,
         tenantId: '',
+        desc: true,
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,

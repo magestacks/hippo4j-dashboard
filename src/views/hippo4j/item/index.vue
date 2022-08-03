@@ -98,10 +98,10 @@
         label-position="left"
         label-width="100px"
       >
-        <el-form-item label="租户ID" prop="tenantId">
+        <el-form-item label="租户" prop="tenantId">
           <el-select
             v-model="temp.tenantId"
-            placeholder="租户ID"
+            placeholder="租户"
             filterable
             clearable
             class="filter-item"
@@ -116,11 +116,11 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="项目ID" prop="itemId">
+        <el-form-item label="项目" prop="itemId">
           <el-input
             v-model="temp.itemId"
             :disabled="dialogStatus === 'create' ? false : true"
-            placeholder="项目ID"
+            placeholder="项目"
             style="width: 40%"
           />
         </el-form-item>
@@ -195,6 +195,7 @@ export default {
         current: 1,
         size: 10,
         itemId: '',
+        desc: true,
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
