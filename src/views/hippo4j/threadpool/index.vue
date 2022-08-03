@@ -117,7 +117,6 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        align="center"
         width="120"
         fixed="right"
         class-name="small-padding fixed-width"
