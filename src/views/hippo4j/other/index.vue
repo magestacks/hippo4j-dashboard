@@ -37,13 +37,8 @@
       </el-select>
       <el-select
         v-model="listQuery.itemId"
-<<<<<<< HEAD
-        placeholder="项目ID"
-        style="width: 220px"
-=======
         placeholder="项目"
         style="width:220px"
->>>>>>> 3aa32af5917d5720c8920c9e47c9054388dfe233
         filterable
         class="filter-item"
         @change="itemSelectList()"
@@ -356,11 +351,11 @@ export default {
         return;
       }
       if (!this.listQuery.tenantId) {
-        this.$message.warning('租户 ID 不允许为空');
+        this.$message.warning('租户不允许为空');
         return;
       }
       if (!this.listQuery.itemId) {
-        this.$message.warning('项目 ID 不允许为空');
+        this.$message.warning('项目不允许为空');
         return;
       }
       if (!this.listQuery.threadPoolKey) {

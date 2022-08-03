@@ -4,7 +4,7 @@
       <el-input
         v-model="listQuery.itemId"
         clearable
-        placeholder="项目ID"
+        placeholder="项目"
         style="width: 200px"
         class="filter-item"
       />

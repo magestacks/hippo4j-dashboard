@@ -300,11 +300,11 @@ export default {
         return;
       }
       if (!this.listQuery.tenantId) {
-        this.$message.warning('租户 ID 不允许为空');
+        this.$message.warning('租户不允许为空');
         return;
       }
       if (!this.listQuery.itemId) {
-        this.$message.warning('项目 ID 不允许为空');
+        this.$message.warning('项目不允许为空');
         return;
       }
       if (!this.listQuery.threadPoolKey) {

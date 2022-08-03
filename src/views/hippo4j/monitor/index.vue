@@ -262,15 +262,15 @@ export default {
   methods: {
     fetchData() {
       if (!this.listQuery.tenantId) {
-        this.$message.warning('租户 ID 不允许为空');
+        this.$message.warning('租户不允许为空');
         return;
       }
       if (!this.listQuery.itemId) {
-        this.$message.warning('项目 ID 不允许为空');
+        this.$message.warning('项目不允许为空');
         return;
       }
       if (!this.listQuery.tpId) {
-        this.$message.warning('线程池 ID 不允许为空');
+        this.$message.warning('线程池不允许为空');
         return;
       }
       if (!this.listQuery.identify) {

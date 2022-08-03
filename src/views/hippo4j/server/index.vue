@@ -427,7 +427,7 @@ export default {
     initSelect() {
       tenantApi.list({ size: this.size }).then((response) => {
         const { records } = response;
-        for (let i = 0; i < records && records.length; i++) {
+        for (let i = 0; i < records.length; i++) {
           this.tenantOptions.push({
             key: records[i].tenantId,
             display_name: records[i].tenantId + ' ' + records[i].tenantName,
