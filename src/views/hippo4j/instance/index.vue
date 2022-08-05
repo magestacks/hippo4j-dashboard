@@ -447,6 +447,11 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="全部修改" prop="allUpdate">
+              <el-switch v-model="allUpdate"> </el-switch>
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row v-if="isRejectShow" :gutter="20">
           <el-col :span="12">
@@ -568,6 +573,7 @@ export default {
         itemId: '',
         tpId: '',
       },
+
       isStackShow: false, // 堆栈信息是否显示
       stackInfo: [], // 堆栈信息
       rowInfo: {}, // 行信息
@@ -630,6 +636,7 @@ export default {
         create: 'Create',
         info: 'Info',
       },
+      allUpdate: false,
       temp: {
         id: undefined,
         tenantId: '',
@@ -732,6 +739,7 @@ export default {
     // 打开弹框
     handleUpdate(row) {
       this.temp = Object.assign({}, row); // copy obj
+      this.allUpdate = false;
       this.dialogStatus = 'update';
       const rejectedType = this.temp.rejectedType;
       const rejectTypeList = [1, 2, 3, 4, 5, 6];
@@ -828,6 +836,9 @@ export default {
             }
           }
           const tempData = Object.assign({}, this.temp);
+          if (this.allUpdate != undefined && this.allUpdate != null && this.allUpdate) {
+            tempData.identify = '';
+          }
           instanceApi
             .updated(tempData)
             .then(() => {
@@ -838,6 +849,7 @@ export default {
                 type: 'success',
                 duration: 2000,
               });
+              setTimeout(2000);
               this.fetchData();
             })
             .catch(() => {});

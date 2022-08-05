@@ -395,7 +395,7 @@ export default {
         }
         const tempResp = response;
         const tempList = [];
-        for (let i = 0; i < tempResp && tempResp.length; i++) {
+        for (let i = 0; i < tempResp.length; i++) {
           const tempData = {};
           const tempResp0 = response[i];
           tempData.identify = tempResp0.identify;
