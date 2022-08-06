@@ -496,6 +496,8 @@ export default {
         itemId: '',
         rejectedType: null,
         customRejectedType: null,
+        coreSize: 4,
+        maxSize: 8,
       },
       visible: true,
     };
@@ -556,6 +558,16 @@ export default {
     },
     handleCreate() {
       this.resetTemp();
+      this.temp.coreSize = 4;
+      this.temp.maxSize = 8;
+      this.temp.queueType = 9;
+      this.temp.keepAliveTime = 9999;
+      this.temp.capacity = 4096;
+      this.temp.isAlarm = 1;
+      this.temp.allowCoreThreadTimeOut = 1;
+      this.temp.livenessAlarm = 80;
+      this.temp.capacityAlarm = 80;
+      this.temp.rejectedType = 2;
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
       this.isRejectShow = false;
