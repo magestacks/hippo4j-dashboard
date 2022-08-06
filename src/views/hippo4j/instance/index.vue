@@ -393,7 +393,7 @@
                 controls-position="right"
                 :min="0"
                 :max="2147483647"
-                :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
+                :disabled="temp.queueType === 9 ? false : true"
               />
             </el-form-item>
           </el-col>
