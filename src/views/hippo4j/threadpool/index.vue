@@ -423,6 +423,7 @@ export default {
         size: 10,
         tpId: '',
         itemId: '',
+        desc: true,
       },
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
