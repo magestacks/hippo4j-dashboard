@@ -18,7 +18,7 @@ export default {
     },
     height: {
       type: String,
-      default: '450px',
+      default: '300px',
     },
     autoResize: {
       type: Boolean,
@@ -75,10 +75,13 @@ export default {
           label: {
             position: 'top',
           },
+          color: item.color,
           emphasis: {
             focus: 'series',
           },
+          smooth: true,
           data: item.data,
+          showSymbol: false,
         };
       });
       this.chart.setOption({

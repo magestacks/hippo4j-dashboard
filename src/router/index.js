@@ -165,25 +165,11 @@ export const asyncRoutes = [
       },
     ],
   },
+
   {
-    path: '/hippo4j/container/threadPool',
+    path: '/hippo4j/dynamic/thread-pool',
     component: Layout,
-    redirect: '/hippo4j/container/threadPoolList',
-    name: 'server-thread-pool',
-    meta: { title: '容器线程池', icon: 'vessel3' },
-    children: [
-      {
-        path: 'index',
-        name: 'index',
-        component: () => import('@/views/hippo4j/server/index'),
-        meta: { title: '容器线程池' },
-      },
-    ],
-  },
-  {
-    path: '/hippo4j/jdk/threadPool',
-    component: Layout,
-    redirect: '/hippo4j/jdk/threadPoolList',
+    redirect: '/hippo4j/dynamic/thread-pool',
     name: 'thread-pool',
     meta: { title: '动态线程池', icon: 'pool3' },
     children: [
@@ -207,11 +193,37 @@ export const asyncRoutes = [
       },
     ],
   },
-
   {
-    path: '/hippo4j/other/threadPool',
+    path: '/hippo4j/server',
     component: Layout,
-    redirect: '/hippo4j/other/threadPoolList',
+    redirect: '/hippo4j/server',
+    name: 'server-thread-pool',
+    meta: { title: '容器线程池', icon: 'vessel3' },
+    children: [
+      {
+        path: 'tomcat',
+        name: 'tomcat',
+        component: () => import('@/views/hippo4j/server/tomcat/index'),
+        meta: { title: 'Tomcat' },
+      },
+      {
+        path: 'undertow',
+        name: 'undertow',
+        component: () => import('@/views/hippo4j/server/undertow/index'),
+        meta: { title: 'Undertow' },
+      },
+      {
+        path: 'jetty',
+        name: 'jetty',
+        component: () => import('@/views/hippo4j/server/jetty/index'),
+        meta: { title: 'Jetty' },
+      },
+    ],
+  },
+  {
+    path: '/hippo4j/other',
+    component: Layout,
+    redirect: '/hippo4j/other',
     name: 'other-thread-pool',
     meta: { title: '框架线程池', icon: 'other4' },
     children: [
@@ -254,7 +266,7 @@ export const asyncRoutes = [
     ],
   },
   {
-    path: '/notify',
+    path: '/hippo4j/notify',
     component: Layout,
     redirect: '/hippo4j/notifyList',
     name: 'notify',

@@ -849,8 +849,14 @@ export default {
                 type: 'success',
                 duration: 2000,
               });
-              setTimeout(2000);
-              this.fetchData();
+              this.listLoading = true;
+              setTimeout(() => {
+                const listArray = [this.listQuery.itemId, this.listQuery.tpId];
+                instanceApi.list(listArray).then((response) => {
+                  this.list = response;
+                });
+                this.listLoading = false;
+              }, 1500);
             })
             .catch(() => {});
         }

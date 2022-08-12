@@ -82,69 +82,66 @@
         重置
       </el-button>
     </div>
-    <el-empty v-if="!temp.isAlarm" description="暂无结果" />
+    <el-empty v-if="!temp.coreSize" description="暂无结果" />
     <el-row v-else :gutter="10">
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <el-descriptions direction="vertical" :column="1" border>
-            <el-descriptions-item label="实例 ID">{{ listQuery.identify }}</el-descriptions-item>
-            <el-descriptions-item label="是否报警">
-              {{ temp.isAlarm | alarmFilter }}
-            </el-descriptions-item>
-            <el-descriptions-item label="核心线程超时">
-              {{ temp.allowCoreThreadTimeOut | allowCoreThreadTimeOutFilter }}
-            </el-descriptions-item>
-            <el-descriptions-item label="核心线程">{{ temp.coreSize }}</el-descriptions-item>
-            <el-descriptions-item label="最大线程">{{ temp.maxSize }}</el-descriptions-item>
-            <el-descriptions-item label="队列类型">
-              {{ temp.queueType | queueFilter }}
-            </el-descriptions-item>
-            <el-descriptions-item label="队列容量">{{ temp.capacity }}</el-descriptions-item>
-            <el-descriptions-item label="拒绝策略">
-              {{ temp.rejectedType | rejectedFilter }}
-            </el-descriptions-item>
-            <el-descriptions-item label="已完成任务数">{{ lastTaskCount }}</el-descriptions-item>
-          </el-descriptions>
-        </el-card>
-      </el-col>
-      <el-col :span="18">
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <line-chart :chart-data="lineChartData1" :times="times" />
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <line-chart :chart-data="lineChartData2" :times="times" />
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10" style="margin-top: 16px">
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <line-chart :chart-data="lineChartData3" :times="times" />
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <line-chart :chart-data="lineChartData4" :times="times" />
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10" style="margin-top: 16px">
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <line-chart :chart-data="lineChartData5" :times="times" />
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <line-chart :chart-data="lineChartData6" :times="times" />
-            </el-card>
-          </el-col>
-        </el-row>
-      </el-col>
+      <el-card shadow="hover">
+        <el-descriptions :column="4" border>
+          <el-descriptions-item label="核心线程">{{ temp.coreSize }}</el-descriptions-item>
+          <el-descriptions-item label="最大线程">{{ temp.maxSize }}</el-descriptions-item>
+          <el-descriptions-item label="是否报警">
+            {{ temp.isAlarm | alarmFilter }}
+          </el-descriptions-item>
+          <el-descriptions-item label="已完成任务数">{{ lastTaskCount }}</el-descriptions-item>
+          <el-descriptions-item label="核心线程超时">
+            {{ temp.allowCoreThreadTimeOut | allowCoreThreadTimeOutFilter }}
+          </el-descriptions-item>
+
+          <el-descriptions-item label="队列类型">
+            {{ temp.queueType | queueFilter }}
+          </el-descriptions-item>
+          <el-descriptions-item label="队列容量">{{ temp.capacity }}</el-descriptions-item>
+          <el-descriptions-item label="拒绝策略">
+            {{ temp.rejectedType | rejectedFilter }}
+          </el-descriptions-item>
+          <el-descriptions-item label="实例 ID">{{ listQuery.identify }}</el-descriptions-item>
+        </el-descriptions>
+      </el-card>
+      <el-row :gutter="10" style="margin-top: 16px">
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData1" :times="times" />
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData2" :times="times" />
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10" style="margin-top: 16px">
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData3" :times="times" />
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData4" :times="times" />
+          </el-card>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10" style="margin-top: 16px">
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData5" :times="times" />
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData6" :times="times" />
+          </el-card>
+        </el-col>
+      </el-row>
     </el-row>
   </div>
 </template>
@@ -203,41 +200,46 @@ export default {
         {
           name: 'activeSizeList',
           data: [],
+          color: '#264653',
         },
       ],
       lineChartData2: [
         {
           name: 'poolSizeList',
           data: [],
+          color: '#e9c46a',
         },
       ],
       lineChartData3: [
         {
           name: 'queueSizeList',
           data: [],
+          color: '#e9c46a',
         },
       ],
       lineChartData4: [
         {
           name: 'queueRemainingCapacityList',
           data: [],
+          color: '#f4a261',
         },
       ],
       lineChartData5: [
         {
           name: 'completedTaskCountList',
           data: [],
+          color: '#e76f51',
         },
       ],
       lineChartData6: [
         {
           name: 'rejectCountList',
           data: [],
+          color: '#e63946',
         },
       ],
       times: [],
       size: 500,
-
       tenantOptions: [],
       threadPoolOptions: [],
       itemOptions: [],

@@ -115,6 +115,12 @@
           />
         </template>
       </el-table-column>
+      <el-table-column label="创建时间" width="200">
+        <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
+      </el-table-column>
+      <el-table-column label="修改时间" width="200">
+        <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
+      </el-table-column>
       <el-table-column
         label="操作"
         width="120"
@@ -219,9 +225,18 @@
               />
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="线程超时" prop="executeTimeOut">
+              <el-input-number
+                v-model="temp.executeTimeOut"
+                placeholder="线程超时（毫秒）"
+                controls-position="right"
+              />
+            </el-form-item>
+          </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="12"></el-col>
+          <el-col :span="12"> </el-col>
         </el-row>
 
         <el-row :gutter="20">
@@ -564,6 +579,7 @@ export default {
       this.temp.queueType = 9;
       this.temp.keepAliveTime = 9999;
       this.temp.capacity = 4096;
+      this.temp.executeTimeOut = 0;
       this.temp.isAlarm = 1;
       this.temp.allowCoreThreadTimeOut = 1;
       this.temp.livenessAlarm = 80;
