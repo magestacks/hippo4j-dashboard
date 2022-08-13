@@ -151,7 +151,7 @@
         :model="temp"
         label-width="80px"
       >
-        <el-form-item label="租户" prop="tenantId">
+        <el-form-item v-if="isEdit" label="租户" prop="tenantId">
           <el-select
             v-model="temp.tenantId"
             placeholder="请选择租户"
@@ -167,7 +167,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="项目" prop="itemId">
+        <el-form-item v-if="isEdit" label="项目" prop="itemId">
           <el-select
             v-model="temp.itemId"
             placeholder="请选择项目"
@@ -183,7 +183,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="线程池" prop="tpId">
+        <el-form-item v-if="isEdit" label="线程池" prop="tpId">
           <el-input
             v-model="temp.tpId"
             size="medium"
@@ -378,6 +378,7 @@ export default {
   data() {
     return {
       isRejectShow: false, // 是否显示spi拒绝策略
+      isEdit: false,
       list: null,
       listLoading: true,
       total: 0,
@@ -513,6 +514,7 @@ export default {
     },
     resetTemp() {
       this.isRejectShow = false;
+      this.isEdit = false;
       this.temp = {
         id: undefined,
         tenantId: '',
@@ -523,6 +525,7 @@ export default {
     },
     handleCreate() {
       this.resetTemp();
+      this.isEdit = true;
       this.temp.coreSize = 4;
       this.temp.maxSize = 8;
       this.temp.queueType = 9;
@@ -583,6 +586,7 @@ export default {
       }
       this.dialogStatus = 'update';
       this.dialogFormVisible = true;
+      this.isEdit = false;
 
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate();

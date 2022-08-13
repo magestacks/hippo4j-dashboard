@@ -292,44 +292,6 @@
         :model="temp"
         label-width="80px"
       >
-        <el-form-item label="租户" prop="tenantId">
-          <el-select
-            v-model="temp.tenantId"
-            placeholder="请选择租户"
-            style="display: block"
-            :disabled="dialogStatus === 'create' ? false : true"
-          >
-            <el-option
-              v-for="item in tenantOptions"
-              :key="item.key"
-              :label="item.display_name"
-              :value="item.key"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="项目" prop="itemId">
-          <el-select
-            v-model="temp.itemId"
-            placeholder="请选择项目"
-            style="display: block"
-            :disabled="dialogStatus === 'create' ? false : true"
-          >
-            <el-option
-              v-for="item in itemOptions"
-              :key="item.key"
-              :label="item.display_name"
-              :value="item.key"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="线程池" prop="tpId">
-          <el-input
-            v-model="temp.tpId"
-            size="medium"
-            placeholder="请输入线程池"
-            :disabled="dialogStatus === 'create' ? false : true"
-          />
-        </el-form-item>
         <el-form-item label="核心线程" prop="coreSize">
           <el-input-number
             v-model="temp.coreSize"
