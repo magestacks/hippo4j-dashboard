@@ -239,7 +239,7 @@
           <template>
             <el-input-number
               v-model="temp.keepAliveTime"
-              placeholder="Time / S"
+              placeholder="Time（秒）"
               controls-position="right"
               :min="1"
             ></el-input-number>

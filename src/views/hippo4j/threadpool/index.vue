@@ -143,232 +143,180 @@
       @pagination="fetchData"
     />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="950px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
+        style="width: 500px; margin-left: 50px"
         :rules="rules"
         :model="temp"
-        label-position="left"
-        label-width="100px"
+        label-width="80px"
       >
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="租户" prop="tenantId">
-              <el-select
-                v-model="temp.tenantId"
-                placeholder="请选择租户"
-                style="display: block"
-                :disabled="dialogStatus === 'create' ? false : true"
-                @change="tenantTempSelectList()"
-              >
-                <el-option
-                  v-for="item in tenantOptions"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="核心线程" prop="coreSize">
-              <el-input-number
-                v-model="temp.coreSize"
-                placeholder="核心线程"
-                controls-position="right"
-                :min="1"
-                :max="9999"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item label="租户" prop="tenantId">
+          <el-select
+            v-model="temp.tenantId"
+            placeholder="请选择租户"
+            style="display: block"
+            :disabled="dialogStatus === 'create' ? false : true"
+            @change="tenantTempSelectList()"
+          >
+            <el-option
+              v-for="item in tenantOptions"
+              :key="item.key"
+              :label="item.display_name"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="项目" prop="itemId">
+          <el-select
+            v-model="temp.itemId"
+            placeholder="请选择项目"
+            style="display: block"
+            :disabled="dialogStatus === 'create' ? false : true"
+          >
+            <el-option
+              v-for="item in itemTempOptions"
+              :key="item.key"
+              :label="item.display_name"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="项目" prop="itemId">
-              <el-select
-                v-model="temp.itemId"
-                placeholder="请选择项目"
-                style="display: block"
-                :disabled="dialogStatus === 'create' ? false : true"
-              >
-                <el-option
-                  v-for="item in itemTempOptions"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="最大线程" prop="maxSize">
-              <el-input-number
-                v-model="temp.maxSize"
-                placeholder="最大线程"
-                controls-position="right"
-                :min="1"
-                :max="9999"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item label="线程池" prop="tpId">
+          <el-input
+            v-model="temp.tpId"
+            size="medium"
+            placeholder="请输入线程池 "
+            :disabled="dialogStatus === 'create' ? false : true"
+          />
+        </el-form-item>
+        <el-form-item label="核心线程" prop="coreSize">
+          <el-input-number
+            v-model="temp.coreSize"
+            placeholder="核心线程"
+            controls-position="right"
+            :min="1"
+            :max="9999"
+          />
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maxSize">
+          <el-input-number
+            v-model="temp.maxSize"
+            placeholder="最大线程"
+            controls-position="right"
+            :min="1"
+            :max="9999"
+          />
+        </el-form-item>
+        <el-form-item label="线程超时" prop="executeTimeOut">
+          <el-input-number
+            v-model="temp.executeTimeOut"
+            placeholder="线程超时（毫秒）"
+            controls-position="right"
+          />
+        </el-form-item>
+        <el-form-item label="队列类型" prop="queueType">
+          <el-select
+            v-model="temp.queueType"
+            placeholder="队列类型"
+            style="display: block"
+            @change="selectQueueType"
+          >
+            <el-option
+              v-for="item in queueTypeOptions"
+              :key="item.key"
+              :label="item.display_name"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="队列容量" prop="capacity">
+          <el-input-number
+            v-model="temp.capacity"
+            placeholder="队列容量"
+            controls-position="right"
+            :min="0"
+            :max="2147483647"
+            :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
+          />
+        </el-form-item>
+        <el-form-item label="空闲回收" prop="keepAliveTime">
+          <el-input-number
+            v-model="temp.keepAliveTime"
+            placeholder="空闲回收（秒）"
+            controls-position="right"
+            :min="1"
+            :max="9999"
+          />
+        </el-form-item>
+        <el-form-item label="线程超时" prop="isAlarm">
+          <template>
+            <div>
+              <el-radio-group v-model="temp.allowCoreThreadTimeOut">
+                <el-radio-button :label="1">超时</el-radio-button>
+                <el-radio-button :label="0">不超时</el-radio-button>
+              </el-radio-group>
+            </div>
+          </template>
+        </el-form-item>
+        <el-form-item label="是否报警" prop="isAlarm">
+          <template>
+            <div>
+              <el-radio-group v-model="temp.isAlarm">
+                <el-radio-button :label="1">报警</el-radio-button>
+                <el-radio-button :label="0">不报警</el-radio-button>
+              </el-radio-group>
+            </div>
+          </template>
+        </el-form-item>
+        <el-form-item label="活跃报警" prop="livenessAlarm">
+          <template>
+            <div>
+              <el-radio-group v-model="temp.livenessAlarm">
+                <el-radio-button :label="40">40%</el-radio-button>
+                <el-radio-button :label="60">60%</el-radio-button>
+                <el-radio-button :label="80">80%</el-radio-button>
+                <el-radio-button :label="90">90%</el-radio-button>
+              </el-radio-group>
+            </div>
+          </template>
+        </el-form-item>
 
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="线程池" prop="tpId">
-              <el-input
-                v-model="temp.tpId"
-                size="medium"
-                placeholder="请输入线程池 "
-                :disabled="dialogStatus === 'create' ? false : true"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="线程超时" prop="executeTimeOut">
-              <el-input-number
-                v-model="temp.executeTimeOut"
-                placeholder="线程超时（毫秒）"
-                controls-position="right"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12"> </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="队列类型" prop="queueType">
-              <el-select
-                v-model="temp.queueType"
-                placeholder="队列类型"
-                style="display: block"
-                @change="selectQueueType"
-              >
-                <el-option
-                  v-for="item in queueTypeOptions"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="队列容量" prop="capacity">
-              <el-input-number
-                v-model="temp.capacity"
-                placeholder="队列容量"
-                controls-position="right"
-                :min="0"
-                :max="2147483647"
-                :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="线程超时" prop="isAlarm">
-              <template>
-                <div>
-                  <el-radio-group v-model="temp.allowCoreThreadTimeOut">
-                    <el-radio-button :label="1">超时</el-radio-button>
-                    <el-radio-button :label="0">不超时</el-radio-button>
-                  </el-radio-group>
-                </div>
-              </template>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="12">
-            <el-form-item label="空闲回收" prop="keepAliveTime">
-              <el-input-number
-                v-model="temp.keepAliveTime"
-                placeholder="空闲回收 / S"
-                controls-position="right"
-                :min="1"
-                :max="9999"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="是否报警" prop="isAlarm">
-              <template>
-                <div>
-                  <el-radio-group v-model="temp.isAlarm">
-                    <el-radio-button :label="1">报警</el-radio-button>
-                    <el-radio-button :label="0">不报警</el-radio-button>
-                  </el-radio-group>
-                </div>
-              </template>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="活跃度报警" prop="livenessAlarm">
-              <template>
-                <div>
-                  <el-radio-group v-model="temp.livenessAlarm">
-                    <el-radio-button :label="40">40%</el-radio-button>
-                    <el-radio-button :label="60">60%</el-radio-button>
-                    <el-radio-button :label="80">80%</el-radio-button>
-                  </el-radio-group>
-                </div>
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="拒绝策略" prop="rejectedType">
-              <el-select
-                v-model="temp.rejectedType"
-                style="display: block"
-                placeholder="拒绝策略"
-                @change="selectRejectedType"
-              >
-                <el-option
-                  v-for="item in rejectedOptions"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="容量报警" prop="capacityAlarm">
-              <template>
-                <div>
-                  <el-radio-group v-model="temp.capacityAlarm">
-                    <el-radio-button :label="40">40%</el-radio-button>
-                    <el-radio-button :label="60">60%</el-radio-button>
-                    <el-radio-button :label="80">80%</el-radio-button>
-                  </el-radio-group>
-                </div>
-              </template>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
-        <el-row v-if="isRejectShow" :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="SPI 拒绝策略" prop="customRejectedType">
-              <el-input
-                v-model="temp.customRejectedType"
-                placeholder="请输入自定义 SPI 拒绝策略标识"
-                @input="onInput()"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-form-item label="容量报警" prop="capacityAlarm">
+          <template>
+            <div>
+              <el-radio-group v-model="temp.capacityAlarm">
+                <el-radio-button :label="40">40%</el-radio-button>
+                <el-radio-button :label="60">60%</el-radio-button>
+                <el-radio-button :label="80">80%</el-radio-button>
+                <el-radio-button :label="90">90%</el-radio-button>
+              </el-radio-group>
+            </div>
+          </template>
+        </el-form-item>
+        <el-form-item label="拒绝策略" prop="rejectedType">
+          <el-select
+            v-model="temp.rejectedType"
+            style="display: block"
+            placeholder="拒绝策略"
+            @change="selectRejectedType"
+          >
+            <el-option
+              v-for="item in rejectedOptions"
+              :key="item.key"
+              :label="item.display_name"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="isRejectShow" label="自定义拒绝策略" prop="customRejectedType">
+          <el-input
+            v-model="temp.customRejectedType"
+            placeholder="请输入自定义 SPI 拒绝策略标识"
+            @input="onInput()"
+          />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false"> 取消 </el-button>
@@ -505,6 +453,7 @@ export default {
         livenessAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
         rejectedType: [{ required: true, message: 'this is required', trigger: 'blur' }],
         capacity: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        executeTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
       },
       temp: {
         id: undefined,

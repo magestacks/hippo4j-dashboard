@@ -235,16 +235,6 @@
             ></el-input-number>
           </template>
         </el-form-item>
-        <el-form-item label="空闲回收时间" prop="keepAliveTime">
-          <template>
-            <el-input-number
-              v-model="temp.keepAliveTime"
-              placeholder="Time / S"
-              controls-position="right"
-              :min="1"
-            ></el-input-number>
-          </template>
-        </el-form-item>
         <el-form-item label="全部修改" prop="allUpdate">
           <el-switch v-model="temp.allUpdate"></el-switch>
         </el-form-item>
