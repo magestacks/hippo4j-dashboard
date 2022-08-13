@@ -171,7 +171,7 @@
         :model="temp"
         label-width="80px"
       >
-        <el-form-item label="租户" prop="tenantId">
+        <el-form-item v-if="isEdit" label="租户" prop="tenantId">
           <el-select
             v-model="temp.tenantId"
             placeholder="请选择租户"
@@ -187,7 +187,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="项目" prop="itemId">
+        <el-form-item v-if="isEdit" label="项目" prop="itemId">
           <el-select
             v-model="temp.itemId"
             placeholder="请选择项目"
@@ -203,7 +203,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="线程池" prop="tpId">
+        <el-form-item v-if="isEdit" label="线程池" prop="tpId">
           <el-select
             v-model="temp.tpId"
             placeholder="线程池"
@@ -362,6 +362,7 @@ export default {
         tpId: '',
         itemId: '',
       },
+      isEdit: false,
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
       pluginData: [],
@@ -469,9 +470,11 @@ export default {
         configType: false,
         alarmType: false,
       };
+      this.isEdit = false;
     },
     handleCreate() {
       this.resetTemp();
+      this.isEdit = true;
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
       this.$nextTick(() => {
@@ -506,6 +509,7 @@ export default {
       }
       this.dialogStatus = 'update';
       this.dialogFormVisible = true;
+      this.isEdit = false;
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate();
         this.selectType(this.temp.configType, this.temp.alarmType);
