@@ -72,7 +72,6 @@
       border
       element-loading-text="Loading"
       fit
-      stripe
       highlight-current-row
     >
       <el-table-column fixed label="序号" width="95">
@@ -123,8 +122,9 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="120"
         fixed="right"
+        width="90"
+        align="center"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">

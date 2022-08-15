@@ -6,7 +6,7 @@
 }
 
 .el-upload {
-  input[type="file"] {
+  input[type='file'] {
     display: none !important;
   }
 }
@@ -69,11 +69,23 @@
 // dropdown
 .el-dropdown-menu {
   a {
-    display: block
+    display: block;
   }
 }
 
 // fix date-picker ui bug in filter-item
 .el-range-editor.el-input__inner {
   display: inline-flex !important;
+}
+
+.el-table .el-table__header-wrapper th {
+  word-break: break-word;
+  background-color: #f8f8f9;
+  color: #515a6e;
+  height: 40px;
+  font-size: 13px;
+}
+
+.el-table--border th.el-table__cell {
+  background-color: #f8f8f9;
 }

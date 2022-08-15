@@ -70,7 +70,6 @@
       element-loading-text="Loading"
       fit
       border
-      stripe
       highlight-current-row
     >
       <el-table-column label="序号" fixed width="95">
@@ -122,24 +121,11 @@
       <el-table-column label="修改时间" width="180">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
-      <!--      <el-table-column label="是否启用" width="160">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.enable"
-                  active-color="#00A854"
-                  active-text="启用"
-                  :active-value="1"
-                  inactive-color="#F04134"
-                  inactive-text="停用"
-                  :inactive-value="0"
-                  @change="changeEnable(scope.row)"
-                />
-              </template>
-            </el-table-column>-->
       <el-table-column
         label="操作"
         fixed="right"
-        width="180"
+        width="90"
+        align="center"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">

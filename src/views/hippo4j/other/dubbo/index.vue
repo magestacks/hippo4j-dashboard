@@ -70,7 +70,6 @@
       :data="list"
       border
       element-loading-text="Loading"
-      stripe
       fit
       max-height="714"
       highlight-current-row

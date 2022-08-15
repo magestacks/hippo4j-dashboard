@@ -31,7 +31,6 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      stripe
       border
       highlight-current-row
       element-loading-text="Loading"
@@ -48,7 +47,7 @@
       <el-table-column label="租户简介" width="400">
         <template slot-scope="scope">{{ scope.row.tenantDesc }}</template>
       </el-table-column>
-      <el-table-column label="OWNER">
+      <el-table-column label="OWNER" width="150">
         <template slot-scope="scope">{{ scope.row.owner }} </template>
       </el-table-column>
       <el-table-column label="创建时间" width="200">
@@ -59,7 +58,8 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="100"
+        width="90"
+        align="center"
         fixed="right"
         class-name="small-padding fixed-width"
       >

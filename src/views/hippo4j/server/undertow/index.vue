@@ -45,13 +45,12 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      stripe
       border
       fit
       max-height="714"
       highlight-current-row
     >
-      <el-table-column label="序号" width="95">
+      <el-table-column label="序号" fixed width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="实例标识" width="260">
@@ -76,13 +75,13 @@
           <el-link type="danger" :underline="false">{{ scope.row.maximumSize }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="队列类型" width="160">
+      <el-table-column label="队列类型" width="260">
         <template slot-scope="scope">{{ scope.row.queueType }}</template>
       </el-table-column>
       <el-table-column label="队列容量" width="160">
         <template slot-scope="scope">{{ scope.row.queueCapacity }}</template>
       </el-table-column>
-      <el-table-column label="拒绝策略" width="160">
+      <el-table-column label="拒绝策略" width="260">
         <template slot-scope="scope">{{ scope.row.rejectedName }}</template>
       </el-table-column>
       <el-table-column label="空闲回收" width="100">
@@ -90,21 +89,13 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="120"
+        width="90"
+        align="center"
         fixed="right"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <!--<el-dropdown trigger="click">
-            <span class="el-dropdown-link">
-              操作<i class="el-icon-arrow-down el-icon&#45;&#45;right"/>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click.native="handleInfo(row)">查看</el-dropdown-item>
-              <el-dropdown-item @click.native="handleUpdate(row)">编辑</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>-->
-          <!-- <el-button type="text" size="small" @click="handleInfo(row)"> 查看 </el-button> -->
+          <el-button type="text" size="small" @click="handleInfo(row)"> 查看 </el-button>
           <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>

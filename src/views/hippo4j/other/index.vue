@@ -83,7 +83,6 @@
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
-      stripe
       fit
       border
       max-height="714"

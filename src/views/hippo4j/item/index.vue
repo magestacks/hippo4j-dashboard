@@ -30,7 +30,6 @@
     </div>
     <el-table
       v-loading="listLoading"
-      stripe
       border
       :data="list"
       style="width: 100%"
@@ -43,10 +42,10 @@
       <el-table-column label="租户" width="200">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="项目" width="300">
+      <el-table-column label="项目" width="200">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="项目名称" width="300">
+      <el-table-column label="项目名称" width="210">
         <template slot-scope="scope">{{ scope.row.itemName }}</template>
       </el-table-column>
       <el-table-column label="项目简介" width="400">
@@ -64,7 +63,8 @@
       <el-table-column
         label="操作"
         fixed="right"
-        width="120"
+        width="90"
+        align="center"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">

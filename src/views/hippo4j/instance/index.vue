@@ -75,7 +75,6 @@
       element-loading-text="Loading"
       fit
       max-height="714"
-      stripe
       highlight-current-row
     >
       <el-table-column label="序号" fixed width="95">
@@ -128,6 +127,7 @@
         label="操作"
         fixed="right"
         width="120"
+        align="center"
         class-name="small-padding fixed-width"
       >
         <!--<template slot-scope="{ row }">
