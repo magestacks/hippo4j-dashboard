@@ -80,7 +80,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/admin/index'),
         name: 'Dashboard',
-        meta: { title: '运行报表', icon: 'dashboard2', affix: true },
+        meta: { title: '首页', icon: 'dashboard2', affix: true },
       },
     ],
   },
@@ -139,12 +139,11 @@ export const asyncRoutes = [
     path: '/hippo4j/tenant',
     component: Layout,
     redirect: '/hippo4j/tenantList',
-    name: 'tenant',
-    meta: { title: '租户管理', icon: 'lessee' },
+    meta: { icon: 'lessee' },
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'tenant',
         component: () => import('@/views/hippo4j/tenant/index'),
         meta: { title: '租户管理', icon: 'lessee' },
       },
@@ -155,7 +154,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/itemList',
     name: 'item',
-    meta: { title: '项目管理', icon: 'item4' },
+    meta: { icon: 'item4' },
     children: [
       {
         path: 'index',
@@ -276,7 +275,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/notifyList',
     name: 'notify',
-    meta: { title: '通知报警', icon: 'notify' },
+    meta: { icon: 'notify' },
     children: [
       {
         path: 'index',
@@ -291,7 +290,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/userList',
     name: 'user',
-    meta: { title: '用户权限', icon: 'user6', roles: ['ROLE_ADMIN'] },
+    meta: { icon: 'user6', roles: ['ROLE_ADMIN'] },
     children: [
       {
         path: 'index',
@@ -306,7 +305,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/logList',
     name: 'log',
-    meta: { title: '日志管理', icon: 'log3' },
+    meta: { icon: 'log3' },
     children: [
       {
         path: 'index',
