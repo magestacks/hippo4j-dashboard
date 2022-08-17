@@ -7,7 +7,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Tenant
+            租户
           </div>
           <count-to :start-val="0" :end-val="successCount" :duration="2600" class="card-panel-num" />
         </div>
@@ -20,7 +20,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Item
+            项目
           </div>
           <count-to :start-val="0" :end-val="failCount" :duration="3000" class="card-panel-num" />
         </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Thread Pool
+            线程池
           </div>
           <count-to :start-val="0" :end-val="runningCount" :duration="3200" class="card-panel-num" />
         </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Pool Instance
+            线程池实例
           </div>
           <count-to :start-val="0" :end-val="runningCountInstance" :duration="3200" class="card-panel-num" />
         </div>
