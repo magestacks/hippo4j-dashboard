@@ -83,11 +83,10 @@
       </el-button>
     </div>
     <el-empty v-if="!temp.coreSize" description="暂无结果" />
-    <el-row v-else :gutter="10">
+    <section v-else>
       <el-card shadow="hover">
-        <el-descriptions :column="4" border>
-          <el-descriptions-item label="核心线程">{{ temp.coreSize }}</el-descriptions-item>
-          <el-descriptions-item label="最大线程">{{ temp.maxSize }}</el-descriptions-item>
+        <el-descriptions :column="3" border>
+          <el-descriptions-item label="实例 ID">{{ listQuery.identify }}</el-descriptions-item>
           <el-descriptions-item label="是否报警">
             {{ temp.isAlarm | alarmFilter }}
           </el-descriptions-item>
@@ -95,7 +94,8 @@
           <el-descriptions-item label="核心线程超时">
             {{ temp.allowCoreThreadTimeOut | allowCoreThreadTimeOutFilter }}
           </el-descriptions-item>
-
+          <el-descriptions-item label="核心线程">{{ temp.coreSize }}</el-descriptions-item>
+          <el-descriptions-item label="最大线程">{{ temp.maxSize }}</el-descriptions-item>
           <el-descriptions-item label="队列类型">
             {{ temp.queueType | queueFilter }}
           </el-descriptions-item>
@@ -103,46 +103,44 @@
           <el-descriptions-item label="拒绝策略">
             {{ temp.rejectedType | rejectedFilter }}
           </el-descriptions-item>
-          <el-descriptions-item label="实例 ID">{{ listQuery.identify }}</el-descriptions-item>
         </el-descriptions>
       </el-card>
+
       <el-row :gutter="10" style="margin-top: 16px">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData1" :times="times" />
           </el-card>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData2" :times="times" />
           </el-card>
         </el-col>
-      </el-row>
-      <el-row :gutter="10" style="margin-top: 16px">
-        <el-col :span="12">
-          <el-card shadow="hover">
-            <line-chart :chart-data="lineChartData3" :times="times" />
-          </el-card>
-        </el-col>
-        <el-col :span="12">
-          <el-card shadow="hover">
-            <line-chart :chart-data="lineChartData4" :times="times" />
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10" style="margin-top: 16px">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData5" :times="times" />
           </el-card>
         </el-col>
-        <el-col :span="12">
+      </el-row>
+      <el-row :gutter="10" style="margin-top: 16px">
+        <el-col :span="8">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData3" :times="times" />
+          </el-card>
+        </el-col>
+        <el-col :span="8">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData4" :times="times" />
+          </el-card>
+        </el-col>
+        <el-col :span="8">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData6" :times="times" />
           </el-card>
         </el-col>
       </el-row>
-    </el-row>
+    </section>
   </div>
 </template>
 
