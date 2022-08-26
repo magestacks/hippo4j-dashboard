@@ -264,6 +264,12 @@ export const asyncRoutes = [
         meta: { title: 'AlibabaDubbo' },
       },
       {
+        path: 'rabbitmqstream',
+        name: 'rabbitmqstream',
+        component: () => import('@/views/hippo4j/other/rabbitmqstream/index'),
+        meta: { title: 'RabbitMQStream' },
+      },
+      {
         path: 'rocketmqstream',
         name: 'rocketmqstream',
         component: () => import('@/views/hippo4j/other/rocketmqstream/index'),
