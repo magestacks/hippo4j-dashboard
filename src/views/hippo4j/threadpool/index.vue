@@ -250,7 +250,7 @@
             :max="9999"
           />
         </el-form-item>
-        <el-form-item label="线程超时" prop="isAlarm">
+        <el-form-item label="是否超时" prop="allowCoreThreadTimeOut">
           <template>
             <div>
               <el-radio-group v-model="temp.allowCoreThreadTimeOut">
@@ -264,8 +264,8 @@
           <template>
             <div>
               <el-radio-group v-model="temp.isAlarm">
-                <el-radio-button :label="1">报警</el-radio-button>
-                <el-radio-button :label="0">不报警</el-radio-button>
+                <el-radio-button label="1">报警</el-radio-button>
+                <el-radio-button label="0">不报警</el-radio-button>
               </el-radio-group>
             </div>
           </template>
@@ -274,10 +274,10 @@
           <template>
             <div>
               <el-radio-group v-model="temp.livenessAlarm">
-                <el-radio-button :label="40">40%</el-radio-button>
-                <el-radio-button :label="60">60%</el-radio-button>
-                <el-radio-button :label="80">80%</el-radio-button>
-                <el-radio-button :label="90">90%</el-radio-button>
+                <el-radio-button label="40">40%</el-radio-button>
+                <el-radio-button label="60">60%</el-radio-button>
+                <el-radio-button label="80">80%</el-radio-button>
+                <el-radio-button label="90">90%</el-radio-button>
               </el-radio-group>
             </div>
           </template>
@@ -287,10 +287,10 @@
           <template>
             <div>
               <el-radio-group v-model="temp.capacityAlarm">
-                <el-radio-button :label="40">40%</el-radio-button>
-                <el-radio-button :label="60">60%</el-radio-button>
-                <el-radio-button :label="80">80%</el-radio-button>
-                <el-radio-button :label="90">90%</el-radio-button>
+                <el-radio-button label="40">40%</el-radio-button>
+                <el-radio-button label="60">60%</el-radio-button>
+                <el-radio-button label="80">80%</el-radio-button>
+                <el-radio-button label="90">90%</el-radio-button>
               </el-radio-group>
             </div>
           </template>
@@ -521,6 +521,10 @@ export default {
         itemId: '',
         rejectedType: null,
         customRejectedType: null,
+        isAlarm: '',
+        allowCoreThreadTimeOut: '',
+        livenessAlarm: '',
+        capacityAlarm: '',
       };
     },
     handleCreate() {
@@ -532,10 +536,10 @@ export default {
       this.temp.keepAliveTime = 9999;
       this.temp.capacity = 4096;
       this.temp.executeTimeOut = 0;
-      this.temp.isAlarm = 1;
-      this.temp.allowCoreThreadTimeOut = 1;
-      this.temp.livenessAlarm = 80;
-      this.temp.capacityAlarm = 80;
+      this.temp.isAlarm = '1';
+      this.temp.allowCoreThreadTimeOut = '1';
+      this.temp.livenessAlarm = '80';
+      this.temp.capacityAlarm = '80';
       this.temp.rejectedType = 2;
       this.dialogStatus = 'create';
       this.dialogFormVisible = true;
