@@ -74,7 +74,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column fixed label="序号" width="95">
+      <el-table-column fixed label="序号" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="租户" width="150">
@@ -101,6 +101,9 @@
       </el-table-column>
       <el-table-column label="队列容量" width="100">
         <template slot-scope="scope">{{ scope.row.capacity }}</template>
+      </el-table-column>
+      <el-table-column label="拒绝策略" width="200">
+        <template slot-scope="scope">{{ scope.row.rejectedType | rejectedTypeFilter }}</template>
       </el-table-column>
       <el-table-column label="是否报警" width="100">
         <template slot-scope="scope">
@@ -374,6 +377,23 @@ export default {
         return 'ResizableLinkedBlockingQueue';
       }
     },
+    rejectedTypeFilter(type) {
+      if ('1' == type) {
+        return 'CallerRunsPolicy';
+      } else if ('2' == type) {
+        return 'AbortPolicy';
+      } else if ('3' == type) {
+        return 'DiscardPolicy';
+      } else if ('4' == type) {
+        return 'DiscardOldestPolicy';
+      } else if ('5' == type) {
+        return 'RunsOldestTaskPolicy';
+      } else if ('6' == type) {
+        return 'SyncPutQueuePolicy';
+      } else {
+        return 'CustomRejectedPolicy_' + type;
+      }
+    },
   },
   data() {
     return {
@@ -437,14 +457,16 @@ export default {
         coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
         maxSize: [
           { required: true, message: 'this is required', trigger: 'blur' },
-          {
-            validator: (rule, value, callback) => {
-              if (parseInt(value) < parseInt(this.temp.coreSize)) {
-                callback('最大线程必须大于等于核心线程');
-              }
-              callback();
-            },
-          },
+          // {
+          //   validator: (rule, value, callback) => {
+          //     if (parseInt(value) < parseInt(this.temp.coreSize)) {
+          //       console.log(value);
+          //       console.log(this.temp.coreSize);
+          //       callback('最大线程必须大于等于核心线程');
+          //     }
+          //     callback();
+          //   },
+          // },
         ],
         queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
         allowCoreThreadTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
@@ -550,6 +572,13 @@ export default {
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
+        if (parseInt(this.temp.maxSize) < parseInt(this.temp.coreSize)) {
+          this.$message({
+            message: '最大线程必须大于等于核心线程',
+            type: 'warning',
+          });
+          return;
+        }
         if (valid) {
           if (this.isRejectShow) {
             if (this.temp.customRejectedType == null) {
@@ -599,6 +628,13 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (parseInt(this.temp.maxSize) < parseInt(this.temp.coreSize)) {
+            this.$message({
+              message: '最大线程必须大于等于核心线程',
+              type: 'warning',
+            });
+            return;
+          }
           let rejectedType = this.temp.rejectedType;
           if (
             rejectedType != 1 &&

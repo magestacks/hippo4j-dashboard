@@ -261,17 +261,7 @@ export default {
       },
       rules: {
         coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        maximumSize: [
-          { required: true, message: 'this is required', trigger: 'blur' },
-          {
-            validator: (rule, value, callback) => {
-              if (parseInt(value) < parseInt(this.temp.coreSize)) {
-                callback('最大线程必须大于等于核心线程');
-              }
-              callback();
-            },
-          },
-        ],
+        maximumSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
       },
       temp: {
         id: undefined,
@@ -342,6 +332,13 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (parseInt(this.temp.maximumSize) < parseInt(this.temp.coreSize)) {
+            this.$message({
+              message: '最大线程必须大于等于核心线程',
+              type: 'warning',
+            });
+            return;
+          }
           const clientAddressList = [];
           const tempData = {
             mark: this.listQuery.mark,

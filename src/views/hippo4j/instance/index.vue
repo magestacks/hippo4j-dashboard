@@ -475,7 +475,7 @@ export default {
       } else if ('6' == type) {
         return 'SyncPutQueuePolicy';
       } else {
-        return 'CustomRejectedPolicy' + ' - ' + type;
+        return 'CustomRejectedPolicy_' + type;
       }
     },
   },
@@ -745,6 +745,13 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          if (parseInt(this.temp.maxSize) < parseInt(this.temp.coreSize)) {
+            this.$message({
+              message: '最大线程必须大于等于核心线程',
+              type: 'warning',
+            });
+            return;
+          }
           let rejectedType = this.temp.rejectedType;
           const rejectTypeList = [1, 2, 3, 4, 5, 6];
           if (!rejectTypeList.includes(rejectedType)) {

@@ -234,12 +234,6 @@ export const asyncRoutes = [
         meta: { title: 'Dubbo' },
       },
       {
-        path: 'kafka',
-        name: 'kafka',
-        component: () => import('@/views/hippo4j/other/kafka/index'),
-        meta: { title: 'Kafka' },
-      },
-      {
         path: 'hystrix',
         name: 'hystrix',
         component: () => import('@/views/hippo4j/other/hystrix/index'),
