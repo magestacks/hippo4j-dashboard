@@ -212,13 +212,6 @@
             :max="9999"
           />
         </el-form-item>
-        <el-form-item label="线程超时" prop="executeTimeOut">
-          <el-input-number
-            v-model="temp.executeTimeOut"
-            placeholder="线程超时（毫秒）"
-            controls-position="right"
-          />
-        </el-form-item>
         <el-form-item label="队列类型" prop="queueType">
           <el-select
             v-model="temp.queueType"
@@ -242,6 +235,13 @@
             :min="0"
             :max="2147483647"
             :disabled="temp.queueType === 4 || temp.queueType === 5 ? true : false"
+          />
+        </el-form-item>
+        <el-form-item label="执行超时" prop="executeTimeOut">
+          <el-input-number
+            v-model="temp.executeTimeOut"
+            placeholder="执行超时（毫秒）"
+            controls-position="right"
           />
         </el-form-item>
         <el-form-item label="空闲回收" prop="keepAliveTime">

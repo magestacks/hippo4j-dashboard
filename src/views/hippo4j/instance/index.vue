@@ -112,6 +112,11 @@
       <el-table-column label="拒绝策略" width="260">
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedFilter }}</template>
       </el-table-column>
+      <el-table-column label="执行超时" width="100">
+        <template slot-scope="scope">
+          {{ scope.row.executeTimeOut }}
+        </template>
+      </el-table-column>
       <el-table-column label="空闲回收" width="100">
         <template slot-scope="scope">
           {{ scope.row.keepAliveTime }}
@@ -347,6 +352,15 @@
             </div>
           </template>
         </el-form-item>
+        <el-form-item label="执行超时" prop="executeTimeOut">
+          <el-input-number
+            v-model="temp.executeTimeOut"
+            placeholder="执行超时（毫秒）"
+            controls-position="right"
+            :min="0"
+            :max="999999"
+          />
+        </el-form-item>
         <el-form-item label="空闲回收" prop="keepAliveTime">
           <el-input-number
             v-model="temp.keepAliveTime"
@@ -540,6 +554,7 @@ export default {
         coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
         maxSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
         queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        executeTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
         keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
         isAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
         capacity: [{ required: true, message: 'this is required', trigger: 'blur' }],
