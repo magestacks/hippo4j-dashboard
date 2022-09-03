@@ -367,7 +367,7 @@
             placeholder="空闲回收（秒）"
             controls-position="right"
             :min="1"
-            :max="9999"
+            :max="999999"
           />
         </el-form-item>
         <el-form-item label="拒绝策略" prop="rejectedType">

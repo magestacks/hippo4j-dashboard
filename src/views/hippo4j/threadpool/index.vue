@@ -250,7 +250,7 @@
             placeholder="空闲回收（秒）"
             controls-position="right"
             :min="1"
-            :max="9999"
+            :max="999999"
           />
         </el-form-item>
         <el-form-item label="是否超时" prop="allowCoreThreadTimeOut">
@@ -277,7 +277,7 @@
           <template>
             <div>
               <el-radio-group v-model="temp.livenessAlarm">
-                <el-radio-button label="40">40%</el-radio-button>
+                <el-radio-button label="0">不报警</el-radio-button>
                 <el-radio-button label="60">60%</el-radio-button>
                 <el-radio-button label="80">80%</el-radio-button>
                 <el-radio-button label="90">90%</el-radio-button>
@@ -290,7 +290,7 @@
           <template>
             <div>
               <el-radio-group v-model="temp.capacityAlarm">
-                <el-radio-button label="40">40%</el-radio-button>
+                <el-radio-button label="0">不报警</el-radio-button>
                 <el-radio-button label="60">60%</el-radio-button>
                 <el-radio-button label="80">80%</el-radio-button>
                 <el-radio-button label="90">90%</el-radio-button>
