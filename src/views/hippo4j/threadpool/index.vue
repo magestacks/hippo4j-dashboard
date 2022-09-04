@@ -105,6 +105,11 @@
       <el-table-column label="拒绝策略" width="200">
         <template slot-scope="scope">{{ scope.row.rejectedType | rejectedTypeFilter }}</template>
       </el-table-column>
+      <el-table-column label="执行超时" width="100">
+        <template slot-scope="scope">{{
+          scope.row.executeTimeOut | defaultExecuteTimeoutValue
+        }}</template>
+      </el-table-column>
       <el-table-column label="是否报警" width="100">
         <template slot-scope="scope">
           <el-switch
@@ -359,6 +364,12 @@ export default {
         deleted: 'danger',
       };
       return statusMap[status];
+    },
+    defaultExecuteTimeoutValue(value) {
+      if (value == undefined || value == null) {
+        return 0;
+      }
+      return value;
     },
     queueFilter(type) {
       if ('1' == type) {

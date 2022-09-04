@@ -35,32 +35,31 @@
       highlight-current-row
       element-loading-text="Loading"
     >
-      <el-table-column fixed label="序号" width="95">
+      <el-table-column label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户" width="200">
+      <el-table-column label="租户">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
-      <el-table-column label="租户名称" width="210">
+      <el-table-column label="租户名称">
         <template slot-scope="scope">{{ scope.row.tenantName }}</template>
       </el-table-column>
-      <el-table-column label="租户简介" width="400">
-        <template slot-scope="scope">{{ scope.row.tenantDesc }}</template>
+      <el-table-column label="租户简介">
+        <template slot-scope="scope">{{ scope.row.tenantDesc | ellipsis }}</template>
       </el-table-column>
-      <el-table-column label="OWNER" width="150">
+      <el-table-column label="负责人">
         <template slot-scope="scope">{{ scope.row.owner }} </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="200">
+      <!-- <el-table-column label="创建时间">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
-      </el-table-column>
-      <el-table-column label="修改时间" width="200">
+      </el-table-column> -->
+      <el-table-column label="修改时间">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
       <el-table-column
         label="操作"
         width="90"
         align="center"
-        fixed="right"
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
@@ -100,15 +99,15 @@
         <el-form-item label="租户名称" prop="tenantName">
           <el-input v-model="temp.tenantName" placeholder="租户名称" style="width: 40%" />
         </el-form-item>
-        <el-form-item label="OWNER" prop="owner">
-          <el-input v-model="temp.owner" placeholder="OWNER" style="width: 40%" />
+        <el-form-item label="负责人" prop="owner">
+          <el-input v-model="temp.owner" placeholder="负责人" style="width: 40%" />
         </el-form-item>
-        <el-form-item label="租户描述" prop="tenantDesc">
+        <el-form-item label="租户简介" prop="tenantDesc">
           <el-input
             v-model="temp.tenantDesc"
             :autosize="{ minRows: 3, maxRows: 6 }"
             type="textarea"
-            placeholder="租户描述"
+            placeholder="租户简介"
             style="width: 40%"
           />
         </el-form-item>
