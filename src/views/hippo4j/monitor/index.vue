@@ -198,7 +198,7 @@ export default {
         {
           name: 'activeSizeList',
           data: [],
-          color: '#264653',
+          color: '#e76f51',
         },
       ],
       lineChartData2: [
@@ -226,7 +226,7 @@ export default {
         {
           name: 'completedTaskCountList',
           data: [],
-          color: '#e76f51',
+          color: '#264653',
         },
       ],
       lineChartData6: [

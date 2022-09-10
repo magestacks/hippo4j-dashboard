@@ -60,12 +60,7 @@
       <el-table-column label="修改时间">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        width="90"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" width="90" class-name="small-padding fixed-width">
         <template slot-scope="{ row }">
           <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
             编辑

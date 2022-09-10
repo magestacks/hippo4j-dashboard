@@ -265,7 +265,7 @@
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label"> 拒绝次数 </template>
-            {{ runTimeTemp.rejectCount }}
+            <el-link type="danger" :underline="false">{{ runTimeTemp.rejectCount }}</el-link>
           </el-descriptions-item>
           <el-descriptions-item>
             <template slot="label"> 最后更新时间 </template>
