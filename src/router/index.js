@@ -291,7 +291,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/hippo4j/verifyList',
     name: 'config-modification-verify',
-    meta: { title: '线程池变更审核', icon: 'notify' },
+    meta: { title: '线程池变更审核', icon: 'notify',roles: ['ROLE_ADMIN'] },
     children: [
       {
         path: 'index',

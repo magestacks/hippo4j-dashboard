@@ -96,7 +96,7 @@
       >
         <template slot-scope="{ row }">
           <el-button type="text" size="small" @click="handleInfo(row)"> 查看 </el-button>
-          <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
+          <el-button type="text" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
         </template>

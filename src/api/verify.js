@@ -16,4 +16,12 @@ export function verify(data) {
   })
 }
 
+export function applicationDetail(data){
+  return request({
+    url: '/hippo4j/v1/cs/configs/verify/query/application/detail',
+    method: 'get',
+    data
+  })  
+}
+
 
