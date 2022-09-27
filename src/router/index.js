@@ -287,6 +287,21 @@ export const asyncRoutes = [
     ],
   },
   {
+    path: '/hippo4j/verify',
+    component: Layout,
+    redirect: '/hippo4j/verifyList',
+    name: 'config-modification-verify',
+    meta: { title: '线程池变更审核', icon: 'notify' },
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/hippo4j/verify/index'),
+        meta: { title: '线程池变更审核', icon: 'notify' },
+      },
+    ],
+  },
+  {
     path: '/hippo4j/user',
     component: Layout,
     redirect: '/hippo4j/userList',

@@ -31,21 +31,6 @@
           :value="item.key"
         />
       </el-select>
-      <el-select
-        v-model="listQuery.tpId"
-        placeholder="线程池"
-        style="width: 220px"
-        filterable
-        class="filter-item"
-      >
-        <el-option
-          v-for="item in threadPoolOptions"
-          :key="item.key"
-          :label="item.display_name"
-          :value="item.key"
-        />
-      </el-select>
-
       <el-button
         v-waves
         class="filter-item"
@@ -53,17 +38,7 @@
         icon="el-icon-search"
         @click="fetchData"
       >
-        搜索试试看啦
-      </el-button>
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px"
-        type="primary"
-        icon="el-icon-edit"
-        @click="handleCreate"
-        :disabled="isEditDisabled"
-      >
-        添加
+        搜索
       </el-button>
     </div>
     <el-table
@@ -77,7 +52,7 @@
       <el-table-column fixed label="序号" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户-test" width="150">
+      <el-table-column label="租户" width="150">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
       <el-table-column label="项目" width="260">
@@ -86,47 +61,27 @@
       <el-table-column label="线程池" width="260">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
       </el-table-column>
-      <el-table-column label="核心线程" width="100">
+      <el-table-column label="变更类型" width="100">
         <template slot-scope="scope">
-          <el-link type="success" :underline="false">{{ scope.row.coreSize }}</el-link>
+          <el-link type="success" :underline="false">{{ scope.row.type }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="最大线程" width="100">
+      <el-table-column label="修改人" width="100">
         <template slot-scope="scope">
-          <el-link type="danger" :underline="false">{{ scope.row.maxSize }}</el-link>
+          <el-link type="danger" :underline="false">{{ scope.row.modifyUser }}</el-link>
         </template>
       </el-table-column>
-      <el-table-column label="队列类型" width="260">
+      <el-table-column label="修改时间" width="260">
         <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
       </el-table-column>
-      <el-table-column label="队列容量" width="100">
-        <template slot-scope="scope">{{ scope.row.capacity }}</template>
+      <el-table-column label="审核状态" width="100">
+        <template slot-scope="scope">{{ scope.row.verifyStatus }}</template>
       </el-table-column>
-      <el-table-column label="拒绝策略" width="200">
-        <template slot-scope="scope">{{ scope.row.rejectedType | rejectedTypeFilter }}</template>
-      </el-table-column>
-      <el-table-column label="执行超时" width="100">
-        <template slot-scope="scope">{{
-          scope.row.executeTimeOut | defaultExecuteTimeoutValue
-        }}</template>
-      </el-table-column>
-      <el-table-column label="是否报警" width="100">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.isAlarm"
-            active-color="#00A854"
-            :active-value="1"
-            inactive-color="#F04134"
-            :inactive-value="0"
-            @change="changeAlarm(scope.row)"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" width="200">
-        <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
-      </el-table-column>
-      <el-table-column label="修改时间" width="200">
+      <el-table-column label="审核时间" width="200">
         <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
+      </el-table-column>
+      <el-table-column label="审核人" width="200">
+        <template slot-scope="scope">{{ scope.row.verifyUser }}</template>
       </el-table-column>
       <el-table-column
         label="操作"
@@ -136,9 +91,9 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="handleUpdate(row)"> 编辑 </el-button>
-          <el-button size="small" :disabled="isEditDisabled" type="text" @click="handleDelete(row)">
-            删除
+          <el-button type="text" size="small" @click="accept(row)"> 通过 </el-button>
+          <el-button size="small" :disabled="isEditDisabled" type="text" @click="reject(row)">
+            拒绝
           </el-button>
         </template>
       </el-table-column>
@@ -348,7 +303,7 @@
 <script>
 import * as itemApi from '@/api/hippo4j-item';
 import * as tenantApi from '@/api/hippo4j-tenant';
-import * as threadPoolApi from '@/api/hippo4j-threadPool';
+import * as verifyApi from '@/api/verify';
 import waves from '@/directive/waves';
 import Pagination from '@/components/Pagination';
 
@@ -515,23 +470,12 @@ export default {
     },
     fetchData() {
       this.listLoading = true;
-      threadPoolApi.list(this.listQuery).then((response) => {
+      verifyApi.list(this.listQuery).then((response) => {
         const { records } = response;
         const { total } = response;
         this.total = total;
         this.list = records;
         this.listLoading = false;
-      });
-    },
-    changeAlarm(row) {
-      threadPoolApi.alarmEnable(row).then(() => {
-        this.fetchData();
-        this.$notify({
-          title: 'Success',
-          message: 'Update Successfully',
-          type: 'success',
-          duration: 2000,
-        });
       });
     },
     initSelect() {
@@ -560,7 +504,7 @@ export default {
         capacityAlarm: '',
       };
     },
-    handleCreate() {
+    accept() {
       this.resetTemp();
       this.isEdit = true;
       this.temp.coreSize = 4;
@@ -581,118 +525,20 @@ export default {
         this.$refs['dataForm'].clearValidate();
       });
     },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (parseInt(this.temp.maxSize) < parseInt(this.temp.coreSize)) {
-          this.$message({
-            message: '最大线程必须大于等于核心线程',
-            type: 'warning',
-          });
-          return;
-        }
-        if (valid) {
-          if (this.isRejectShow) {
-            if (this.temp.customRejectedType == null) {
-              this.temp.rejectedType = 2;
-            } else {
-              this.temp.rejectedType = this.temp.customRejectedType;
-            }
-          }
-          threadPoolApi.created(this.temp).then(() => {
-            this.fetchData();
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: 'Success',
-              message: 'Created Successfully',
-              type: 'success',
-              duration: 2000,
-            });
-          });
-        }
-      });
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row); // copy obj
-      let rejectedType = this.temp.rejectedType;
-      if (
-        rejectedType != 1 &&
-        rejectedType != 2 &&
-        rejectedType != 3 &&
-        rejectedType != 4 &&
-        rejectedType != 5 &&
-        rejectedType != 6
-      ) {
-        this.isRejectShow = true;
-        this.temp.customRejectedType = this.temp.rejectedType;
-        this.temp.rejectedType = 99;
-      } else {
-        this.isRejectShow = false;
-      }
-      this.dialogStatus = 'update';
-      this.dialogFormVisible = true;
-      this.isEdit = false;
-
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate();
-      });
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          if (parseInt(this.temp.maxSize) < parseInt(this.temp.coreSize)) {
-            this.$message({
-              message: '最大线程必须大于等于核心线程',
-              type: 'warning',
-            });
-            return;
-          }
-          let rejectedType = this.temp.rejectedType;
-          if (
-            rejectedType != 1 &&
-            rejectedType != 2 &&
-            rejectedType != 3 &&
-            rejectedType != 4 &&
-            rejectedType != 5 &&
-            rejectedType != 6
-          ) {
-            if (this.temp.customRejectedType != null) {
-              this.temp.rejectedType = this.temp.customRejectedType;
-            }
-          }
-          const tempData = Object.assign({}, this.temp);
-          threadPoolApi.updated(tempData).then(() => {
-            this.fetchData();
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: 'Success',
-              message: 'Update Successfully',
-              type: 'success',
-              duration: 2000,
-            });
-          });
-        }
-      });
-    },
-    openDelConfirm(name) {
-      return this.$confirm(`此操作将删除 ${name}, 是否继续?`, '提示', {
+    openRejectConfirm() {
+      return this.$confirm(`此操作将拒绝线程池变更申请, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
       });
     },
-    handleDelete(row) {
-      const role = this.$cookie.get('userName') === 'admin' ? true : false;
-      if (!role) {
-        this.$message.error('请联系管理员删除');
-        return;
-      }
-
-      this.openDelConfirm(row.tpId).then(() => {
-        threadPoolApi.deleted(row).then((response) => {
+    reject(row) {
+      this.openRejectConfirm().then(() => {
+        verifyApi.verify(row).then((response) => {
           this.fetchData();
           this.$notify({
             title: 'Success',
-            message: 'Delete Successfully',
+            message: 'reject Successfully',
             type: 'success',
             duration: 2000,
           });
@@ -750,7 +596,7 @@ export default {
 
       this.threadPoolOptions = [];
       const itemId = { itemId: this.listQuery.itemId, size: this.size };
-      threadPoolApi.list(itemId).then((response) => {
+      verifyApi.list(itemId).then((response) => {
         const { records = [] } = response;
         for (let i = 0; i < records.length; i++) {
           this.threadPoolOptions.push({
