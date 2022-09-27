@@ -58,12 +58,18 @@
       <el-table-column label="项目" width="260">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="线程池" width="260">
+      <el-table-column label="线程池" width="200">
         <template slot-scope="scope">{{ scope.row.tpId }}</template>
+      </el-table-column>
+      <el-table-column label="实例标识" width="260">
+        <template slot-scope="scope">{{ scope.row.identify }}</template>
+      </el-table-column>
+      <el-table-column label="是否全部修改" width="100">
+        <template slot-scope="scope">{{ scope.row.modifyAll | modifyAllFilter }}</template>
       </el-table-column>
       <el-table-column label="变更类型" width="100">
         <template slot-scope="scope">
-          <el-link type="success" :underline="false">{{ scope.row.type }}</el-link>
+          <el-link type="success" :underline="false">{{ scope.row.type | modifyTypeFilter}}</el-link>
         </template>
       </el-table-column>
       <el-table-column label="修改人" width="100">
@@ -72,13 +78,13 @@
         </template>
       </el-table-column>
       <el-table-column label="修改时间" width="260">
-        <template slot-scope="scope">{{ scope.row.queueType | queueFilter }}</template>
+        <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
       <el-table-column label="审核状态" width="100">
-        <template slot-scope="scope">{{ scope.row.verifyStatus }}</template>
+        <template slot-scope="scope">{{ scope.row.verifyStatus | verifyStatusFilter}}</template>
       </el-table-column>
       <el-table-column label="审核时间" width="200">
-        <template slot-scope="scope">{{ scope.row.gmtModified }}</template>
+        <template slot-scope="scope">{{ scope.row.gmtVerify }}</template>
       </el-table-column>
       <el-table-column label="审核人" width="200">
         <template slot-scope="scope">{{ scope.row.verifyUser }}</template>
@@ -326,40 +332,33 @@ export default {
       }
       return value;
     },
-    queueFilter(type) {
-      if ('1' == type) {
-        return 'ArrayBlockingQueue';
-      } else if ('2' == type) {
-        return 'LinkedBlockingQueue';
-      } else if ('3' == type) {
-        return 'LinkedBlockingDeque';
-      } else if ('4' == type) {
-        return 'SynchronousQueue';
-      } else if ('5' == type) {
-        return 'LinkedTransferQueue';
-      } else if ('6' == type) {
-        return 'PriorityBlockingQueue';
-      } else if ('9' == type) {
-        return 'ResizableLinkedBlockingQueue';
-      }
+    modifyTypeFilter(type) {
+      if (1 == type) {
+        return '线程池管理';
+      } else if (2 == type) {
+        return '线程池实例';
+      } else if (3 == type) {
+        return 'web容器线程池';
+      } else if (4 == type) {
+        return '框架线程池';
+      } 
     },
-    rejectedTypeFilter(type) {
-      if ('1' == type) {
-        return 'CallerRunsPolicy';
-      } else if ('2' == type) {
-        return 'AbortPolicy';
-      } else if ('3' == type) {
-        return 'DiscardPolicy';
-      } else if ('4' == type) {
-        return 'DiscardOldestPolicy';
-      } else if ('5' == type) {
-        return 'RunsOldestTaskPolicy';
-      } else if ('6' == type) {
-        return 'SyncPutQueuePolicy';
-      } else {
-        return 'CustomRejectedPolicy_' + type;
-      }
+    verifyStatusFilter(type) {
+      if (0 == type) {
+        return '待审核';
+      } else if (1 == type) {
+        return '审核通过';
+      } else if (2 == type) {
+        return '审核拒绝';
+      } 
     },
+    modifyAllFilter(type) {
+      if (0 == type) {
+        return '否';
+      } else if (1 == type) {
+        return '是';
+      }  
+    }
   },
   data() {
     return {
