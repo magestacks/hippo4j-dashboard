@@ -53,7 +53,7 @@
         icon="el-icon-search"
         @click="fetchData"
       >
-        搜索试试看啦
+        搜索
       </el-button>
       <el-button
         class="filter-item"
