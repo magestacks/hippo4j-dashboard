@@ -87,54 +87,58 @@
       <el-card shadow="hover">
         <el-descriptions :column="3" border>
           <el-descriptions-item label="实例 ID">{{ listQuery.identify }}</el-descriptions-item>
-          <el-descriptions-item label="是否报警">
-            {{ temp.isAlarm | alarmFilter }}
-          </el-descriptions-item>
-          <el-descriptions-item label="已完成任务数">{{ lastTaskCount }}</el-descriptions-item>
-          <el-descriptions-item label="核心线程超时">
-            {{ temp.allowCoreThreadTimeOut | allowCoreThreadTimeOutFilter }}
-          </el-descriptions-item>
+
           <el-descriptions-item label="核心线程">{{ temp.coreSize }}</el-descriptions-item>
           <el-descriptions-item label="最大线程">{{ temp.maxSize }}</el-descriptions-item>
           <el-descriptions-item label="队列类型">
             {{ temp.queueType | queueFilter }}
           </el-descriptions-item>
           <el-descriptions-item label="队列容量">{{ temp.capacity }}</el-descriptions-item>
+
+          <el-descriptions-item label="已完成任务数">{{ lastTaskCount }}</el-descriptions-item>
           <el-descriptions-item label="拒绝策略">
             {{ temp.rejectedType | rejectedFilter }}
+          </el-descriptions-item>
+
+          <el-descriptions-item label="是否报警">
+            {{ temp.isAlarm | alarmFilter }}
+          </el-descriptions-item>
+          <el-descriptions-item label="任务拒绝次数">
+            {{ rejectCount }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
 
       <el-row :gutter="10" style="margin-top: 16px">
-        <el-col :span="8">
+        <el-col :span="12">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData1" :times="times" />
           </el-card>
         </el-col>
-        <el-col :span="8">
+        <!-- <el-col :span="8">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData2" :times="times" />
           </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card shadow="hover">
-            <line-chart :chart-data="lineChartData5" :times="times" />
-          </el-card>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10" style="margin-top: 16px">
-        <el-col :span="8">
+        </el-col> -->
+
+        <el-col :span="12">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData3" :times="times" />
           </el-card>
         </el-col>
-        <el-col :span="8">
+      </el-row>
+      <el-row :gutter="10" style="margin-top: 16px">
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <line-chart :chart-data="lineChartData5" :times="times" />
+          </el-card>
+        </el-col>
+        <!-- <el-col :span="8">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData4" :times="times" />
           </el-card>
-        </el-col>
-        <el-col :span="8">
+        </el-col> -->
+        <el-col :span="12">
           <el-card shadow="hover">
             <line-chart :chart-data="lineChartData6" :times="times" />
           </el-card>
@@ -198,7 +202,7 @@ export default {
         {
           name: 'activeSizeList',
           data: [],
-          color: '#e76f51',
+          color: '#709775',
         },
       ],
       lineChartData2: [
@@ -212,7 +216,7 @@ export default {
         {
           name: 'queueSizeList',
           data: [],
-          color: '#e9c46a',
+          color: '#003049',
         },
       ],
       lineChartData4: [
@@ -226,14 +230,14 @@ export default {
         {
           name: 'completedTaskCountList',
           data: [],
-          color: '#264653',
+          color: '#023e8a',
         },
       ],
       lineChartData6: [
         {
           name: 'rejectCountList',
           data: [],
-          color: '#e63946',
+          color: '#dd1c1a',
         },
       ],
       times: [],
@@ -253,6 +257,7 @@ export default {
       },
 
       temp: {},
+      rejectCount: null,
       lastTaskCount: null,
     };
   },
@@ -284,6 +289,7 @@ export default {
       });
 
       monitorApi.lastTaskCountFun(this.listQuery).then((res) => {
+        this.rejectCount = res.rejectCount;
         this.lastTaskCount = res.completedTaskCount;
       });
 
