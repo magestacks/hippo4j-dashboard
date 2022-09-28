@@ -109,6 +109,128 @@
       @pagination="fetchData"
     />
 
+    <!--thread pool manager-->
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="threadPoolManagerDialog">
+      <el-form
+        ref="dataForm"
+        style="width: 500px; margin-left: 50px"
+        :rules="rules"
+        :model="temp"
+        label-width="80px"
+      >
+        <el-form-item  label="租户" prop="tenantId">
+          {{detailInfo.tenantId}}
+        </el-form-item>
+        <el-form-item  label="项目" prop="itemId">
+          {{detailInfo.itemId}}
+        </el-form-item>
+        <el-form-item label="线程池" prop="tpId">
+          {{detailInfo.tpId}}
+        </el-form-item>
+        <el-form-item label="核心线程" prop="corePoolSize">
+          {{detailInfo.corePoolSize}}
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maxSize">
+          {{detailInfo.maximumPoolSize}}
+        </el-form-item>
+        <el-form-item label="队列类型" prop="queueType">
+          {{detailInfo.queueType | queueTypeFilter}}
+        </el-form-item>
+        <el-form-item label="队列容量" prop="capacity">
+          {{detailInfo.capacity}}
+        </el-form-item>
+        <el-form-item label="执行超时" prop="executeTimeOut">
+          {{detailInfo.executeTimeOut}}
+        </el-form-item>
+        <el-form-item label="空闲回收" prop="keepAliveTime">
+          {{detailInfo.keepAliveTime}}
+        </el-form-item>
+        <el-form-item label="是否超时" prop="allowCoreThreadTimeOut">
+          {{detailInfo.allowCoreThreadTimeOut}}
+        </el-form-item>
+        <el-form-item label="是否报警" prop="isAlarm">
+          {{detailInfo.isAlarm | alarmFilter}}
+        </el-form-item>
+        <el-form-item label="活跃报警" prop="livenessAlarm">
+          {{detailInfo.livenessAlarm}}
+        </el-form-item>
+
+        <el-form-item label="容量报警" prop="capacityAlarm">
+          {{detailInfo.capacityAlarm}}
+        </el-form-item>
+        <el-form-item label="拒绝策略" prop="rejectedType">
+          {{detailInfo.rejectedType | rejectedTypeFilter}}
+        </el-form-item>
+        <!-- <el-form-item v-if="isRejectShow" label="自定义拒绝策略" prop="customRejectedType">
+          <el-input
+            v-model="temp.customRejectedType"
+            placeholder="请输入自定义 SPI 拒绝策略标识"
+            @input="onInput()"
+          />
+        </el-form-item> -->
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="reject(row)"> 审核拒绝 </el-button>
+        <el-button type="primary" @click="accept()">
+          审核通过
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <!--web thread pool-->
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="webThreadPoolDialog">
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="110px"
+      >
+        <el-form-item label="核心线程" prop="corePoolSize">
+          {{detailInfo.corePoolSize}}
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maximumPoolSize">
+          {{detailInfo.maximumPoolSize}}
+        </el-form-item>
+        <el-form-item label="空闲回收时间" prop="keepAliveTime">
+          {{detailInfo.keepAliveTime}}
+        </el-form-item>
+        <el-form-item label="全部修改" prop="modifyAll">
+          <el-switch v-model="detailInfo.modifyAll"></el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false"> 审核拒绝 </el-button>
+        <el-button type="primary" @click="updateData()"> 审核通过 </el-button>
+      </div>
+    </el-dialog>
+
+    <!-- adapter thread pool -->
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="adapterThreadPoolDialog">
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="110px"
+      >
+        <el-form-item label="核心线程" prop="corePoolSize">
+          {{detailInfo.corePoolSize}}
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maximumPoolSize">
+          {{detailInfo.maximumPoolSize}}
+        </el-form-item>
+        <el-form-item label="全部修改" prop="allUpdate">
+          <el-switch v-model="detailInfo.modifyAll"></el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="reject(row)"> 审核拒绝 </el-button>
+        <el-button type="primary" @click="updateData()"> 审核通过 </el-button>
+      </div>
+    </el-dialog>
+    
+
     <el-dialog :visible.sync="dialogPluginVisible" title="Reading statistics">
       <el-table :data="pluginData" border fit highlight-current-row style="width: 100%">
         <el-table-column prop="key" label="Channel" />
@@ -146,6 +268,47 @@ export default {
         return 0;
       }
       return value;
+    },
+    alarmFilter(type){
+      if(1 == type){
+        return "报警";
+      }else if(0 == type){
+        return "不报警";
+      }
+    },
+    queueTypeFilter(type){
+      if ('1' == type) {
+        return 'ArrayBlockingQueue';
+      } else if ('2' == type) {
+        return 'LinkedBlockingQueue';
+      } else if ('3' == type) {
+        return 'LinkedBlockingDeque';
+      } else if ('4' == type) {
+        return 'SynchronousQueue';
+      } else if ('5' == type) {
+        return 'LinkedTransferQueue';
+      } else if ('6' == type) {
+        return 'PriorityBlockingQueue';
+      } else if ('9' == type) {
+        return 'ResizableLinkedBlockingQueue';
+      }
+    },
+    rejectedTypeFilter(type) {
+      if ('1' == type) {
+        return 'CallerRunsPolicy';
+      } else if ('2' == type) {
+        return 'AbortPolicy';
+      } else if ('3' == type) {
+        return 'DiscardPolicy';
+      } else if ('4' == type) {
+        return 'DiscardOldestPolicy';
+      } else if ('5' == type) {
+        return 'RunsOldestTaskPolicy';
+      } else if ('6' == type) {
+        return 'SyncPutQueuePolicy';
+      } else {
+        return 'CustomRejectedPolicy_' + type;
+      }
     },
     modifyTypeFilter(type) {
       if (1 == type) {
@@ -194,7 +357,10 @@ export default {
       dialogPluginVisible: false,
       pluginData: [],
       isEditDisabled: true,
-      dialogFormVisible: false,
+      threadPoolManagerDialog: false,
+      threadPoolInstanceDialog: false,
+      webThreadPoolDialog: false,
+      adapterThreadPoolDialog: false,
       tenantOptions: [],
       threadPoolOptions: [],
       itemOptions: [],
@@ -228,8 +394,10 @@ export default {
       size: 500,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create',
+        1: '线程池管理',
+        2: '线程池实例',
+        3: '容器线程池',
+        4: '框架线程池'
       },
       rules: {
         tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
@@ -363,11 +531,26 @@ export default {
 
     applicationDetail(row) {
       let id = row.id;
+      let type = row.type;
+      if(type == 1){
+        this.dialogStatus = 1;
+        this.threadPoolManagerDialog = true;
+      }else if(type == 2){
+        this.dialogStatus = 2;
+        this.threadPoolInstanceDialog = true;
+      }else if(type == 3){
+        this.dialogStatus = 3;
+        this.webThreadPoolDialog = true;
+      }else if(type == 4){
+        this.dialogStatus = 4;
+        this.adapterThreadPoolDialog = true;
+      }
       verifyApi
         .applicationDetail(id)
         .then((response) => {
           if (response != null) {
             this.detailInfo = response;
+            this.detailInfo.modifyAll = row.modifyAll;
           }
         })
         .catch((error) => {
