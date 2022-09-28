@@ -146,10 +146,10 @@
           {{detailInfo.keepAliveTime}}
         </el-form-item>
         <el-form-item label="是否超时" prop="allowCoreThreadTimeOut">
-          {{detailInfo.allowCoreThreadTimeOut}}
+          {{detailInfo.allowCoreThreadTimeOut | enableFilter}}
         </el-form-item>
         <el-form-item label="是否报警" prop="isAlarm">
-          {{detailInfo.isAlarm | alarmFilter}}
+          {{detailInfo.isAlarm | enableFilter}}
         </el-form-item>
         <el-form-item label="活跃报警" prop="livenessAlarm">
           {{detailInfo.livenessAlarm}}
@@ -268,6 +268,13 @@ export default {
         return 0;
       }
       return value;
+    },
+    enableFilter(type){
+      if(1 == type){
+        return "是";
+      }else if(0 == type){
+        return "否";
+      }
     },
     alarmFilter(type){
       if(1 == type){
