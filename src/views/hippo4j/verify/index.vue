@@ -59,10 +59,10 @@
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
       <el-table-column label="线程池" width="200">
-        <template slot-scope="scope">{{ scope.row.tpId }}</template>
+        <template slot-scope="scope">{{ scope.row.tpId || '--'}}</template>
       </el-table-column>
       <el-table-column label="实例标识" width="260">
-        <template slot-scope="scope">{{ scope.row.identify }}</template>
+        <template slot-scope="scope">{{ scope.row.identify || '--'}}</template>
       </el-table-column>
       <el-table-column label="是否全部修改" width="100">
         <template slot-scope="scope">{{ scope.row.modifyAll | modifyAllFilter }}</template>
@@ -200,7 +200,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(row)"> 审核拒绝 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
         <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)"> 审核通过 </el-button>
       </div>
     </el-dialog>
@@ -214,6 +214,9 @@
         label-position="left"
         label-width="110px"
       >
+      <el-form-item label="mark" prop="corePoolSize">
+          {{detailInfo.mark}}
+        </el-form-item>
         <el-form-item label="核心线程" prop="corePoolSize">
           {{detailInfo.corePoolSize}}
         </el-form-item>
