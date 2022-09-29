@@ -170,8 +170,8 @@
         </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="reject(row)"> 审核拒绝 </el-button>
-        <el-button type="primary" @click="accept(row)">
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(row)"> 审核拒绝 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)">
           审核通过
         </el-button>
       </div>
@@ -200,8 +200,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="reject(row)"> 审核拒绝 </el-button>
-        <el-button type="primary" @click="accept(row)"> 审核通过 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(row)"> 审核拒绝 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)"> 审核通过 </el-button>
       </div>
     </el-dialog>
 
@@ -226,7 +226,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
-        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(row)"> 审核通过 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)"> 审核通过 </el-button>
       </div>
     </el-dialog>
     
@@ -479,6 +479,19 @@ export default {
         }
       });
     },
+
+    closeDetailDialog(type){
+      if(type == 1){
+            this.threadPoolManagerDialog = false;
+          }else if(type == 2){
+            this.threadPoolInstanceDialog = false;
+          }else if(type == 3){
+            this.webThreadPoolDialog = false;
+          }else if(type = 4){
+            this.adapterThreadPoolDialog = false;
+          }
+    },
+
     resetTemp() {
       this.isRejectShow = false;
       this.isEdit = false;
@@ -494,25 +507,34 @@ export default {
         capacityAlarm: '',
       };
     },
-    accept() {
-      this.resetTemp();
-      this.isEdit = true;
-      this.temp.coreSize = 4;
-      this.temp.maxSize = 8;
-      this.temp.queueType = 9;
-      this.temp.keepAliveTime = 9999;
-      this.temp.capacity = 4096;
-      this.temp.executeTimeOut = 0;
-      this.temp.isAlarm = '1';
-      this.temp.allowCoreThreadTimeOut = '1';
-      this.temp.livenessAlarm = '80';
-      this.temp.capacityAlarm = '80';
-      this.temp.rejectedType = 2;
-      this.dialogStatus = 'create';
-      this.dialogFormVisible = true;
-      this.isRejectShow = false;
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate();
+    accept(detailInfo) {
+      this.openAcceptConfitm().then(() => {
+        let acceptDetail = {};
+        acceptDetail = detailInfo;
+        acceptDetail.accept = true;
+        if(detailInfo.type == 4){
+          acceptDetail.threadPoolKey = detailInfo.tpId;
+        }
+        console.log(detailInfo);
+        console.log(acceptDetail);
+        verifyApi.verify(acceptDetail).then((response) => {
+          this.fetchData();
+          this.$notify({
+            title: 'Success',
+            message: 'accept Successfully',
+            type: 'success',
+            duration: 2000
+          });
+          this.closeDetailDialog(detailInfo.type);
+        });
+      });
+      
+    },
+    openAcceptConfitm(){
+      return this.$confirm(`此操作将接受线程池变更申请, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       });
     },
     openRejectConfirm() {
@@ -537,15 +559,7 @@ export default {
             type: 'success',
             duration: 2000,
           });
-          if(rejectDetail.type == 1){
-            this.threadPoolManagerDialog = false;
-          }else if(rejectDetail.type == 2){
-            this.threadPoolInstanceDialog = false;
-          }else if(rejectDetail.type == 3){
-            this.webThreadPoolDialog = false;
-          }else if(rejectDetail.type = 4){
-            this.adapterThreadPoolDialog = false;
-          }
+          this.closeDetailDialog(detailInfo.type);
         });
       });
     },
@@ -571,10 +585,14 @@ export default {
         .then((response) => {
           if (response != null) {
             this.detailInfo = response;
+            this.detailInfo.mark = row.mark;
             this.detailInfo.modifyAll = row.modifyAll;
             this.detailInfo.id = row.id;
             this.detailInfo.type = row.type;
             this.detailInfo.verifyStatus = row.verifyStatus;
+            this.detailInfo.tenantId = row.tenantId;
+            this.detailInfo.itemId = row.itemId;
+            this.detailInfo.identify = row.identify;
           }
         })
         .catch((error) => {
