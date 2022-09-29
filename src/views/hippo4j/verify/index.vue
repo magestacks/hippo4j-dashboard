@@ -171,7 +171,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="reject(row)"> 审核拒绝 </el-button>
-        <el-button type="primary" @click="accept()">
+        <el-button type="primary" @click="accept(row)">
           审核通过
         </el-button>
       </div>
@@ -200,8 +200,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false"> 审核拒绝 </el-button>
-        <el-button type="primary" @click="updateData()"> 审核通过 </el-button>
+        <el-button @click="reject(row)"> 审核拒绝 </el-button>
+        <el-button type="primary" @click="accept(row)"> 审核通过 </el-button>
       </div>
     </el-dialog>
 
@@ -225,8 +225,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="reject(row)"> 审核拒绝 </el-button>
-        <el-button type="primary" @click="updateData()"> 审核通过 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(row)"> 审核通过 </el-button>
       </div>
     </el-dialog>
     
@@ -522,9 +522,14 @@ export default {
         type: 'warning',
       });
     },
-    reject(row) {
+    reject(detailInfo) {
+      let rejectDetail = {
+        accept:false,
+        id:detailInfo.id,
+        type:detailInfo.type
+      };
       this.openRejectConfirm().then(() => {
-        verifyApi.verify(row).then((response) => {
+        verifyApi.verify(rejectDetail).then((response) => {
           this.fetchData();
           this.$notify({
             title: 'Success',
@@ -532,6 +537,15 @@ export default {
             type: 'success',
             duration: 2000,
           });
+          if(rejectDetail.type == 1){
+            this.threadPoolManagerDialog = false;
+          }else if(rejectDetail.type == 2){
+            this.threadPoolInstanceDialog = false;
+          }else if(rejectDetail.type == 3){
+            this.webThreadPoolDialog = false;
+          }else if(rejectDetail.type = 4){
+            this.adapterThreadPoolDialog = false;
+          }
         });
       });
     },
@@ -558,6 +572,9 @@ export default {
           if (response != null) {
             this.detailInfo = response;
             this.detailInfo.modifyAll = row.modifyAll;
+            this.detailInfo.id = row.id;
+            this.detailInfo.type = row.type;
+            this.detailInfo.verifyStatus = row.verifyStatus;
           }
         })
         .catch((error) => {
