@@ -177,6 +177,51 @@
       </div>
     </el-dialog>
 
+    <!-- thread pool instance-->
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="threadPoolInstanceDialog">
+      <el-form
+        ref="dataForm"
+        style="width: 500px; margin-left: 50px"
+        :rules="rules"
+        :model="temp"
+        label-width="80px"
+      >
+        <el-form-item label="核心线程" prop="corePoolSize">
+          {{detailInfo.corePoolSize}}
+        </el-form-item>
+        <el-form-item label="最大线程" prop="maximumPoolSize">
+          {{detailInfo.maximumPoolSize}}
+        </el-form-item>
+        <el-form-item label="队列类型" prop="queueType">
+          {{detailInfo.queueType | queueFilter}}
+        </el-form-item>
+        <el-form-item label="队列容量" prop="capacity">
+          {{detailInfo.capacity}}
+        </el-form-item>
+        <el-form-item label="是否超时" prop="isAlarm">
+          {{detailInfo.allowCoreThreadTimeOut | enableFilter}}
+        </el-form-item>
+        <el-form-item label="执行超时" prop="executeTimeOut">
+         {{detailInfo.executeTimeOut}}
+        </el-form-item>
+        <el-form-item label="空闲回收" prop="keepAliveTime">
+          {{detailInfo.keepAliveTime}}
+        </el-form-item>
+        <el-form-item label="拒绝策略" prop="rejectedType">
+          {{detailInfo.rejectedType | rejectedTypeFilter}}
+        </el-form-item>
+        <el-form-item label="全部修改" prop="allUpdate">
+          <el-switch v-model="detailInfo.modifyAll"> </el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
+        <el-button type="primary" :disabled="detailInfo.verifyStatus != 0" @click="accept(detailInfo)">
+          审核通过
+        </el-button>
+      </div>
+    </el-dialog>
+
     <!--web thread pool-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="webThreadPoolDialog">
       <el-form
