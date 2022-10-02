@@ -383,7 +383,9 @@ export default {
         return '审核通过';
       } else if (2 == type) {
         return '审核拒绝';
-      } 
+      } else if (3 == type){
+        return '失效';
+      }
     },
     modifyAllFilter(type) {
       if (0 == type) {
