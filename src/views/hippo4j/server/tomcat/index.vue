@@ -96,7 +96,7 @@
       >
         <template slot-scope="{ row }">
           <el-button type="text" size="small" @click="handleInfo(row)"> 查看 </el-button>
-          <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
+          <el-button type="text" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
         </template>
@@ -388,6 +388,8 @@ export default {
           tempData.queueCapacity = tempResp0.queueCapacity;
           tempData.rejectedName = tempResp0.rejectedName;
           tempData.keepAliveTime = tempResp0.keepAliveTime;
+          tempData.tenantId = tempResp0.tenantId;
+          tempData.itemId = tempResp0.itemId;
           tempList.push(tempData);
         }
         this.list = tempList;
@@ -489,13 +491,18 @@ export default {
           const clientAddressList = [];
           const tempData = {
             corePoolSize: this.temp.coreSize,
+            itemId: this.temp.itemId,
+            tenantId: this.temp.tenantId,
             maximumPoolSize: this.temp.maximumSize,
             keepAliveTime: this.temp.keepAliveTime,
             clientAddressList: clientAddressList,
           };
           if (!this.temp.allUpdate) {
+            tempData.modifyAll = false;
+            tempData.identify = this.temp.identify;
             clientAddressList[0] = this.temp.clientAddress;
           } else {
+            tempData.modifyAll = true;
             for (let i = 0; i < this.list.length; i++) {
               if (this.list[i] != null) {
                 clientAddressList[i] = this.list[i].clientAddress;

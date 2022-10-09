@@ -346,14 +346,17 @@ export default {
             tenant: this.listQuery.tenantId,
             item: this.listQuery.itemId,
             threadPoolKey: this.temp.threadPoolKey,
-            identify: this.temp.identify,
+            // identify: this.temp.identify,
             clientAddressList: clientAddressList,
             corePoolSize: this.temp.coreSize,
             maximumPoolSize: this.temp.maximumSize,
           };
           if (!this.temp.allUpdate) {
+            tempData.modifyAll = false;
+            tempData.identify = this.temp.identify;
             clientAddressList[0] = this.temp.clientAddress;
           } else {
+            tempData.modifyAll = true;
             for (let i = 0; i < this.list.length; i++) {
               if (this.list[i] != null) {
                 clientAddressList[i] = this.list[i].clientAddress;
