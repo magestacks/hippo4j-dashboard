@@ -96,9 +96,7 @@
       >
         <template slot-scope="{ row }">
           <el-button type="text" size="small" @click="handleInfo(row)"> 查看 </el-button>
-          <el-button type="text" size="small" @click="handleUpdate(row)">
-            编辑
-          </el-button>
+          <el-button type="text" size="small" @click="handleUpdate(row)"> 编辑 </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -353,7 +351,7 @@ export default {
     this.initSelect();
   },
   mounted() {
-    this.isEditDisabled = this.$cookie.get('userName') !== 'admin';
+    this.isEditDisabled = localStorage.getItem('USER_ROLE') !== 'ROLE_ADMIN';
   },
   methods: {
     onInput() {

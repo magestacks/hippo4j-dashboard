@@ -507,7 +507,7 @@ export default {
     this.initSelect();
   },
   mounted() {
-    this.isEditDisabled = this.$cookie.get('userName') !== 'admin';
+    this.isEditDisabled = localStorage.getItem('USER_ROLE') !== 'ROLE_ADMIN';
   },
   methods: {
     onInput() {
@@ -681,7 +681,7 @@ export default {
       });
     },
     handleDelete(row) {
-      const role = this.$cookie.get('userName') === 'admin' ? true : false;
+      const role = localStorage.getItem('USER_ROLE') === 'ROLE_ADMIN' ? true : false;
       if (!role) {
         this.$message.error('请联系管理员删除');
         return;

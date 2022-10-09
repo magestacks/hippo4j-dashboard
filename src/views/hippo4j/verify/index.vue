@@ -40,6 +40,16 @@
       >
         搜索
       </el-button>
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        style="margin-left: 10px"
+        icon="el-icon-refresh"
+        @click="refreshData"
+      >
+        重置
+      </el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -49,44 +59,43 @@
       fit
       highlight-current-row
     >
-      <el-table-column fixed label="序号" width="80">
+      <el-table-column fixed label="序号" width="95">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
-      </el-table-column>
-      <el-table-column label="租户" width="150">
-        <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
       <el-table-column label="项目" width="260">
         <template slot-scope="scope">{{ scope.row.itemId }}</template>
       </el-table-column>
-      <el-table-column label="线程池" width="200">
-        <template slot-scope="scope">{{ scope.row.tpId || '--'}}</template>
+      <el-table-column label="线程池" width="260">
+        <template slot-scope="scope">{{ scope.row.tpId || '-' }}</template>
       </el-table-column>
       <el-table-column label="实例标识" width="260">
-        <template slot-scope="scope">{{ scope.row.identify || '--'}}</template>
-      </el-table-column>
-      <el-table-column label="是否全部修改" width="100">
-        <template slot-scope="scope">{{ scope.row.modifyAll | modifyAllFilter }}</template>
+        <template slot-scope="scope">
+          <el-link type="primary" :underline="false">{{ scope.row.identify || '-' }}</el-link>
+        </template>
       </el-table-column>
       <el-table-column label="变更类型" width="100">
+        <template slot-scope="scope"> {{ scope.row.type | modifyTypeFilter }} </template>
+      </el-table-column>
+      <el-table-column label="全部修改" width="100">
         <template slot-scope="scope">
-          <el-link type="success" :underline="false">{{ scope.row.type | modifyTypeFilter}}</el-link>
+          <el-tag :type="scope.row.modifyAll | modifyAllTagFilter">
+            {{ scope.row.modifyAll | modifyAllFilter }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column label="修改人" width="100">
-        <template slot-scope="scope">
-          <el-link type="danger" :underline="false">{{ scope.row.modifyUser }}</el-link>
-        </template>
+        <template slot-scope="scope"> {{ scope.row.modifyUser }}</template>
       </el-table-column>
-      <el-table-column label="修改时间" width="260">
+      <el-table-column label="提交时间" width="180">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
       <el-table-column label="审核状态" width="100">
-        <template slot-scope="scope">{{ scope.row.verifyStatus | verifyStatusFilter}}</template>
+        <template slot-scope="scope">{{ scope.row.verifyStatus | verifyStatusFilter }}</template>
       </el-table-column>
-      <el-table-column label="审核时间" width="200">
+      <el-table-column label="审核时间" width="180">
         <template slot-scope="scope">{{ scope.row.gmtVerify }}</template>
       </el-table-column>
-      <el-table-column label="审核人" width="200">
+      <el-table-column label="审核人" width="100">
         <template slot-scope="scope">{{ scope.row.verifyUser }}</template>
       </el-table-column>
       <el-table-column
@@ -97,7 +106,7 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="applicationDetail(row)"> 查看 </el-button>
+          <el-button type="text" size="small" @click="applicationDetail(row)"> 审核 </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -118,48 +127,48 @@
         :model="temp"
         label-width="80px"
       >
-        <el-form-item  label="租户" prop="tenantId">
-          {{detailInfo.tenantId}}
+        <el-form-item label="租户" prop="tenantId">
+          {{ detailInfo.tenantId }}
         </el-form-item>
-        <el-form-item  label="项目" prop="itemId">
-          {{detailInfo.itemId}}
+        <el-form-item label="项目" prop="itemId">
+          {{ detailInfo.itemId }}
         </el-form-item>
         <el-form-item label="线程池" prop="tpId">
-          {{detailInfo.tpId}}
+          {{ detailInfo.tpId }}
         </el-form-item>
         <el-form-item label="核心线程" prop="corePoolSize">
-          {{detailInfo.corePoolSize}}
+          {{ detailInfo.corePoolSize }}
         </el-form-item>
         <el-form-item label="最大线程" prop="maxSize">
-          {{detailInfo.maximumPoolSize}}
+          {{ detailInfo.maximumPoolSize }}
         </el-form-item>
         <el-form-item label="队列类型" prop="queueType">
-          {{detailInfo.queueType | queueTypeFilter}}
+          {{ detailInfo.queueType | queueTypeFilter }}
         </el-form-item>
         <el-form-item label="队列容量" prop="capacity">
-          {{detailInfo.capacity}}
+          {{ detailInfo.capacity }}
         </el-form-item>
         <el-form-item label="执行超时" prop="executeTimeOut">
-          {{detailInfo.executeTimeOut}}
+          {{ detailInfo.executeTimeOut }}
         </el-form-item>
         <el-form-item label="空闲回收" prop="keepAliveTime">
-          {{detailInfo.keepAliveTime}}
+          {{ detailInfo.keepAliveTime }}
         </el-form-item>
         <el-form-item label="是否超时" prop="allowCoreThreadTimeOut">
-          {{detailInfo.allowCoreThreadTimeOut | enableFilter}}
+          {{ detailInfo.allowCoreThreadTimeOut | enableFilter }}
         </el-form-item>
         <el-form-item label="是否报警" prop="isAlarm">
-          {{detailInfo.isAlarm | enableFilter}}
+          {{ detailInfo.isAlarm | enableFilter }}
         </el-form-item>
         <el-form-item label="活跃报警" prop="livenessAlarm">
-          {{detailInfo.livenessAlarm}}
+          {{ detailInfo.livenessAlarm }}
         </el-form-item>
 
         <el-form-item label="容量报警" prop="capacityAlarm">
-          {{detailInfo.capacityAlarm}}
+          {{ detailInfo.capacityAlarm }}
         </el-form-item>
         <el-form-item label="拒绝策略" prop="rejectedType">
-          {{detailInfo.rejectedType | rejectedTypeFilter}}
+          {{ detailInfo.rejectedType | rejectedTypeFilter }}
         </el-form-item>
         <!-- <el-form-item v-if="isRejectShow" label="自定义拒绝策略" prop="customRejectedType">
           <el-input
@@ -170,8 +179,14 @@
         </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(row)"> 审核拒绝 </el-button>
-        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)">
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(row)">
+          审核拒绝
+        </el-button>
+        <el-button
+          :disabled="detailInfo.verifyStatus != 0"
+          type="primary"
+          @click="accept(detailInfo)"
+        >
           审核通过
         </el-button>
       </div>
@@ -187,36 +202,42 @@
         label-width="80px"
       >
         <el-form-item label="核心线程" prop="corePoolSize">
-          {{detailInfo.corePoolSize}}
+          {{ detailInfo.corePoolSize }}
         </el-form-item>
         <el-form-item label="最大线程" prop="maximumPoolSize">
-          {{detailInfo.maximumPoolSize}}
+          {{ detailInfo.maximumPoolSize }}
         </el-form-item>
         <el-form-item label="队列类型" prop="queueType">
-          {{detailInfo.queueType | queueFilter}}
+          {{ detailInfo.queueType | queueTypeFilter }}
         </el-form-item>
         <el-form-item label="队列容量" prop="capacity">
-          {{detailInfo.capacity}}
+          {{ detailInfo.capacity }}
         </el-form-item>
         <el-form-item label="是否超时" prop="isAlarm">
-          {{detailInfo.allowCoreThreadTimeOut | enableFilter}}
+          {{ detailInfo.allowCoreThreadTimeOut | enableFilter }}
         </el-form-item>
         <el-form-item label="执行超时" prop="executeTimeOut">
-         {{detailInfo.executeTimeOut}}
+          {{ detailInfo.executeTimeOut }}
         </el-form-item>
         <el-form-item label="空闲回收" prop="keepAliveTime">
-          {{detailInfo.keepAliveTime}}
+          {{ detailInfo.keepAliveTime }}
         </el-form-item>
         <el-form-item label="拒绝策略" prop="rejectedType">
-          {{detailInfo.rejectedType | rejectedTypeFilter}}
+          {{ detailInfo.rejectedType | rejectedTypeFilter }}
         </el-form-item>
         <el-form-item label="全部修改" prop="allUpdate">
           <el-switch v-model="detailInfo.modifyAll"> </el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
-        <el-button type="primary" :disabled="detailInfo.verifyStatus != 0" @click="accept(detailInfo)">
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)">
+          审核拒绝
+        </el-button>
+        <el-button
+          type="primary"
+          :disabled="detailInfo.verifyStatus != 0"
+          @click="accept(detailInfo)"
+        >
           审核通过
         </el-button>
       </div>
@@ -232,21 +253,29 @@
         label-width="110px"
       >
         <el-form-item label="核心线程" prop="corePoolSize">
-          {{detailInfo.corePoolSize}}
+          {{ detailInfo.corePoolSize }}
         </el-form-item>
         <el-form-item label="最大线程" prop="maximumPoolSize">
-          {{detailInfo.maximumPoolSize}}
+          {{ detailInfo.maximumPoolSize }}
         </el-form-item>
         <el-form-item label="空闲回收时间" prop="keepAliveTime">
-          {{detailInfo.keepAliveTime}}
+          {{ detailInfo.keepAliveTime }}
         </el-form-item>
         <el-form-item label="全部修改" prop="modifyAll">
           <el-switch v-model="detailInfo.modifyAll"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
-        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)"> 审核通过 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)">
+          审核拒绝
+        </el-button>
+        <el-button
+          :disabled="detailInfo.verifyStatus != 0"
+          type="primary"
+          @click="accept(detailInfo)"
+        >
+          审核通过
+        </el-button>
       </div>
     </el-dialog>
 
@@ -259,25 +288,32 @@
         label-position="left"
         label-width="110px"
       >
-      <el-form-item label="mark" prop="corePoolSize">
-          {{detailInfo.mark}}
+        <el-form-item label="mark" prop="corePoolSize">
+          {{ detailInfo.mark }}
         </el-form-item>
         <el-form-item label="核心线程" prop="corePoolSize">
-          {{detailInfo.corePoolSize}}
+          {{ detailInfo.corePoolSize }}
         </el-form-item>
         <el-form-item label="最大线程" prop="maximumPoolSize">
-          {{detailInfo.maximumPoolSize}}
+          {{ detailInfo.maximumPoolSize }}
         </el-form-item>
         <el-form-item label="全部修改" prop="allUpdate">
           <el-switch v-model="detailInfo.modifyAll"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)"> 审核拒绝 </el-button>
-        <el-button :disabled="detailInfo.verifyStatus != 0" type="primary" @click="accept(detailInfo)"> 审核通过 </el-button>
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)">
+          审核拒绝
+        </el-button>
+        <el-button
+          :disabled="detailInfo.verifyStatus != 0"
+          type="primary"
+          @click="accept(detailInfo)"
+        >
+          审核通过
+        </el-button>
       </div>
     </el-dialog>
-    
 
     <el-dialog :visible.sync="dialogPluginVisible" title="Reading statistics">
       <el-table :data="pluginData" border fit highlight-current-row style="width: 100%">
@@ -303,11 +339,11 @@ export default {
   components: { Pagination },
   directives: { waves },
   filters: {
-    statusFilter(status) {
+    modifyAllTagFilter(status) {
+      console.log('34234:' + status);
       const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger',
+        true: 'success',
+        false: 'danger',
       };
       return statusMap[status];
     },
@@ -317,21 +353,21 @@ export default {
       }
       return value;
     },
-    enableFilter(type){
-      if(1 == type){
-        return "是";
-      }else if(0 == type){
-        return "否";
+    enableFilter(type) {
+      if (1 == type) {
+        return '是';
+      } else if (0 == type) {
+        return '否';
       }
     },
-    alarmFilter(type){
-      if(1 == type){
-        return "报警";
-      }else if(0 == type){
-        return "不报警";
+    alarmFilter(type) {
+      if (1 == type) {
+        return '报警';
+      } else if (0 == type) {
+        return '不报警';
       }
     },
-    queueTypeFilter(type){
+    queueTypeFilter(type) {
       if ('1' == type) {
         return 'ArrayBlockingQueue';
       } else if ('2' == type) {
@@ -367,14 +403,14 @@ export default {
     },
     modifyTypeFilter(type) {
       if (1 == type) {
-        return '线程池管理';
+        return '管理';
       } else if (2 == type) {
-        return '线程池实例';
+        return '实例';
       } else if (3 == type) {
-        return 'web容器线程池';
+        return '容器';
       } else if (4 == type) {
-        return '框架线程池';
-      } 
+        return '框架';
+      }
     },
     verifyStatusFilter(type) {
       if (0 == type) {
@@ -383,17 +419,17 @@ export default {
         return '审核通过';
       } else if (2 == type) {
         return '审核拒绝';
-      } else if (3 == type){
+      } else if (3 == type) {
         return '失效';
       }
     },
     modifyAllFilter(type) {
       if (0 == type) {
-        return '否';
+        return 'N';
       } else if (1 == type) {
-        return '是';
-      }  
-    }
+        return 'Y';
+      }
+    },
   },
   data() {
     return {
@@ -409,7 +445,7 @@ export default {
         itemId: '',
         desc: true,
       },
-      detailInfo:{},
+      detailInfo: {},
       pluginTypeOptions: ['reader', 'writer'],
       dialogPluginVisible: false,
       pluginData: [],
@@ -454,35 +490,7 @@ export default {
         1: '线程池管理',
         2: '线程池实例',
         3: '容器线程池',
-        4: '框架线程池'
-      },
-      rules: {
-        tenantId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        itemId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        tpId: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        coreSize: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        maxSize: [
-          { required: true, message: 'this is required', trigger: 'blur' },
-          // {
-          //   validator: (rule, value, callback) => {
-          //     if (parseInt(value) < parseInt(this.temp.coreSize)) {
-          //       console.log(value);
-          //       console.log(this.temp.coreSize);
-          //       callback('最大线程必须大于等于核心线程');
-          //     }
-          //     callback();
-          //   },
-          // },
-        ],
-        queueType: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        allowCoreThreadTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        keepAliveTime: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        isAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        capacityAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        livenessAlarm: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        rejectedType: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        capacity: [{ required: true, message: 'this is required', trigger: 'blur' }],
-        executeTimeOut: [{ required: true, message: 'this is required', trigger: 'blur' }],
+        4: '框架线程池',
       },
       temp: {
         id: undefined,
@@ -498,11 +506,10 @@ export default {
   },
   created() {
     this.fetchData();
-    // 初始化租户、项目
     this.initSelect();
   },
   mounted() {
-    this.isEditDisabled = this.$cookie.get('userName') !== 'admin';
+    this.isEditDisabled = localStorage.getItem('USER_ROLE') !== 'ROLE_ADMIN';
   },
   methods: {
     onInput() {
@@ -529,17 +536,21 @@ export default {
         }
       });
     },
-
-    closeDetailDialog(type){
-      if(type == 1){
-            this.threadPoolManagerDialog = false;
-          }else if(type == 2){
-            this.threadPoolInstanceDialog = false;
-          }else if(type == 3){
-            this.webThreadPoolDialog = false;
-          }else if(type = 4){
-            this.adapterThreadPoolDialog = false;
-          }
+    refreshData() {
+      this.listQuery.tenantId = null;
+      this.listQuery.itemId = null;
+      this.itemOptions = [];
+    },
+    closeDetailDialog(type) {
+      if (type == 1) {
+        this.threadPoolManagerDialog = false;
+      } else if (type == 2) {
+        this.threadPoolInstanceDialog = false;
+      } else if (type == 3) {
+        this.webThreadPoolDialog = false;
+      } else if ((type = 4)) {
+        this.adapterThreadPoolDialog = false;
+      }
     },
 
     resetTemp() {
@@ -562,7 +573,7 @@ export default {
         let acceptDetail = {};
         acceptDetail = detailInfo;
         acceptDetail.accept = true;
-        if(detailInfo.type == 4){
+        if (detailInfo.type == 4) {
           acceptDetail.threadPoolKey = detailInfo.tpId;
         }
         console.log(detailInfo);
@@ -573,14 +584,13 @@ export default {
             title: 'Success',
             message: 'accept Successfully',
             type: 'success',
-            duration: 2000
+            duration: 2000,
           });
           this.closeDetailDialog(detailInfo.type);
         });
       });
-      
     },
-    openAcceptConfitm(){
+    openAcceptConfitm() {
       return this.$confirm(`此操作将接受线程池变更申请, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -596,9 +606,9 @@ export default {
     },
     reject(detailInfo) {
       let rejectDetail = {
-        accept:false,
-        id:detailInfo.id,
-        type:detailInfo.type
+        accept: false,
+        id: detailInfo.id,
+        type: detailInfo.type,
       };
       this.openRejectConfirm().then(() => {
         verifyApi.verify(rejectDetail).then((response) => {
@@ -617,16 +627,16 @@ export default {
     applicationDetail(row) {
       let id = row.id;
       let type = row.type;
-      if(type == 1){
+      if (type == 1) {
         this.dialogStatus = 1;
         this.threadPoolManagerDialog = true;
-      }else if(type == 2){
+      } else if (type == 2) {
         this.dialogStatus = 2;
         this.threadPoolInstanceDialog = true;
-      }else if(type == 3){
+      } else if (type == 3) {
         this.dialogStatus = 3;
         this.webThreadPoolDialog = true;
-      }else if(type == 4){
+      } else if (type == 4) {
         this.dialogStatus = 4;
         this.adapterThreadPoolDialog = true;
       }

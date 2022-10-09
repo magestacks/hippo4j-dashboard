@@ -371,7 +371,7 @@ export default {
     this.initSelect();
   },
   mounted() {
-    this.isEditDisabled = this.$cookie.get('userName') !== 'admin';
+    this.isEditDisabled = localStorage.getItem('USER_ROLE') !== 'ROLE_ADMIN';
   },
   methods: {
     onInput() {
