@@ -103,7 +103,7 @@
               <el-dropdown-item @click.native="handleUpdate(row)">编辑</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>-->
-          <el-button type="text" size="small" @click="handleInfo(row)"> 查看11111 </el-button>
+          <el-button type="text" size="small" @click="handleInfo(row)"> 查看 </el-button>
           <el-button type="text" :disabled="isEditDisabled" size="small" @click="handleUpdate(row)">
             编辑
           </el-button>
