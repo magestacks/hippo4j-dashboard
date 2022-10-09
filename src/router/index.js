@@ -240,6 +240,12 @@ export const asyncRoutes = [
         meta: { title: 'Hystrix' },
       },
       {
+        path: 'hystrix',
+        name: 'hystrix',
+        component: () => import('@/views/hippo4j/other/hystrix/index'),
+        meta: { title: 'Hystrix' },
+      },
+      {
         path: 'rabbitmq',
         name: 'rabbitmq',
         component: () => import('@/views/hippo4j/other/rabbitmq/index'),
@@ -272,6 +278,21 @@ export const asyncRoutes = [
     ],
   },
   {
+    path: '/hippo4j/verify',
+    component: Layout,
+    redirect: '/hippo4j/verifyList',
+    name: 'config-modification-verify',
+    meta: { title: '线程池审核', icon: 'audit', roles: ['ROLE_ADMIN'] },
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/hippo4j/verify/index'),
+        meta: { title: '线程池审核', icon: 'audit' },
+      },
+    ],
+  },
+  {
     path: '/hippo4j/notify',
     component: Layout,
     redirect: '/hippo4j/notifyList',
@@ -283,21 +304,6 @@ export const asyncRoutes = [
         name: 'index',
         component: () => import('@/views/hippo4j/notify/index'),
         meta: { title: '通知报警', icon: 'notify' },
-      },
-    ],
-  },
-  {
-    path: '/hippo4j/verify',
-    component: Layout,
-    redirect: '/hippo4j/verifyList',
-    name: 'config-modification-verify',
-    meta: { title: '线程池变更审核', icon: 'notify',roles: ['ROLE_ADMIN'] },
-    children: [
-      {
-        path: 'index',
-        name: 'index',
-        component: () => import('@/views/hippo4j/verify/index'),
-        meta: { title: '线程池变更审核', icon: 'notify' },
       },
     ],
   },
