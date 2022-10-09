@@ -77,7 +77,7 @@
       <el-table-column fixed label="序号" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
-      <el-table-column label="租户-test" width="150">
+      <el-table-column label="租户" width="150">
         <template slot-scope="scope">{{ scope.row.tenantId }}</template>
       </el-table-column>
       <el-table-column label="项目" width="260">
