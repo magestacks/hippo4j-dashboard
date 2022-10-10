@@ -59,7 +59,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column fixed label="序号" width="95">
+      <el-table-column fixed label="序号" width="80">
         <template slot-scope="scope">{{ scope.$index + 1 }}</template>
       </el-table-column>
       <el-table-column label="项目" width="260">
@@ -68,7 +68,7 @@
       <el-table-column label="线程池" width="260">
         <template slot-scope="scope">{{ scope.row.tpId || '-' }}</template>
       </el-table-column>
-      <el-table-column label="实例标识" width="260">
+      <el-table-column label="实例标识" width="280">
         <template slot-scope="scope">
           <el-link type="primary" :underline="false">{{ scope.row.identify || '-' }}</el-link>
         </template>
@@ -83,20 +83,20 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="修改人" width="100">
+      <el-table-column label="修改人" width="120">
         <template slot-scope="scope"> {{ scope.row.modifyUser }}</template>
+      </el-table-column>
+      <el-table-column label="审核状态" width="110">
+        <template slot-scope="scope">{{ scope.row.verifyStatus | verifyStatusFilter }}</template>
+      </el-table-column>
+      <el-table-column label="审核人" width="120">
+        <template slot-scope="scope">{{ scope.row.verifyUser }}</template>
       </el-table-column>
       <el-table-column label="提交时间" width="180">
         <template slot-scope="scope">{{ scope.row.gmtCreate }}</template>
       </el-table-column>
-      <el-table-column label="审核状态" width="100">
-        <template slot-scope="scope">{{ scope.row.verifyStatus | verifyStatusFilter }}</template>
-      </el-table-column>
       <el-table-column label="审核时间" width="180">
         <template slot-scope="scope">{{ scope.row.gmtVerify }}</template>
-      </el-table-column>
-      <el-table-column label="审核人" width="100">
-        <template slot-scope="scope">{{ scope.row.verifyUser }}</template>
       </el-table-column>
       <el-table-column
         label="操作"

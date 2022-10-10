@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: 'hippo4j 1.4.1',
+      title: 'hippo4j 1.4.2',
       logo: 'https://images-machen.oss-cn-beijing.aliyuncs.com/20220808_hippo4j_logo.PNG',
     };
   },
