@@ -240,12 +240,6 @@ export const asyncRoutes = [
         meta: { title: 'Hystrix' },
       },
       {
-        path: 'hystrix',
-        name: 'hystrix',
-        component: () => import('@/views/hippo4j/other/hystrix/index'),
-        meta: { title: 'Hystrix' },
-      },
-      {
         path: 'rabbitmq',
         name: 'rabbitmq',
         component: () => import('@/views/hippo4j/other/rabbitmq/index'),

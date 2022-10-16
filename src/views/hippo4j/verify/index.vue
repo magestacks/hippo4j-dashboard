@@ -123,19 +123,9 @@
       <el-form
         ref="dataForm"
         style="width: 500px; margin-left: 50px"
-        :rules="rules"
         :model="temp"
         label-width="80px"
       >
-        <el-form-item label="租户" prop="tenantId">
-          {{ detailInfo.tenantId }}
-        </el-form-item>
-        <el-form-item label="项目" prop="itemId">
-          {{ detailInfo.itemId }}
-        </el-form-item>
-        <el-form-item label="线程池" prop="tpId">
-          {{ detailInfo.tpId }}
-        </el-form-item>
         <el-form-item label="核心线程" prop="corePoolSize">
           {{ detailInfo.corePoolSize }}
         </el-form-item>
@@ -179,7 +169,7 @@
         </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(row)">
+        <el-button :disabled="detailInfo.verifyStatus != 0" @click="reject(detailInfo)">
           审核拒绝
         </el-button>
         <el-button
@@ -197,7 +187,6 @@
       <el-form
         ref="dataForm"
         style="width: 500px; margin-left: 50px"
-        :rules="rules"
         :model="temp"
         label-width="80px"
       >
@@ -245,13 +234,7 @@
 
     <!--web thread pool-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="webThreadPoolDialog">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="110px"
-      >
+      <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px">
         <el-form-item label="核心线程" prop="corePoolSize">
           {{ detailInfo.corePoolSize }}
         </el-form-item>
@@ -281,13 +264,7 @@
 
     <!-- adapter thread pool -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="adapterThreadPoolDialog">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="110px"
-      >
+      <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px">
         <el-form-item label="mark" prop="corePoolSize">
           {{ detailInfo.mark }}
         </el-form-item>
@@ -340,7 +317,6 @@ export default {
   directives: { waves },
   filters: {
     modifyAllTagFilter(status) {
-      console.log('34234:' + status);
       const statusMap = {
         true: 'success',
         false: 'danger',
@@ -576,8 +552,6 @@ export default {
         if (detailInfo.type == 4) {
           acceptDetail.threadPoolKey = detailInfo.tpId;
         }
-        console.log(detailInfo);
-        console.log(acceptDetail);
         verifyApi.verify(acceptDetail).then((response) => {
           this.fetchData();
           this.$notify({
